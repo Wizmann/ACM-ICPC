@@ -43,10 +43,7 @@ void fab(unsigned n)
 }
 
 int main()
-{
-	
-	freopen("input.txt","r",stdin);
-	
+{	
 	unsigned n;
 	scanf("%d",&n);
 	while(n!=-1)
