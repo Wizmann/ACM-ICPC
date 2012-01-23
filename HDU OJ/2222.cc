@@ -70,7 +70,10 @@ int find()
 	
 	for(int i=0;comp[i];i++)
 	{
-		while(trie[p].fail&&!trie[p].next[comp[i]-'a']) p=trie[p].fail;
+		while(trie[p].fail && !trie[p].next[comp[i]-'a'])
+		{
+			p=trie[p].fail;
+		}
 		
 		p=trie[p].next[comp[i]-'a'];
 		int t=p;
