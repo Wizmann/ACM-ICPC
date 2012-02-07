@@ -52,7 +52,7 @@ void dij()
 
 int main()
 {
-	freopen("input.txt","r",stdin);
+	freopen("b.txt","r",stdin);
 	while(scanf("%d",&n),n)
 	{
 		init();
