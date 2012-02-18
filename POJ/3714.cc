@@ -26,11 +26,7 @@ struct point
     llint x,y;
     bool flag;
     
-    point(){}
-    point(llint i_x,llint i_y,bool i_f)
-    {
-        x=i_x;y=i_y;flag=i_f;
-    }
+
     
     inline double pointDis(const point &p)
     {
