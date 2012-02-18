@@ -15,7 +15,7 @@ using namespace std;
 #define N 100010
 #define SHORTSTR 8
 #define ALPHA 26
-#define SIZE 60000
+#define SIZE 200000
 #define ROOT 0
 
 struct node
@@ -49,7 +49,8 @@ void trieInsert(char *instr,int endMark,int type)
 		}
 		ptr=trie[ptr].next[now];
 	}
-	//type = 0 denotes substring a is allowed to overlap and type = 1 denotes not.
+	//type = 0 denotes substring a is allowed to overlap
+	//and type = 1 denotes not.
 	if(type)
 	{
 		father[trie[ptr].nolap]=endMark;

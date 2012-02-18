@@ -1,4 +1,4 @@
-//Result: Accepted    3190    C++    9110    16772    Wizmann
+//Result: Accepted    3190    C++    9110MS    16772KB    Wizmann
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -134,7 +134,12 @@ int main()
         EOS=0;ind=1;
         for(int i=1;i<=n;i++) EOS|=(1<<i);
         memset(trie,0,sizeof(trie));
-        for(int i=0;i<n;i++)//the Resources.
+        //给出一些程序片段和另一些病毒片度
+        //求解出包含所有程序片段且不包含病毒片段的最短的序列
+        
+		//The next n lines contain the resources
+		//The next m lines contain the virus codes,
+        for(int i=0;i<n;i++)
         {
             scanf("%s",inStr);
             trieInsert(inStr,i+1);
