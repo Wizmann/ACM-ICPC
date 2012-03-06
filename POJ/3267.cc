@@ -61,4 +61,3 @@ int main()
 	printf("%d\n",dp[0]);
 	return 0;
 }
-	
