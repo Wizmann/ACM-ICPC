@@ -9,14 +9,14 @@ using namespace std;
 #define print(x) cout<<x<<endl
 #define input(x) cin>>x
 #define SIZE 128
-#define INF 1<<25
+#define INF 1<<30
 
 int dp[SIZE][SIZE];
 char a[SIZE],b[SIZE];
 
 int main()
 {
-	freopen("input.txt","r",stdin);
+	//freopen("input.txt","r",stdin);
 	int n;
 	while(input(n))
 	{

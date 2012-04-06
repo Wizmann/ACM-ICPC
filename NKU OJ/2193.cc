@@ -1,3 +1,4 @@
+//Result:Wizmann 	2193 	Accepted 	GNU C++ 	1.62k 	380 ms 	5344 KB
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -32,7 +33,7 @@ struct node
 };
 
 double dis[SIZE];
-node g[SIZE<<4];
+node g[SIZE<<10];
 int head[SIZE];
 map<string,int> mp;
 int n,m;

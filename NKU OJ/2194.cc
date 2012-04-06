@@ -1,3 +1,4 @@
+//Result:Wizmann 	2194 	Accepted 	GNU C++ 	1.33k 	2280 ms 	16800 KB
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
