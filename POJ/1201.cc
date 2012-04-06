@@ -1,74 +1,100 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <algorithm>
+#include <iostream>
+#include <queue>
+#include <bitset>
 
-typedef struct node
+using namespace std;
+
+#define print(x) cout<<x<<endl
+#define input(x) cin>>x
+#define SIZE 50010
+#define INF 1<<25
+
+struct node
 {
-	int from,to,weight;
-	
-	void setnode(int a,int b,int c)
+	int dest,cost;
+	int next;
+
+	node(){}
+	node(int i_dest,int i_cost,int i_next)
 	{
-		from=a;
-		to=b;
-		weight=c;
+		dest=i_dest;
+		cost=i_cost;
+		next=i_next;
 	}
-}node;
+};
 
-node g[50010];
-int dis[50010];
+node g[SIZE<<2];
+int head[SIZE];
+int n,ind;
+int START,END;
+int dis[SIZE];
 
-int n,max=-1,min=1<<20,ans=0;
-
-void bellman_ford()
+void addEdge(int st,int end,int cost)
 {
-	for(int i=min;i<=max;i++) dis[i]=-1<<20;
-	dis[min]=0;
-	bool over;
-	for(int i=0;i<=max-min;i++)
+	g[ind]=node(end,cost,head[st]);
+	head[st]=ind++;
+}
+
+int SPFA()
+{
+	bitset<SIZE> visit;
+	queue<int> q;
+	visit.reset();
+	q.push(START);
+	for(int i=START;i<=END;i++) dis[i]=-INF;
+	visit[START]=1;
+	dis[START]=0;
+
+	while(!q.empty())
 	{
-		over=true;
-		for(int k=min;k<max;k++)
+		int now=q.front();
+		q.pop();
+		visit[now]=0;
+
+		for(int i=head[now];i!=-1;i=g[i].next)
 		{
-			if(dis[k]!=-1<<20&&dis[k]>dis[k+1])
+			int v=g[i].dest;
+			if(dis[v]<dis[now]+g[i].cost)
 			{
-				dis[k+1]=dis[k];
-				over=false;
+				dis[v]=dis[now]+g[i].cost;
+
+				if(!visit[v])
+				{
+					visit[v]=1;
+					q.push(v);
+				}
 			}
 		}
-		for(int k=max;k>min;k--)
-		{
-			if(dis[k]!=-1<<20&&dis[k]-1>dis[k-1])
-			{
-				dis[k-1]=dis[k]-1;
-				over=false;
-			}
-		}
-		for(int k=0;k<n;k++)
-		{
-			if(dis[g[k].from]+g[k].weight>dis[g[k].to])
-			{
-				dis[g[k].to]=dis[g[k].from]+g[k].weight;
-				over=false;
-			}
-		}
-		if(over) break;
 	}
-	ans=dis[max];
+	return dis[END];
 }
 
 int main()
 {
-	freopen("input.txt","r",stdin);
 	int a,b,c;
-	scanf("%d",&n);
-	for(int i=0;i<n;i++)
+	while(input(n))
 	{
-		scanf("%d%d%d",&a,&b,&c);
-		g[i].setnode(a,++b,c);
-		if(b>max) max=b;
-		if(a<min) min=a;
-	}	
-	bellman_ford();
-	printf("%d\n",ans);
+		memset(head,-1,sizeof(head));
+		ind=0;
+		START=INF;END=-1;
+		for(int i=0;i<n;i++)
+		{
+			scanf("%d%d%d",&a,&b,&c);
+			addEdge(a,b+1,c);
+			START=min(START,a);
+			END=max(END,b+1);
+		}
+		for(int i=START;i<=END;i++)
+		{
+			addEdge(i,i+1,0);
+			addEdge(i+1,i,-1);
+		}
+
+		print(SPFA());
+	}
 	return 0;
 }
