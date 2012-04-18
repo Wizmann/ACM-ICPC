@@ -61,56 +61,59 @@ int slove()
 	}
 	while(remain)
 	{
-		int sz;
-		sz=upper.size();
+		
 		double speed=LEN;
-		for(int i=0;i<sz;i++)
+		for(int i=0;i<(int)upper.size();i++)
 		{
 			upper[i].forward(speed);
 			speed=min(speed,LEN/upper[i].pace);
-			if(upper[i].dis+eps>LEN)
+			if(upper[0].dis+eps>=LEN)
 			{
-				node now=upper[i];
+				node now=upper[0];
 				upper.pop_front();
 				right.push(now);
+				i--;
 			}
 		}
 
-		sz=lower.size();
 		speed=LEN;
-		for(int i=0;i<sz;i++)
+		for(int i=0;i<(int)lower.size();i++)
 		{
 			lower[i].forward(speed);
 			speed=min(speed,LEN/upper[i].pace);
-			if(lower[i].dis+eps>LEN)
+			if(lower[0].dis+eps>=LEN)
 			{
-				node now=lower[i];
+				node now=lower[0];
 				lower.pop_front();
 				left.push(now);
+				i--;
 			}
 		}
 
 		while(!left.empty())
 		{
 			node now=left.top();
+			left.pop();
 			now.dis=0;
 			now.loop--;
-			if(now.loop>=0) upper.push_front(now);
+			if(now.loop>=0) upper.push_back(now);
 			else remain--;
 		}
 		while(!right.empty())
 		{
 			node now=right.top();
+			right.pop();
 			now.dis=0;
-			lower.push_front(now);
+			lower.push_back(now);
 		}
-		ans++;
+		if(remain) ans++;
 	}
 	return ans;
 }
 
 int main()
 {
+	freopen("input.txt","r",stdin);
 	int a,b;
 	while(input(n) && n)
 	{
