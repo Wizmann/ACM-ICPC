@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <ctime>
 
 #define left(x) ((x<<1)+1)
 #define right(x) ((x<<1)+2)
@@ -81,7 +82,7 @@ int main()
 {
 	freopen("input.txt","r",stdin);
 	int n,a;
-	while(scanf("%d",&n),n)
+	while(scanf("%d",&n)!=EOF&&n)
 	{
 		memset(stree,-1,sizeof(stree));
 		memset(bird,0,sizeof(bird));
@@ -96,6 +97,7 @@ int main()
 		}
 		printf("%lld\n",res);
 	}
+	printf("%.5lf\n",(double)clock()/CLOCKS_PER_SEC);
 	return 0;
 }
 	
