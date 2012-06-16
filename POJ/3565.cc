@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 //Result:wizmann	3565	Accepted	1392K	2110MS	G++	3040B
+=======
+/*
+ * Problem: 3565		User: wizmann
+ * Memory: 1392K		Time: 2110MS
+ * Language: G++		Result: Accepted
+ */
+
+>>>>>>> 4a54375654ec9a83e3725ee7c44913a1b7bbc28f
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -150,7 +159,10 @@ double MinCostMaxFlow()
 
 int main()
 {
+<<<<<<< HEAD
 	freopen("input.txt","r",stdin);
+=======
+>>>>>>> 4a54375654ec9a83e3725ee7c44913a1b7bbc28f
 	double a,b;
 	while(input(n))
 	{
