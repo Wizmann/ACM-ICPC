@@ -15,7 +15,7 @@ if(__name__=='__main__'):
 		for item in files:
 			ext=item.split('.')
 			ext=ext[-1]
-			if(ext in ['cc','java','cpp','c','py','cxx']):
+			if(ext in ['cc','java','cpp','c','py','cxx','hs']):
 				path=root+'/'+item
 				print path
 				allinall+=LineCounter(path)
