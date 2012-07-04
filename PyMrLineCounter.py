@@ -3,20 +3,18 @@
 import sys,os
 
 def LineCounter(i_path):
-	res=0
-	f=open(i_path)
-	for lines in f:
-		res+=1
-	return res
+	return open(i_path).read().count('\n')
 
 if(__name__=='__main__'):
 	allinall=0
+	filesum=0
 	for root, dirs, files in os.walk(sys.path[0]):
 		for item in files:
-			ext=item.split('.')
-			ext=ext[-1]
+			ext=item.split('.')[-1]
 			if(ext in ['cc','java','cpp','c','py','cxx','hs']):
 				path=root+'/'+item
+				filesum+=1
 				print path
 				allinall+=LineCounter(path)
+	print "Total problem sloved :",filesum
 	print "Total lines of your code :",allinall
