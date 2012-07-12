@@ -1,98 +1,122 @@
-//Result:wizmann	1724	Accepted	1304K	63MS	C++	1417B
+//Result:wizmann	1724	Accepted	6276K	94MS	C++	1849B
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <queue>
 #include <iostream>
-#include <bitset>
-#include <stack>
+#include <algorithm>
+#include <cmath>
+#include <set>
+#include <map>
 #include <vector>
-
-#define pq priority_queue
-#define pb push_back
+#include <stack>
+#include <queue>
+#include <bitset>
+#include <deque>
 
 using namespace std;
 
-typedef struct road
-{
-	int dest,cost,dis;
-	
-	void setroad()
-	{
-		scanf("%d%d%d",&dest,&dis,&cost);
-	}
-}road;
+#define print(x) cout<<x<<endl
+#define input(x) cin>>x
+#define INF 1<<28
+#define inf 1e30
+#define eps 1e-9
+#define pb push_back
+#define SIZE 128
 
-typedef struct node
+struct node
 {
-	bitset<110> visit;
-	int now,cost,dis;
+	int dest,dis,cost;
 	
-	node()
+	node(){}
+	node(int i_dest,int i_dis,int i_cost)
 	{
-		visit.reset();
-		now=cost=dis=0;
+		dest=i_dest;dis=i_dis;
+		cost=i_cost;
+	}
+};
+
+struct path
+{
+	int pos,dis,cost;
+	
+	path(){}
+	path(int i_pos,int i_dis,int i_cost)
+	{
+		pos=i_pos;dis=i_dis;cost=i_cost;
 	}
 	
-	void setnode(int v,int a,int b,int c)
-	{
-		visit[v]=1;
-		now=a;cost+=b;dis+=c;
-	}
-	
-	friend bool operator < (const node a,const node b)
+	friend bool operator < (const path& a,const path& b)
 	{
 		return a.dis>b.dis;
 	}
-}node;
+};
 
-int money,n,ask;
-road g[110][110];
-int num[110];
+vector<node> g[SIZE];
 
-void pb(int a,road r)
+int coin,n,m;
+
+
+int bfs()
 {
-	num[a]++;
-	g[a][num[a]]=r;
-}
-
-int main()
-{
-	freopen("input.txt","r",stdin);
-	int a;
-	scanf("%d%d%d",&money,&n,&ask);
-	while(ask--)
-	{
-		scanf("%d",&a);
-		road r;
-		r.setroad();
-		pb(a,r);
-	}	
-	pq<node> q;
-	node t;
-	t.setnode(1,1,0,0);
-	q.push(t);
-	int ans=1<<20;
+	int hash[SIZE][10024];
+	memset(hash,0x0f,sizeof(hash));
+	
+	priority_queue<path> q;
+	q.push(path(1,0,0));
+	int ans=INF;
 	while(!q.empty())
 	{
-		t=q.top();
+		path now=q.top();
 		q.pop();
-		int now=t.now;
-		if(t.dis>ans) continue;
-		if(now==n) ans=min(ans,t.dis);
-		for(int i=1;i<=num[now];i++)
+		int hier=now.pos;
+		int money=now.cost;
+		int dis=now.dis;
+		if(money>coin) continue;
+		
+		if(hash[hier][money]<dis) continue;
+		else hash[hier][money]=dis;
+		
+		if(dis>ans) continue;
+		
+		if(hier==n)
 		{
-			road tmp=g[now][i];
-			if(!t.visit[tmp.dest]&&t.cost+tmp.cost<=money)
+			ans=dis;
+			continue;
+		}
+		
+		for(int i=0;i<(int)g[hier].size();i++)
+		{
+			int next=g[hier][i].dest;
+			int cost=g[hier][i].cost;
+			int dist=g[hier][i].dis;
+			
+			if(hash[next][cost+money]>dis+dist)
 			{
-				node neu=t;
-				neu.setnode(tmp.dest,tmp.dest,tmp.cost,tmp.dis);
-				q.push(neu);
+				q.push(path(next,dis+dist,cost+money));
 			}
 		}
 	}
-	if(ans>=1<<20) puts("-1");
-	else printf("%d\n",ans);
-	return 0;
+	return ans;
 }
 	
+
+
+int main()
+{
+	freopen("f.txt","r",stdin);
+	int a,b,c,d;
+	scanf("%d%d%d",&coin,&n,&m);
+//	while(!=EOF)
+	{
+		for(int i=0;i<n;i++) g[i].clear();
+		for(int i=0;i<m;i++)
+		{
+			scanf("%d%d%d%d",&a,&b,&c,&d);
+			g[a].pb(node(b,c,d));
+			//g[b].pb(node(a,c,d));
+		}
+		print(bfs());
+	}
+	return 0;
+}
+		

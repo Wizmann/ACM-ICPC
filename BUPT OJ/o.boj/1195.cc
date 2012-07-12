@@ -21,7 +21,7 @@ int mini[SIZE][32];
 
 int log2(int x)
 {
-	for(int ii=31;i>=0;i--)
+	for(int i=31;i>=0;i--)
 	{
 		if(x&(1<<i)) return i;
 	}
