@@ -1,61 +1,59 @@
-//Result:wizmann	1200	Accepted	5328K	47MS	G++	1003B
+//Result:wizmann	1200	Accepted	14532K	141MS	C++	839B
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <algorithm>
 #include <iostream>
+#include <algorithm>
 #include <string>
-#include <set>
 #include <bitset>
 
 using namespace std;
 
 #define print(x) cout<<x<<endl
 #define input(x) cin>>x
-#define SIZE 32131177
+#define SIZE 111111111
 
-int n,nc;
-char tmpStr[SIZE];
-bitset<SIZE> hash;
-int alpha[256];
+typedef long long llint;
 
-unsigned int Hash(char *str)
-{
-    unsigned int hash = 0;
- 
-    for(int i=0;i<n;i++)
-    {
-		//printf("%c",*str);
-        // equivalent to: hash = 65599*hash + (*str++);
-        hash = alpha[int(*(str+i))]+hash*nc;
-    }
-	//print("");
-    return (hash & 0x7FFFFFFF)%SIZE;
-}
+bitset<SIZE+5> hash;
+int n,m;
+char str[16000100];
+
+//Karp-Rabin算法
 
 int main()
 {
-	freopen("input.txt","r",stdin);
-	int ans=0,alphanum=1;
-	scanf("%d%d",&n,&nc);
-	scanf("%s",tmpStr);
-	int len=strlen(tmpStr);
-	for(int i=0;tmpStr[i];i++)
+	int sz,ans=0;
+	input(n>>m);
+	scanf("%s",str);
+	sz=strlen(str);
+	str[sz]='#';
+	llint val=0;
+	llint t=1;
+	for(int i=0;i<n;i++)
 	{
-		if(!alpha[int(tmpStr[i])])
-		{
-			alpha[int(tmpStr[i])]=alphanum++;
-		}
+		val=(val*26)+llint(str[i]-'a');
+		val%=SIZE;
 	}
-	for(int i=0;i+n<=len;i++)
+	for(int i=0;i<n-1;i++) t=(t*26)%SIZE;
+	for(int i=n;i<=sz;i++)
 	{
-		int hasha=Hash(tmpStr+i);
-		if(!hash[hasha])
+		//print(str[i]);
+		if(!hash[val])
 		{
-			hash[hasha]=1;
+			hash[val]=1;
 			ans++;
 		}
+		val-=(llint(str[i-n]-'a'))*t;
+		val=((val*26)+(llint(str[i]-'a')))%SIZE+SIZE;
+		val%=SIZE;
+		//print(val);
 	}
+
 	print(ans);
 	return 0;
 }
+		
+
+
+
