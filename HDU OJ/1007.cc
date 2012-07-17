@@ -1,3 +1,4 @@
+//Result:2012-07-17 10:10:27	Accepted	1007	1093MS	2052K	2194 B	G++	Wizmann
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -62,7 +63,7 @@ double minDisPointPair(int st,int end)
     double res=inf;
     
     
-    if(end-st<=12)
+    if(end-st<=3)
     {
         for(int i=st;i<=end;i++)
         {
@@ -78,8 +79,8 @@ double minDisPointPair(int st,int end)
         int mid=(st+end)>>1;
         res=min(res,minDisPointPair(st,mid));
         res=min(res,minDisPointPair(mid+1,end));
-        double left=array[mid].x-res+eps;
-        double right=array[mid].x+res+eps;
+        double left=array[mid].x-res;
+        double right=array[mid].x+res;
         
         int a=lower_bound(array+st,array+end+1,point(left,-1),cmp)-array;
         int b=lower_bound(array+st,array+end+1,point(right,-1),cmp)-array;
@@ -99,6 +100,7 @@ double minDisPointPair(int st,int end)
 
 int main()
 {
+	freopen("input.txt","r",stdin);
     double a,b;
     while(input(n) && n)
     {
@@ -110,5 +112,6 @@ int main()
         sort(array,array+n,cmp);
         printf("%.2f\n",minDisPointPair(0,n-1)/2.0);
     }
+    printf("%.4lf\n",(double)clock()/CLOCKS_PER_SEC);
     return 0;
 }
