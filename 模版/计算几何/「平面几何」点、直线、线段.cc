@@ -76,6 +76,22 @@ inline double xmult(point sp,point ep,point op)
     return ((sp.x-op.x)*(ep.y-op.y)-(sp.y-op.y)*(ep.x-op.x));
 }
 
+//返回vector(op->sp)与vector(op->ep)的数量积
+//xmult(sp,ep,op) = |op->sp| * |op->ep| * cos(sop) -> 边op->sp到边op->ep的夹角
+double dotmult(point sp,point ep,point op)
+{
+	return (sp.x-op.x)*(ep.x-op.x)+(sp.y-op.y)*(ep.y-op.y);
+}
+
+//求向量的夹角，从(sp->op)到(ep->op)，较精确
+double getangle(const point &sp,const point &ep,const point &op)
+{
+	double a=atan2(sp.y-op.y,sp.x-op.x);
+	double b=atan2(ep.y-op.y,ep.x-op.x);
+	if(b-a>pi) a+=2*pi;
+	if(a-b>pi) b+=2*pi;
+	return a-b;
+}
 
 
 line makeLine(point p1,point p2)
@@ -150,9 +166,6 @@ segment extendSegment(point p1,point p2,int flag,double ext)
 	}
 	return res;
 }
-
-
-
 
 bool onSegment(segment s,point p)
 {
