@@ -11,7 +11,6 @@ inline double mul(double x)
     return x*x;
 }
 
-
 //点类
 struct point
 {
@@ -21,6 +20,20 @@ struct point
     {
         x=i_x;y=i_y;
     }
+    point operator - (const point &p) const
+	{
+		return point(x-p.x,y-p.y);
+	}
+	
+	point operator * (double val) const
+	{
+		return point(x*val,y*val);
+	}
+	
+	point operator + (const point &p) const
+	{
+		return point(x+p.x,y+p.y);
+	}
     friend bool operator == (const point& pa,const point& pb)
     {
         return (zero(pa.x-pb.x)==0) && (zero(pa.y-pb.y)==0);
@@ -64,8 +77,80 @@ struct line
 
 		if(x.a==d*y.a&&x.b==d*y.b&&x.c==d*y.c) return true;
 		else return false;
-	}	
+	}
+	
+	//求过p点的，垂直于l的直线
+	line make_vertical(const point &p)
+	{
+		line res=(*this);
+		swap(res.a,res.b);
+		res.b*=-1;
+		res.c=-(res.a*p.x+res.b*p.y);
+
+		return res;
+	}
+	
+	double distopoint(const point &p)//点到直线的距离
+	{
+		return fabs(p.x*a+p.y*b+c)/sqrt(mul(a)+mul(b));
+	}
 };
+
+
+struct circle
+{
+	point c;
+	double r;
+	circle(){}
+	circle(const point& ic,double ir)
+	{
+		c=ic;r=ir;
+	}
+
+	int line_in_circle(line l)
+	{
+		if(zero(l.distopoint(c)-r)==0) return 1;
+		else if(zero(l.distopoint(c)-r)<0) return 2;
+		else return 0;
+	}
+	
+	bool inCircle(const point& p)
+	{
+		return zero(pointDis(p,c)-r)<=0;
+	}
+
+	int cross_line(line l,point& a,point& b)//圆与直线的交
+	{
+		int ncr=line_in_circle(l);
+		if(ncr==0)
+		{
+			a=b=point(-inf,-inf);
+			return 0;
+		}
+		else
+		{
+			line v=l.make_vertical(c);
+			point cr;
+			lineIntersect(l,v,cr);
+			if(ncr==1)
+			{
+				a=cr;
+				b=point(inf,inf);
+				return 1;
+			}
+			else
+			{
+				double dis=sqrt( (mul(r)-mul(pointDis(c,cr))) / (mul(v.a)+mul(v.b)) );
+				double mx=v.a*dis;
+				double my=v.b*dis;
+				a=point(cr.x+mx,cr.y+my);
+				b=point(cr.x-mx,cr.y-my);
+				return 2;
+			}
+		}
+	}
+};
+
 
 //返回vector(op->sp)与vector(op->ep)的向量积
 //abs(xmult(sp,ep,op)) = 2* 三角形面积（sp,ep,op)
@@ -167,15 +252,34 @@ segment extendSegment(point p1,point p2,int flag,double ext)
 	return res;
 }
 
+//点的移位
+//以点v为圆心，逆时针旋转点p一定的角度，并将(v->p)扩大scale倍
+point rotate(point v,point circle,double angle,double scale)
+{
+	point ret=circle;
+	v.x-=circle.x;v.y-=circle.y;
+	circle.x=scale*cos(angle);
+	circle.y=scale*sin(angle);
+	ret.x+=v.x*circle.x-v.y*circle.y;
+	ret.y+=v.x*circle.y+v.y*circle.x;
+	return ret;
+}
+
 bool onSegment(segment s,point p)
 {
     return fabs(xmult(s.p2,p,s.p1))<eps && (p.x-s.p1.x)*(p.x-s.p2.x)<=0 && (p.y-s.p1.y)*(p.y-s.p2.y)<=0;
 }
 
-double pointDis(point p1,point p2)
+inline double pointDis(point p1,point p2)
 {
-    return sqrt((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
+	return sqrt(mul(p1.x-p2.x)+mul(p1.y-p2.y));
 }
+
+inline double pointMulDis(point p1,point p2)
+{
+	return mul(p1.x-p2.x)+mul(p1.y-p2.y);
+}
+
 
 //最近点对，分治法，1e5个点大概需要1s左右
 

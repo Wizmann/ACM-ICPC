@@ -1,19 +1,4 @@
-//Result:24 	Accepted 	1880ms 	14988kb 	G++	3238B	2012-07-23 22:46:05 	Wizmann
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <vector>
-#include <bitset>
-#include <iostream>
-#include <algorithm>
-#include <stack>
-#include <queue>
-#include <cmath>
-
-using namespace std;
-
-#define print(x) cout<<x<<endl
-#define input(x) cin>>x
+//求区间中位数
 
 inline int mul(int x){return x*x;}
 inline int left(int x){return (x<<1)+1;}
@@ -154,47 +139,29 @@ int query(int st,int end,int val,int pos=ROOT,int deep=0)
 	}
 }
 
-	
-
-int main()
+void slove()
 {
-	freopen("input.txt","r",stdin);
-	//freopen("out.txt","w",stdout);
-	int cas=1;
-	int T,n,a,b;
-	input(T);
-	while(T--)
+	input(n);
+	init(n);
+	int mini=INF,maxi=-INF;
+	for(int i=0;i<n;i++)
 	{
-		printf("Case #%d:\n",cas++);
-		input(n);
-		init(n);
-		int mini=INF,maxi=-INF;
-		for(int i=0;i<n;i++)
-		{
-			scanf("%d",&a);
-			insert(i,a);
-			mini=min(a,mini);
-			maxi=max(a,maxi);
-		}
-		makeST();
-		int q;
-		scanf("%d",&q);
-		while(q--)
-		{
-			int l=mini,r=maxi;
-			scanf("%d%d",&a,&b);
-			int val=(b-a)/2+1;
-			//print("val"<<' '<<val);
-			while(l<=r)
-			{
-				//print(l<<' '<<r);
-				int mid=(l+r)>>1;
-				if(query(a-1,b-1,mid)>=val) r=mid-1;
-				else l=mid+1;
-			}
-			printf("%d\n",l);
-		}
-		puts("");
+		scanf("%d",&a);
+		insert(i,a);
+		mini=min(a,mini);
+		maxi=max(a,maxi);
 	}
-	return 0;
+	makeST();
+
+	int l=mini,r=maxi;
+	scanf("%d%d",&a,&b);
+	int val=(b-a)/2+1;
+	while(l<=r)//用二分求答案
+	{
+		//print(l<<' '<<r);
+		int mid=(l+r)>>1;
+		if(query(a-1,b-1,mid)>=val) r=mid-1;
+		else l=mid+1;
+	}
+	printf("%d\n",l);
 }
