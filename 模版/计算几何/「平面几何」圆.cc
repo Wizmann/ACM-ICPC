@@ -112,6 +112,31 @@ struct circle
 			}
 		}
 	}
+	
+	//unstable
+	int cross_segment(segment s,point &a,point &b)
+	{
+		line l=makeline(s);
+		int res=cross_line(l,a,b);
+		if(res==2)
+		{
+			if(onSegment(s,a) && onSegment(s,b)) return 2;
+			else if(onSegment(s,a)) return 1;
+			else if(onSegment(s,b))
+			{
+				swap(a,b);
+				return 1;
+			}
+			else return 0;
+		}
+		else if(res==1)
+		{
+			if(onSegment(s,a)) return 1;
+			else return 0;
+		}
+		else return 0;
+	}
+	
 
 	double get_cross_area_triangle(point p1,point p2)
 	{
