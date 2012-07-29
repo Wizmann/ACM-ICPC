@@ -162,7 +162,7 @@ inline double xmult(point sp,point ep,point op)
 }
 
 //返回vector(op->sp)与vector(op->ep)的数量积
-//xmult(sp,ep,op) = |op->sp| * |op->ep| * cos(sop) -> 边op->sp到边op->ep的夹角
+//dotmult(sp,ep,op) = |op->sp| * |op->ep| * cos(sop) -> 边op->sp到边op->ep的夹角
 double dotmult(point sp,point ep,point op)
 {
 	return (sp.x-op.x)*(ep.x-op.x)+(sp.y-op.y)*(ep.y-op.y);
