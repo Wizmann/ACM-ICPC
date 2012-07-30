@@ -13,6 +13,8 @@ if(__name__=='__main__'):
 			ext=item.split('.')[-1]
 			if(ext in ['cc','java','cpp','c','py','cxx','hs']):
 				path=root+'/'+item
+				if('模版' in path):
+					continue
 				filesum+=1
 				print path
 				allinall+=LineCounter(path)
