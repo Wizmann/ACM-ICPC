@@ -79,4 +79,93 @@ int main()
 }
 		
 
+//Result:wizmann	2299	Accepted	6564K	438MS	G++	1118B
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+#define print(x) cout<<x<<endl
+#define input(x) cin>>x
+#define SIZE 500100
+#define INF 1<<30
+
+int baum[SIZE];
+
+int lowbit(int x)
+{
+	return x & (-x);
+}
+
+void add(int pos,int val)
+{
+	while(pos<SIZE)
+	{
+		baum[pos]+=val;
+		pos+=lowbit(pos);
+	}
+}
+
+int sum(int pos)
+{
+	int res=0;
+	while(pos>0)
+	{
+		res+=baum[pos];
+		pos-=lowbit(pos);
+	}
+	return res;
+}
+
+int sum(int l,int r)
+{
+	return sum(r)-sum(l-1);
+}
+
+struct node
+{
+	int val,nr;
+	
+	friend bool operator < (const node &a,const node &b)
+	{
+		return a.val<b.val;
+	}
+};
+
+
+node array[SIZE];
+
+int main()
+{
+	freopen("input.txt","r",stdin);
+	int n;
+	while(input(n) && n)
+	{
+		memset(baum,0,sizeof(baum));
+		memset(array,0,sizeof(array));
+		long long ans=0;
+		for(int i=0;i<n;i++)
+		{
+			scanf("%d",&(array[i].val));
+			array[i].nr=i+1;
+		}
+		sort(array,array+n);
+		for(int i=0;i<n;i++)
+		{
+			int pos=array[i].nr;
+			ans+=sum(pos+1,n);
+			add(pos,1);
+		}
+		printf("%lld\n",ans);
+	}
+	return 0;
+}
+			
+			
+		
+
+
 
