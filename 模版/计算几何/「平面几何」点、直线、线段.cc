@@ -254,14 +254,14 @@ segment extendSegment(point p1,point p2,int flag,double ext)
 
 //点的移位
 //以点v为圆心，逆时针旋转点p一定的角度，并将(v->p)扩大scale倍
-point rotate(point v,point circle,double angle,double scale)
+point rotate(point v,point cc,double angle,double scale)
 {
-	point ret=circle;
-	v.x-=circle.x;v.y-=circle.y;
-	circle.x=scale*cos(angle);
-	circle.y=scale*sin(angle);
-	ret.x+=v.x*circle.x-v.y*circle.y;
-	ret.y+=v.x*circle.y+v.y*circle.x;
+	point ret=cc;
+	v.x-=cc.x;v.y-=cc.y;
+	cc.x=scale*cos(angle);
+	cc.y=scale*sin(angle);
+	ret.x+=v.x*cc.x-v.y*cc.y;
+	ret.y+=v.x*cc.y+v.y*cc.x;
 	return ret;
 }
 
@@ -324,4 +324,11 @@ double minDisPointPair(int st,int end)
         }
         return res;
     }
+}
+
+//点在线段的异侧，不含点在线段上的情况
+//Unstable
+int oppSide(point p1,point p2,segment s)
+{
+	return xmult(s.a,p1,s.b)*xmult(s.a,p2,s.b)<0;
 }
