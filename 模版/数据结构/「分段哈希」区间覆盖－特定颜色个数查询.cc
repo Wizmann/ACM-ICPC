@@ -1,3 +1,7 @@
+//Result:2012-08-25 23:47:51	Accepted	4391	3171MS	24964K	3365 B	G++	Wizmann
+//分段哈希，对一个区间进行覆盖，以及对一个区间的某种颜色个数进行查询
+//哈希表的作用是对区间某种颜色的个数进行统计
+//对于修改采用Lazy标记，从而降低时间复杂度
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
@@ -10,14 +14,14 @@ using namespace std;
 
 #define print(x) cout<<x<<endl
 #define input(x) cin>>x
-#define SIZE 320
+#define SIZE 512
 #define PRIME 10007
 
 typedef unsigned uint;
 
 const uint mone=-1;
 
-struct _link
+struct _link//链表类
 {
 	uint key,val;
 	int next;
@@ -28,7 +32,7 @@ struct _link
 	}
 };
 
-struct hash
+struct hash//哈希表类
 {
 	int head[PRIME];
 	_link pool[PRIME];
@@ -89,12 +93,12 @@ struct hash
 	}
 };
 
-struct node
+struct node//分段哈希类
 {
-	hash cnum;
-	uint clist[SIZE];
-	long long lazy;
-	bool ready;
+	hash cnum;//记录数据的Hash表，[Key->Value][颜色->个数]
+	uint clist[SIZE];//记录本段的颜色
+	long long lazy;//Lazy标记，如果本段只有一种颜色，做标记，否则为-1
+	bool ready;//修改只修改clist的内容，并不进行统计，所以做标记是否已经统计完
 
 	void init()
 	{
@@ -103,7 +107,8 @@ struct node
 		lazy=-1;
 		ready=true;
 	}
-	void push()
+	
+	void push()//进行统计
 	{
 		if(lazy==-1)
 		{
@@ -116,7 +121,8 @@ struct node
 		}
 		ready=true;
 	}
-	void cover(int st,int end,int ic)
+	
+	void cover(int st,int end,int ic)//区间覆盖
 	{
 		if(end-st+1==SIZE) lazy=ic;
 		else
@@ -133,7 +139,8 @@ struct node
 		}
 		ready=false;
 	}
-	int count(int st,int end,uint ic)
+	
+	int count(int st,int end,uint ic)//区间查询
 	{
 		if(!ready) push();
 		if(lazy!=-1)
@@ -161,7 +168,7 @@ node wall[SIZE];
 int n,q;
 
 
-void paint_wall(int st,int end,int c)
+void paint_wall(int st,int end,int c)//大区间覆盖
 {
 	int st_nr=st/SIZE;
 	int end_nr=end/SIZE;
@@ -176,7 +183,7 @@ void paint_wall(int st,int end,int c)
 	}
 }
 
-int count_wall(int st,int end,int c)
+int count_wall(int st,int end,int c)//大区间统计
 {
 	int res=0;
 	int st_nr=st/SIZE;
