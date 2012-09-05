@@ -267,7 +267,9 @@ point rotate(point v,point cc,double angle,double scale)
 
 bool onSegment(segment s,point p)
 {
-    return fabs(xmult(s.p2,p,s.p1))<eps && (p.x-s.p1.x)*(p.x-s.p2.x)<=0 && (p.y-s.p1.y)*(p.y-s.p2.y)<=0;
+	return zero(xmult(s.p2,p,s.p1))==0 &&
+			zero((p.x-s.p1.x)*(p.x-s.p2.x))<=0 &&
+			zero((p.y-s.p1.y)*(p.y-s.p2.y))<=0;
 }
 
 inline double pointDis(point p1,point p2)
