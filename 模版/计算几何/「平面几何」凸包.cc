@@ -1,3 +1,17 @@
+bool isConvex(point poly[])
+{
+	for(int i=0;i<n;i++)
+	{
+		int j=(i+1)%n;
+		int k=(i+2)%n;
+		if(xmult(poly[j],poly[k],poly[i])<0)//当点是逆时针给出时，取小于0，当顺时针给出时，取大于
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 //使用namespace防止命名冲突
 
 namespace ConvexHull//一定要多于三个点
