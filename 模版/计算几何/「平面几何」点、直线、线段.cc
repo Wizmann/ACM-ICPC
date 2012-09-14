@@ -282,52 +282,6 @@ inline double pointMulDis(point p1,point p2)
 	return mul(p1.x-p2.x)+mul(p1.y-p2.y);
 }
 
-
-//最近点对，分治法，1e5个点大概需要1s左右
-
-//排序函数，读入点集后应该先排序
-//e.g.sort(array,array+n,cmp);
-bool cmp(const point& a,const point& b)
-{
-    return a.x<b.x;
-}
-
-double minDisPointPair(int st,int end)
-{
-    double res=inf;
-    if(end-st<=12)
-    {
-        for(int i=st;i<=end;i++)
-        {
-            for(int j=i+1;j<=end;j++)
-            {
-                res=min(res,pointDis(array[i],array[j]));
-            }
-        }
-        return res;
-    }
-    else
-    {
-        int mid=(st+end)>>1;
-        res=min(res,minDisPointPair(st,mid));
-        res=min(res,minDisPointPair(mid+1,end));
-        double left=array[mid].x-res;
-        double right=array[mid].x+res;
-        
-        int a=lower_bound(array+st,array+end+1,point(left,-1),cmp)-array;
-        int b=lower_bound(array+st,array+end+1,point(right,-1),cmp)-array;
-        b=min(end,b);
-        for(int i=a;i<=b;i++)
-        {
-            for(int j=i+1;j<=b;j++)
-            {
-                res=min(res,pointDis(array[i],array[j]));
-            }
-        }
-        return res;
-    }
-}
-
 //点在线段的异侧，不含点在线段上的情况
 //Unstable
 int oppSide(point p1,point p2,segment s)

@@ -10,14 +10,14 @@ int slack;
 bool dfs(int x)
 {
 	visx[x]=1;
-    for(int y=0;y<m;y++)
-    {
-        if(visy[y]) continue;
-        int t=lx[x]+ly[y]-g[x][y];
-        if(!t)
-        {
-            visy[y] = 1;
-            if(linky[y]==-1 || dfs(linky[y]))
+	for(int y=0;y<m;y++)
+	{
+		if(visy[y]) continue;
+		int t=lx[x]+ly[y]-g[x][y];
+		if(!t)
+		{
+			visy[y] = 1;
+			if(linky[y]==-1 || dfs(linky[y]))
 			{
 				linky[y] = x;
 				return 1;
@@ -66,5 +66,5 @@ int km()
 			res+=lx[linky[i]]+ly[i];
 		}
 	}
-    return res;
+	return res;
 }
