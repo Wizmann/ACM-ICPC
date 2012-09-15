@@ -62,4 +62,21 @@ namespace ConvexHull//一定要多于三个点
 		}
 		return p-stack;
 	}
+	
+	//先求出凸包，然后传入凸包顶点数，求出最远顶点对的距离
+	double maxPntDis(int num)
+	{
+		double ans=0;
+		int q=1;
+		stack[num]=stack[0];
+		for(int p=0;p<num;p++)
+		{
+			while(xmult(stack[p+1],stack[q+1],stack[p])>xmult(stack[p+1],stack[q],stack[p]))
+			{
+				q=(q+1)%num;
+			}
+			ans=max(ans,max(pntDis(stack[p],stack[q]),pntDis(stack[p+1],stack[q+1])));
+		}
+		return ans;
+	}
 };

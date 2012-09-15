@@ -43,13 +43,22 @@ struct point
 //线段
 struct segment
 {
-    point p1,p2;
-    segment(){}
-    segment(const point& i_p1,const point& i_p2)
-    {
-        p1=i_p1;p2=i_p2;
-    }
+	point p1,p2;
+	segment(){}
+	segment(const point &ip1,const point &ip2)
+	{
+		p1=ip1;p2=ip2;
+	}
+	double distopoint(const point &c)//点到线段的最小距离
+	{
+		double x=mul(p1.x-c.x)+mul(p1.y-c.y);
+		double y=mul(p2.x-c.x)+mul(p2.y-c.y);
+		double z=mul(p1.x-p2.x)+mul(p1.y-p2.y);
+		if(x+z-y<0 || y+z-x<0) return sqrt(min(x,y));
+		return fabs(xmult(c,p1,p2)/sqrt(z));
+	}
 };
+
 
 //直线
 struct line

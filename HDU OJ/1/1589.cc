@@ -1,4 +1,4 @@
-//Result:2012-09-14 13:53:24	Accepted	1007	906MS	3436K	1854 B	C++	Wizmann
+//Result:2012-09-14 13:46:41	Accepted	1589	375MS	2096K	3346 B	G++
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -10,7 +10,7 @@ using namespace std;
 
 #define print(x) cout<<x<<endl
 #define input(x) cin>>x
-#define SIZE 100010
+#define SIZE 50010
 
 const double eps=1e-8;
 const double inf=1e100;
@@ -60,6 +60,7 @@ bool cmpY(const point &a,const point &b)
 point array[SIZE];
 point ym[SIZE];
 
+
 double minDisPointPair(int st,int end,point *ip)
 {
 	double res=inf;
@@ -97,12 +98,77 @@ double minDisPointPair(int st,int end,point *ip)
 	}
 }
 
-int n;
+
+namespace ConvexHull
+{
+	int sz;
+	point stack[SIZE];
+	point *p;
+	inline void push(point ip){*p=ip;p++;}
+	inline void pop(){p--;}
+	inline void init(int isz)
+	{
+		sz=isz;
+		memset(stack,0,sizeof(stack));
+		p=stack;
+	}
+
+	int cmp(point p1,point p2)
+	{
+		if(xmult(p1,p2,array[0])>0) return 1;
+		else if(zero(xmult(p1,p2,array[0]))==0 && pntDis(p1,array[0])<pntDis(p2,array[0])) return 1;
+		else return 0;
+	}
+
+	int findtop()
+	{
+		int res=0;
+		for(int i=1;i<sz;i++)
+		{
+			if(array[i].y<array[res].y) res=i;
+			else if(array[i].y==array[res].y && array[i].x<array[res].x) res=i;
+		}
+		return res;
+	}
+
+	int graham()
+	{
+		int top=findtop();
+		push(array[top]);
+		swap(array[0],array[top]);
+		sort(array+1,array+sz,cmp);
+
+		push(array[1]);
+		push(array[2]);
+		for(int i=3;i<sz;i++)
+		{
+			while(zero(xmult(array[i],*(p-1),*(p-2)))>0) pop();
+			push(array[i]);
+		}
+		return p-stack;
+	}
+	double maxPntDis(int num)
+	{
+		double ans=0;
+		int q=1;
+		stack[num]=stack[0];
+		for(int p=0;p<num;p++)
+		{
+			while(xmult(stack[p+1],stack[q+1],stack[p])>xmult(stack[p+1],stack[q],stack[p]))
+			{
+				q=(q+1)%num;
+			}
+			ans=max(ans,max(pntDis(stack[p],stack[q]),pntDis(stack[p+1],stack[q+1])));
+		}
+		return ans;
+	}
+}
 
 int main()
 {
 	freopen("input.txt","r",stdin);
 	double a,b;
+	int n,cas=1;
 	while(input(n) && n)
 	{
 		for(int i=0;i<n;i++)
@@ -110,8 +176,15 @@ int main()
 			scanf("%lf%lf",&a,&b);
 			array[i]=point(a,b);
 		}
+		
 		sort(array,array+n,cmpX);
-		printf("%.2lf\n",minDisPointPair(0,n-1,array)/2.0);
+		printf("Case %d:\n",cas++);
+		printf("Distance of the nearest couple is %.3lf\n",minDisPointPair(0,n-1,array));
+		ConvexHull::init(n);
+		int len=ConvexHull::graham();
+		printf("Distance of the most distant couple is %.3lf\n\n",ConvexHull::maxPntDis(len));
 	}
+	return 0;
 }
-	
+
+
