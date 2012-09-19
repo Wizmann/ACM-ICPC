@@ -1,58 +1,182 @@
-//Result:2012-09-11 19:08:16	Accepted	4283	265MS	8524K	954 B	C++	Wizmann
+//Result:2012-09-17 16:05:11	Accepted	4292	125MS	3080K	3398 B	G++	Wizmann
 #include <cstdio>
-#include <cstdlib>
 #include <cstring>
+#include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <queue>
+#include <stack>
 
 using namespace std;
 
 #define print(x) cout<<x<<endl
 #define input(x) cin>>x
-#define SIZE 128
+#define NODE 1024
+#define EDGE 180000
 #define INF 0x3f3f3f3f
+#define SOURCE 0
+#define SINK (f+n*2+d+1)
 
-int dp[SIZE][SIZE][SIZE];
-int que[SIZE];
-int n;
-
-int dfs(int st,int end,int show)
+struct node
 {
-	if(st==end) return que[st]*show;
-	else if(st>end) return 0;
-	else if(dp[st][end][show]<INF) return dp[st][end][show];	
-	else
-	{
-		int mini=dfs(st+1,end,show+1)+que[st]*show;
-		for(int i=st+1;i<=end;i++)
-		{
-			int l=dfs(st+1,i,show);
-			int r=dfs(i+1,end,show+(i+1-st));
-			int now=que[st]*(show+i-st);
-			mini=min(mini,l+r+now);
-		}
-		dp[st][end][show]=mini;
-		return mini;
+    int st,end,flow,next;
+    node(){}
+    node(int ist,int iend,int iflow,int inext)
+    {
+		st=ist;end=iend;flow=iflow;next=inext;
 	}
+};
+
+node edge[EDGE];
+int head[NODE];
+int ind;
+int source,sink;
+
+void addEdge(int s,int e,int f)
+{
+    edge[ind]=node(s,e,f,head[s]);
+    head[s] = ind ++;
+    
+    edge[ind]=node(e,s,0,head[e]);
+    head[e] = ind ++;
+}
+
+namespace dinic
+{
+	int level[NODE],cur_head[NODE];
+	int edge_stack[(NODE<<2)+(EDGE<<2)];
+	int stack_top;
+	
+	int BFS()
+	{
+		memset(level,-1,sizeof(level));
+		queue<int> q;
+		q.push(source);
+		level[source] = 0;
+		while(!q.empty())
+		{
+			int cur =q.front();
+			q.pop();
+			for(int e=head[cur]; e!=-1; e=edge[e].next)
+			{
+				int next = edge[e].end;
+				if(edge[e].flow && level[next] == -1 ){
+					q.push(next);
+					level[next] = level[cur] + 1;
+				}
+			}
+		}
+		return level[sink] != -1;
+	}
+
+	int DFS()
+	{
+		int index,min_limit,e;
+		int res = 0;
+
+		memcpy(cur_head,head,sizeof(head));                          
+		int cur = source;                                                   
+
+		stack_top = 0;
+		while(stack_top>=0)
+		{            
+			if(cur==sink)
+			{                                       
+				min_limit = INF;
+				for(int i=stack_top-1;i>=0;i--)
+				{
+					e=edge_stack[i];
+					if(edge[e].flow<=min_limit)
+					{
+						min_limit = edge[e].flow;
+						index = i;
+					}
+				}
+				res+=min_limit;                                   
+
+				for(int i=stack_top-1;i>=0;i--)
+				{               
+					e = edge_stack[i];
+					edge[e].flow -= min_limit;
+					edge[e^1].flow += min_limit;
+				}
+				stack_top = index;                                    
+				cur = edge[edge_stack[stack_top]].st;          
+			}
+			for(e =cur_head[cur]; e!=-1; e=edge[e].next)
+			{  
+				cur_head[cur] = e;
+				int next = edge[e].end;
+				if( edge[e].flow && level[next] == level[cur] + 1 )
+				{
+					edge_stack[stack_top ++]  = e;
+					cur = next;
+					break;
+				}
+			}
+			if(e==-1)
+			{                                           
+				stack_top--;
+				level[cur]=-2;                                    
+				cur=edge[edge_stack[stack_top]].st;               
+			}
+		}
+		return res;
+	}
+}
+
+void init()
+{
+	ind=0;
+	memset(head,-1,sizeof(head));
 }
 
 
 int main()
 {
-	//freopen("input.txt","r",stdin);
-	int T,cas=1;
-	input(T);
-	while(T--)
+	freopen("input.txt","r",stdin);	
+	char cmd[256];
+	int a,n,f,d;
+	while(input(n>>f>>d))
 	{
-		scanf("%d",&n);
-		for(int i=0;i<n;i++)
+		init();
+		for(int i=1;i<=f;i++)
 		{
-			scanf("%d",&que[i]);
+			scanf("%d",&a);
+			addEdge(SOURCE,i,a);
 		}
-		memset(dp,INF,sizeof(dp));
-		printf("Case #%d: ",cas++);
-		print(dfs(0,n-1,0));
+		for(int i=1;i<=d;i++)
+		{
+			scanf("%d",&a);
+			addEdge(f+n*2+i,SINK,a);
+		}
+		for(int i=1;i<=n;i++)
+		{
+			scanf("%s",cmd);
+			for(int j=0;cmd[j];j++) if(cmd[j]=='Y')
+			{
+				addEdge(j+1,f+(i*2)-1,1);
+			}
+		}
+		for(int i=1;i<=n;i++)
+		{
+			addEdge(f+i*2-1,f+i*2,1);
+		}
+		for(int i=1;i<=n;i++)
+		{
+			scanf("%s",cmd);
+			for(int j=0;cmd[j];j++) if(cmd[j]=='Y')
+			{
+				addEdge(f+(i*2),f+2*n+j+1,1);
+			}
+		}
+		source=SOURCE;
+		sink=SINK;
+		int res = 0;
+        while(dinic::BFS()) res+=dinic::DFS();
+        printf("%d\n",res);
 	}
 	return 0;
 }
+
 
