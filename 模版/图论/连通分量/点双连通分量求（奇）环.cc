@@ -121,6 +121,7 @@ void tarjan(int x,int pre)
 
 int main()
 {
+	freopen("input.txt","r",stdin);
 	int a,b;
 	while(input(n>>m) && n+m)
 	{
@@ -151,3 +152,4 @@ int main()
 	}
 	return 0;
 }
+
