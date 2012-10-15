@@ -57,6 +57,10 @@ struct segment
 		if(x+z-y<0 || y+z-x<0) return sqrt(min(x,y));
 		return fabs(xmult(c,p1,p2)/sqrt(z));
 	}
+	double distoline(const point &c)//点到线段所在直线的最小距离
+	{
+		return fabs(xmult(c,p1,p2))/pntDis(p1,p2);
+	}	
 };
 
 
@@ -99,7 +103,9 @@ struct line
 		return res;
 	}
 	
-	double distopoint(const point &p)//点到直线的距离
+	//点到直线的距离,精度问题！！！
+	//可以采用点到线段所在直线的长度代替，见Segment类
+	double distopoint(const point &p)
 	{
 		return fabs(p.x*a+p.y*b+c)/sqrt(mul(a)+mul(b));
 	}

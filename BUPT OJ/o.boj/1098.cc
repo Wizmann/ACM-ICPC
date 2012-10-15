@@ -1,30 +1,18 @@
-//Result:1098	Accepted	12MS	312K	G++	 1413B	2012-09-13 20:41:23	Wizmann
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <iostream>
-#include <algorithm>
 #include <cmath>
+#include <algorithm>
+#include <iostream>
 
 using namespace std;
 
 #define print(x) cout<<x<<endl
 #define input(x) cin>>x
+#define SIZE 101
 
-const double inf=1e100;
 const double eps=1e-8;
-
-inline double mul(double x)
-{
-	return x*x;
-}
-
-inline int zero(double x)
-{
-	if(x>eps) return 1;
-	else if(x<-eps) return -1;
-	else return 0;
-}
+const double inf=1e12;
 
 struct point
 {
@@ -36,60 +24,63 @@ struct point
 	}
 };
 
-struct line
+inline double xmult(point sp,point ep,point op)
 {
-	double a,b,c;
-	line(){}
-	line(double ia,double ib,double ic)
-	{
-		a=ia;b=ib;c=ic;
-	}
+	return ((sp.x-op.x)*(ep.y-op.y)-(sp.y-op.y)*(ep.x-op.x));
+}
 
-	double disToPoint(const point &p)
+double pntDis(point p1,point p2)
+{
+	return sqrt((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
+}
+
+struct segment
+{
+	point p1,p2;
+	segment(){}
+	segment(const point& ip1,const point& ip2)
 	{
-		return fabs(p.x*a+p.y*b+c)/sqrt(mul(a)+mul(b));
+		p1=ip1;p2=ip2;
+	}
+	double distoline(const point &c)
+	{
+		return fabs(xmult(c,p1,p2))/pntDis(p1,p2);
 	}
 };
 
-line makeline(const point &p1,const point &p2)
+struct polygen
 {
-	line res;
-	int sig=1;
-	res.a=p2.y-p1.y;
-	if(zero(res.a)<0)
-	{
-		sig=-1;
-		res.a=sig*res.a;
-	}
-	res.b=sig*(p1.x-p2.x);
-	res.c=sig*(p1.y*p2.x-p2.y*p1.x);
-	return res;
-}
-
-point array[100];
+	int sz;
+	point array[SIZE];
+	void init(int isz){sz=isz;}
+};
 
 int main()
 {
+	freopen("input.txt","r",stdin);
 	int n;
 	double a,b;
+	polygen poly;
 	while(input(n) && n)
 	{
 		double ans=inf;
+		poly.init(n);
 		for(int i=0;i<n;i++)
 		{
 			scanf("%lf%lf",&a,&b);
-			array[i]=point(a,b);
+			poly.array[i]=point(a,b);
 		}
+
 		for(int i=0;i<n;i++)
 		{
 			int j=(i+1)%n;
-			line l=makeline(array[i],array[j]);
-			double t=0;
-			for(int k=0;k<n;k++) if(k!=i && k!=j)
+			double tmp=0;
+			for(int k=0;k<n;k++)
 			{
-				t=max(t,l.disToPoint(array[k]));
+				double dis=segment(poly.array[i],poly.array[j]).distoline(poly.array[k]);
+				tmp=max(tmp,dis);
 			}
-			ans=min(ans,t);
+			ans=min(ans,tmp);
 		}
 		printf("%.6lf\n",ans);
 	}

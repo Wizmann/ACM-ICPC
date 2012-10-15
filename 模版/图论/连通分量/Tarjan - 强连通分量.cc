@@ -24,6 +24,7 @@ int sccnr=0;//强连通分量编号
 
 int ind=0;//临接链表指针
 
+//时间复杂度O(n+m)
 
 inline void add_edge(int a,int b)
 {

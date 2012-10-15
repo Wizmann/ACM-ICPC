@@ -165,3 +165,149 @@ int main()
 	}
 	return 0;
 }
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+//Result:wizmann	2195	Accepted	332K	0MS	C++	2038B	2012-09-28 15:39:55
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+#define print(x) cout<<x<<endl
+#define input(x) cin>>x
+#define SIZE 128
+#define INF 0x3f3f3f3f
+
+struct point
+{
+	int x,y;
+	point(){}
+	point(int ix,int iy)
+	{
+		x=ix;y=iy;
+	}
+};
+
+int n,m;
+char maze[SIZE][SIZE];
+point house[SIZE],man[SIZE];
+int ph,pm;
+int g[SIZE][SIZE];
+char visx[SIZE],visy[SIZE];
+int linky[SIZE];
+int lx[SIZE],ly[SIZE];
+int slack;
+
+inline int pntDis(const point& a,const point& b)
+{
+	return abs(a.x-b.x)+abs(a.y-b.y);
+}
+
+bool dfs(int x)
+{
+	visx[x]=1;
+	for(int y=0;y<ph;y++)
+	{
+		if(visy[y]) continue;
+		int t=lx[x]+ly[y]-g[x][y];
+		if(!t)
+		{
+			visy[y]=1;
+			if(linky[y]==-1 || dfs(linky[y]))
+			{
+				linky[y]=x;
+				return 1;
+			}
+		}
+		else if(t<slack) slack=t;
+	}
+	return 0;
+}
+
+
+int km()
+{
+	memset(linky,-1,sizeof(linky));
+	memset(lx,0,sizeof(lx));
+	memset(ly,0,sizeof(ly));
+	for(int i=0;i<pm;i++)
+	{
+		for(int j=0;j<ph;j++)
+		{
+			lx[i]=max(lx[i],g[i][j]);
+		}
+	}
+	for(int i=0;i<pm;i++)
+	{
+		while(1)
+		{
+			memset(visx,0,sizeof(visx));
+			memset(visy,0,sizeof(visy));
+			slack=INF;
+			if(dfs(i)) break;
+			for(int j=0;j<pm;j++)
+			{
+				if(visx[j]) lx[j]-=slack;
+			}
+			for(int j=0;j<ph;j++)
+			{
+				if(visy[j]) ly[j]+=slack;
+			}
+		}
+	}
+	int res=0;
+	for(int i=0;i<ph;i++)
+	{
+		if(linky[i]!=-1)
+		{
+			res+=lx[linky[i]]+ly[i];
+		}
+	}
+	return res;
+}
+
+int main()
+{
+	freopen("input.txt","r",stdin);
+	while(input(n>>m) && n+m)
+	{
+		ph=pm=0;
+		memset(g,0,sizeof(g));
+		for(int i=0;i<n;i++)
+		{
+			scanf("%s",maze[i]);
+		}
+		for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<m;j++)
+			{
+				if(maze[i][j]=='m')
+				{
+					man[pm++]=point(j,i);
+				}
+				else if(maze[i][j]=='H')
+				{
+					house[ph++]=point(j,i);
+				}
+			}
+		}
+		for(int i=0;i<pm;i++)
+		{
+			for(int j=0;j<ph;j++)
+			{
+				g[i][j]=-pntDis(man[i],house[j]);
+			}
+		}
+
+		print(-km());
+	}
+	return 0;
+}
