@@ -1,3 +1,15 @@
+/*
+由于在2-SAT问题中，最多只对两个元素进行限制，所以可能的限制关系有：
+A[x] => addEdge(a+n,a)
+NOT A[x] => addEdge(a,a+n)
+A[x] OR A[y] => addEdge(a+n,b),addEdge(b+n,a)
+A[x] OR NOT A[y] => addEdge(a+n,b+n),addEdge(b,a)
+NOT A[x] or NOT A[y] => addEdge(a,b+n),addEdge(b,a+n)
+A[x] XOR A[y] => addEdge(a,b+n),addEdge(a+n,b),addEdge(b,a+n),addEdge(b+n,a)
+NOT (A[x] XOR A[y]) 
+A[x] XOR NOT A[y]
+*/
+
 //Result:wizmann	2296	Accepted	428K	16MS	C++	2487B	2012-10-15 20:57:02
 #include <cstdio>
 #include <cstring>

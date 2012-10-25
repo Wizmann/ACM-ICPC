@@ -32,7 +32,7 @@ bool dfs(int pos,int step=0)
         {
             if(dfs(next,step+1)) return true;
         }
-        else if(visit[next]+n-1==step)
+        else if(visit[next]+n-1==step)//<-这里是n元环，可以根据需要进行修改
         {
             return true;
         }

@@ -1,3 +1,7 @@
+/*
+从一个有向图形成一个强连通图所需要增加的边数为： 缩点后的图中入度为0的点数与出度为0的点数的较大值
+*/
+
 //Result: Wizmann	1236	Accepted	228K	0MS	C++	1551B
 
 /*
@@ -8,7 +12,6 @@
  * 所以缩点之后可以堪称一棵树,树的叶子和根结点都必须和其他的点相连才能
  * 构成一个连通图)
  * 如果强连通分量的个数为1的话,要注意第二个答案是0,单独考虑
- * ZZ:http://apps.hi.baidu.com/share/detail/16105265
 */
 
 
@@ -116,6 +119,4 @@ int main()
 	}
 	return 0;
 }
-//This is my first program write in VIM...
-
 

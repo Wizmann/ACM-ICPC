@@ -170,8 +170,8 @@ int main()
 		source=SOURCE;
 		sink=SINK;
 		int res = 0;
-        while(dinic::BFS()) res+=dinic::DFS();
-        printf("%d\n",res);
+		while(dinic::BFS()) res+=dinic::DFS();
+		printf("%d\n",res);
 	}
 	return 0;
 }

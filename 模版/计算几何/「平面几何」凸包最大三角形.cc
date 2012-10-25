@@ -1,3 +1,37 @@
+/*
+Triangle
+Time Limit: 3000MS		Memory Limit: 30000K
+Total Submissions: 7318		Accepted: 2132
+Description
+
+Given n distinct points on a plane, your task is to find the triangle that have the maximum area, whose vertices are from the given points.
+Input
+
+The input consists of several test cases. The first line of each test case contains an integer n, indicating the number of points on the plane. Each of the following n lines contains two integer xi and yi, indicating the ith points. The last line of the input is an integer −1, indicating the end of input, which should not be processed. You may assume that 1 <= n <= 50000 and −104 <= xi, yi <= 104 for all i = 1 . . . n.
+Output
+
+For each test case, print a line containing the maximum area, which contains two digits after the decimal point. You may assume that there is always an answer which is greater than zero.
+Sample Input
+
+3
+3 4
+2 6
+2 7
+5
+2 6
+3 9
+2 0
+8 0
+6 5
+-1
+Sample Output
+
+0.50
+27.00
+*/
+
+//这个题，给了你很多个点，然后要我们求其中三个点，让这三个点的面积最大。
+
 //Result:wizmann	2079	Accepted	2336K	110MS	G++	2502B
 #include <cstdio>
 #include <cstdlib>

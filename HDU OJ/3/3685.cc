@@ -1,3 +1,52 @@
+/*
+HDU - 3685
+Rotational Painting
+Time Limit: 1000MS		Memory Limit: 32768KB
+
+Description
+给出一个多边形，判断有多少种稳定的摆放方法。
+
+[分析]：从物理角度分析，多边形的稳定方法就是重心的垂足落在支撑边以内（不含顶点），而因为有可能会有凹多边形出现所以支撑边一定是所有点的凸包的边。现在问题转化成了：
+
+（1）、求凸包：可以用Graham_Scan搞定
+
+（2）、求重心：这个比较麻烦，有一堆的公式我也不会证明记住就行，真要想弄明白还是自己找计算几何的书看吧（谁搞懂了可以告诉我一声）。首先对多边形进行三角剖分（从0号点到i和i+1构成三角形），每个三角形的重心坐标就是xi=(x0+xi+xi+1)/3，yi=(y0+yi+yi+1)/3，然后三角形的有向面积G(i)就是它的两条边（0，i）和（0，i+1）的叉积。整个多边形的重心坐标就是
+
+x0=ΣxiG(i)/ΣG(i)，y0=ΣyiG(i)/ΣG(i)。
+
+（3）、枚举支撑边，判断重心的垂足是否在边上：从重心到支撑边的两顶点连边和支撑边构成的角应该都是锐角——这两条边和支撑边的点积应该都大于0
+
+Input
+The input file contains several test cases. The first line of the file contains an integer T representing the number of test cases. 
+
+For each test case, the first line is an integer n representing the number of lines of the polygon. (3<=n<=50000). Then n lines follow. The ith line contains two real number xi and yi representing a point of the polygon. (xi, yi) to (xi+1, yi+1) represents a edge of the polygon (1<=i<n), and (xn,yn) to (x1, y1) also represents a edge of the polygon. The input data insures that the polygon is not self-crossed.
+ 
+Output
+For each test case, output a single integer number in a line representing the number of ways to put the polygonal glass stably on the table.
+ 
+Sample Input
+2
+4
+0 0
+100 0
+99 1
+1 1
+6
+0 0
+0 10
+1 10
+1 1
+10 1
+10 0
+ 
+Sample Output
+2
+3
+Hint
+The sample test cases can be demonstrated by Figure 1 and Figure 2 in Description part.  
+*/
+
+
 //Result:2012-09-05 11:38:42	Accepted	3685	281MS	2784K	4350 B	C++	Wizmann
 #include <cstdio>
 #include <cstdlib>
@@ -131,7 +180,7 @@ point getBaryCenter(point a,point b,point c)
 	return p;
 }
 
-void getBaryCenter(point &p)
+void getBaryCenter(point &p)//求多边形重心
 {
 	int sz=poly.size();
 	point t;
@@ -206,7 +255,7 @@ namespace ConvexHull//一定要多于三个点
 };
 
 
-bool stable(point a,point b,point bc)
+bool stable(point a,point b,point bc)//判断重心bc的垂足是否在边ab上
 {
 	segment seg(a,b);
 	line l=makeLine(a,b);

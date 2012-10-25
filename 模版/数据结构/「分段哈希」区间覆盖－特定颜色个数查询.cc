@@ -1,3 +1,49 @@
+/*
+Paint The Wall
+Time Limit: 10000MS		Memory Limit: 32768KB
+
+Description
+As a amateur artist, Xenocide loves painting the wall. The wall can be considered as a line consisting of n nodes. Each node has its own color.
+
+Xenocide spends all day in front of the wall. Sometimes, he paints some consecutive nodes so that these nodes have the same color. When he feels tired, he focuses on a particular color and counts the number of nodes that have this color within a given interval.
+
+Now Xenocide is tired of counting, so he turns to you for help.
+ 
+Input
+The input consists of several test cases.
+The first line of each test case contains two integer n, m(1<=n, m<=100000) indicating the length of the wall and the number of queries.
+The following line contains N integers which describe the original color of every position.
+Then m lines follow. Each line contains 4 non-negative integers a, l, r, z(1<=a<=2, 0<=l<=r<n ,0<=z<231).
+a = 1 indicates that Xenocide paints nodes between l and r and the resulting color is z.
+a = 2 indicates that Xenocide wants to know how many nodes between l and r have the color z.
+ 
+Output
+Print the corresponding answer for each queries.
+ 
+Sample Input
+5 5
+1 2 3 4 0
+2 1 3 3
+1 1 3 1
+2 1 3 3
+2 0 3 1
+2 3 4 1
+ 
+Sample Output
+1
+0
+4
+1
+*/
+
+/*
+n个单位长度，m个操作
+n个数，表示n个单位长度中起始颜色
+m行， a, l, r, z
+a== 1表示把l到r涂为z色（z>= 0 && z<= 2^31)
+a==2 表示询问l到r为z色的有多少
+*/
+
 //Result:2012-08-25 23:47:51	Accepted	4391	3171MS	24964K	3365 B	G++	Wizmann
 //分段哈希，对一个区间进行覆盖，以及对一个区间的某种颜色个数进行查询
 //哈希表的作用是对区间某种颜色的个数进行统计
@@ -203,8 +249,6 @@ int count_wall(int st,int end,int c)//大区间统计
 
 int main()
 {
-	freopen("1002.in","r",stdin);
-	freopen("out.txt","w",stdout);
 	uint a,b,c,d;
 	while(scanf("%d%d",&n,&q)!=EOF)
 	{

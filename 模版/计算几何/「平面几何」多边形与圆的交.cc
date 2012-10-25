@@ -1,3 +1,32 @@
+/*
+多边形与圆的交
+
+Description
+给定一个多边形和一个圆，求它们相交部分的面积
+
+Input
+首先一个整数n (3<=n<=1000)
+表示多边形的顶点数
+然后三个整数cx,cy,cr (0<=cx,cy<=1000,cr<=1000,cr!=0)表示圆的横坐标，纵坐标，半径
+然后下面n行，每行两个整数x，y 0<=x,y<=1000 ，表示多边形的顶点（按顺时针或逆时针给出）
+多组测试数据，n=0结束
+
+Output
+相交部分的面积
+
+Sample Input
+3
+0 0 10
+0 20
+10 0
+-10 0
+0
+
+Sample Output
+
+144.35
+*/
+
 //Result:354 	Accepted 	30ms 	144kb 	G++	5345B	2012-07-22 17:36:27 	Wizmann
 #include <cstdio>
 #include <cstdlib>

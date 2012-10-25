@@ -108,8 +108,6 @@ int sap(int st,int end)
 }
 
 
-
-
 int main()
 {
 	freopen("input.txt","r",stdin);

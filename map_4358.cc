@@ -1,3 +1,44 @@
+/*
+启发式合并
+
+Boring counting
+Time Limit: 3000MS		Memory Limit: 98304KB
+
+Description
+In this problem we consider a rooted tree with N vertices. The vertices are numbered from 1 to N, and vertex 1 represents the root. There are integer weights on each vectice. Your task is to answer a list of queries, for each query, please tell us among all the vertices in the subtree rooted at vertice u, how many different kinds of weights appear exactly K times?
+ 
+Input
+The first line of the input contains an integer T( T<= 5 ), indicating the number of test cases.
+For each test case, the first line contains two integers N and K, as described above. ( 1<= N <= 105, 1 <= K <= N )
+Then come N integers in the second line, they are the weights of vertice 1 to N. ( 0 <= weight <= 109 )
+For next N-1 lines, each line contains two vertices u and v, which is connected in the tree.
+Next line is a integer Q, representing the number of queries. (1 <= Q <= 105)
+For next Q lines, each with an integer u, as the root of the subtree described above.
+ 
+Output
+For each test case, output "Case #X:" first, X is the test number. Then output Q lines, each with a number -- the answer to each query.
+
+Seperate each test case with an empty line.
+ 
+Sample Input
+1
+3 1
+1 2 2
+1 2
+1 3
+3
+2
+1
+3
+ 
+Sample Output
+Case #1:
+1
+1
+1
+
+*/
+
 //Result:2012-08-13 14:42:20	Accepted	4358	1515MS	29076K	1657 B	C++	Wizmann
 #include <cstdio>
 #include <cstdlib>

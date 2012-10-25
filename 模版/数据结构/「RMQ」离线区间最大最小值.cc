@@ -4,7 +4,7 @@ namespace RMQ
 	int mini[N][RMQSIZE],maxi[N][RMQSIZE];
 	int pow2[RMQSIZE];
 	int tolog2[1<<RMQSIZE];
-	
+
 	int log2(int x)
 	{
 		return upper_bound(pow2,pow2+RMQSIZE,x)-pow2-1;
@@ -17,11 +17,21 @@ namespace RMQ
 			tolog2[i]=log2(i);
 		}
 	}
+
 	inline void init()
 	{
 		memset(mini,0,sizeof(mini));
 	}
-
+	
+	inline void initVAL(int val[])
+	{
+		for(int i=1;i<=n;i++)
+		{
+			mini[i][0]=maxi[i][0]=val[i];
+		}
+	}
+	
+	
 	void initRMQ()
 	{
 		int m=tolog2[n];

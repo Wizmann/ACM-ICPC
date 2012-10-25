@@ -1,3 +1,44 @@
+/*
+Bridge Across Islands
+Time Limit: 1000MS		Memory Limit: 65536K
+
+Description
+
+Thousands of thousands years ago there was a small kingdom located in the middle of the Pacific Ocean. The territory of the kingdom consists two separated islands. Due to the impact of the ocean current, the shapes of both the islands became convex polygons. The king of the kingdom wanted to establish a bridge to connect the two islands. To minimize the cost, the king asked you, the bishop, to find the minimal distance between the boundaries of the two islands.
+
+
+Input
+
+The input consists of several test cases.
+Each test case begins with two integers N, M. (3 ≤ N, M ≤ 10000)
+Each of the next N lines contains a pair of coordinates, which describes the position of a vertex in one convex polygon.
+Each of the next M lines contains a pair of coordinates, which describes the position of a vertex in the other convex polygon.
+A line with N = M = 0 indicates the end of input.
+The coordinates are within the range [-10000, 10000].
+
+Output
+
+For each test case output the minimal distance. An error within 0.001 is acceptable.
+
+Sample Input
+
+4 4
+0.00000 0.00000
+0.00000 1.00000
+1.00000 1.00000
+1.00000 0.00000
+2.00000 0.00000
+2.00000 1.00000
+3.00000 1.00000
+3.00000 0.00000
+0 0
+Sample Output
+
+1.00000
+
+*/
+
+
 //Result:wizmann	3608	Accepted	1060K	141MS	G++	2735B	2012-09-15 12:47:25
 #include <cstdio>
 #include <cstdlib>

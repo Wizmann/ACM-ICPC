@@ -1,0 +1,158 @@
+/*
+题目的大意比较难叙述清楚。大概是，有一些幻灯片，上面都写上了编号，但是它们现在混在了一起。由于幻灯片是透明的，所以不知道哪个编号是哪张幻灯片的。现在给出一些坐标信息，让你确定哪些编号是可以对应得上幻灯片的，并输出之。
+
+如果建立二分匹配的模型来做，那么也就是说这些边是二分匹配的必须边，删掉这些边后，匹配就会不成功。因此给出了一种做法：这道题要先计算出最大匹配数,并把最大匹配表记录下来,然后把匹配到的边记录在队列里,然后依次删除,重新计算匹配数,如果匹配数减少说明此边是必须也是唯一的.如果一样说明这边存不存在都行,要从原来记录的最大匹配表中减掉此边.
+*/
+
+
+//Result:wizmann	1486	Accepted	752K	0MS	G++	2299B	
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <bitset>
+
+using namespace std;
+
+#define print(x) cout<<x<<endl
+#define input(x) cin>>x
+#define SIZE 32
+
+int n;
+
+struct Cpoint
+{
+	int x,y;
+	Cpoint(){}
+	Cpoint(int ix,int iy)
+	{
+		x=ix;y=iy;
+	}
+};
+
+struct Cslide
+{
+	int xmin,xmax;
+	int ymin,ymax;
+	Cslide(){}
+	Cslide(int ixmin,int ixmax,int iymin,int iymax)
+	{
+		xmin=ixmin;xmax=ixmax;
+		ymin=iymin;ymax=iymax;
+	}
+	
+	bool inSlide(const Cpoint &p)
+	{
+		if(p.x>=xmin && p.x<=xmax &&
+			p.y>=ymin && p.y<=ymax) return true;
+		else return false;
+	}
+};
+
+Cslide slide[SIZE];
+int g[SIZE][SIZE];
+char visit[SIZE];
+int pre[SIZE];
+pair<int,int> edge[SIZE];
+
+bool deal(int x)
+{
+	for(int i=0;i<n;i++) if(g[x][i])
+	{
+		if(!visit[i])
+		{
+			visit[i]=1;
+			if(pre[i]==-1 || deal(pre[i]))
+			{
+				pre[i]=x;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+				
+			
+
+int hungary()
+{
+	int sum=0;
+	memset(pre,-1,sizeof(pre));
+	for(int i=0;i<n;i++)
+	{
+		memset(visit,0,sizeof(visit));
+		if(deal(i)) sum++;
+	}
+	return sum;
+}
+
+int main()
+{
+	freopen("input.txt","r",stdin);
+	int a,b,c,d;
+	int cas=1;
+	while(input(n) && n)
+	{
+		printf("Heap %d\n",cas++);
+		memset(g,0,sizeof(g));
+		for(int i=0;i<n;i++)
+		{
+			scanf("%d%d%d%d",&a,&b,&c,&d);
+			slide[i]=Cslide(a,b,c,d);
+		}
+		for(int i=0;i<n;i++)
+		{
+			scanf("%d%d",&a,&b);
+			for(int j=0;j<n;j++)
+			{
+				if(slide[j].inSlide(Cpoint(a,b)))
+				{
+					g[j][i]=1;
+				}
+			}
+		}
+		int ind=0;
+		int sum=hungary();
+		//print(sum);
+		for(int i=0;i<n;i++)
+		{
+			if(pre[i]!=-1)
+			{
+				edge[ind++]=make_pair(i,pre[i]);
+			}
+		}
+		ind=0;
+		pair<int,int> ans[SIZE];
+		for(int i=0;i<sum;i++)
+		{
+			g[edge[i].second][edge[i].first]=0;
+			int t=hungary();
+			if(t!=sum)
+			{
+				//print(edge[i].second<<' '<<edge[i].first);
+				ans[ind++]=make_pair(edge[i].second,edge[i].first);
+			}
+			g[edge[i].second][edge[i].first]=1;
+		}
+		if(ind==0) puts("none");
+		else
+		{
+			sort(ans,ans+ind);
+			for(int i=0;i<ind;i++)
+			{
+				if(i) printf(" ");
+				printf("(%c,%d)",'A'+ans[i].first,ans[i].second+1);
+			}
+			puts("");
+		}
+		puts("");
+	}
+	return 0;
+}
+
+
+
+
+

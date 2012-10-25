@@ -1,3 +1,37 @@
+/*
+Catch the Theves
+Time Limit: 2000MS 		Memory Limit: 32768KB
+
+Description
+A group of thieves is approaching a museum in the country of zjsxzy,now they are in city A,and the museum is in city B,where keeps many broken legs of zjsxzy.Luckily,GW learned the conspiracy when he is watching stars and told it to zjsxzy.
+Zjsxzy decided to caught these thieves,and he let the police to do this,the police try to catch them on their way from A to B. Although the thieves might travel this way by more than one group, zjsxzy's excellent police has already gather the statistics that the cost needed on each road to guard it.
+Now ,zjsxzy's conutry can be described as a N*N matrix A,Aij indicates the city(i,j) have bidirectionals road to city(i+1,j) and city(i,j+1),gurad anyone of them costs Aij.
+Now give you the map,help zjsxzy to calculate the minimium cost.We assume thieves may travel in any way,and we will catch all passing thieves on a road if we guard it.
+ 
+
+Input
+The first line is an integer T,followed by T test cases.
+In each test case,the first line contains a number N(1<N<=400).
+The following N lines,each line is N numbers,the jth number of the ith line is Aij.
+The city A is always located on (1,1) and the city B is always located on (n,n).
+Of course,the city (i,j) at the last row or last line won't have road to (i,j+1) or (i+1,j).
+ 
+Output
+For each case,print a line with a number indicating the minimium cost to arrest all thieves.
+ 
+Sample Input
+
+1 
+3 
+10 5 5 
+6 6 20 
+4 7 9
+
+Sample Output
+
+18
+
+*/
 //Result:2012-09-12 22:26:04	Accepted	3870	234MS	25452K	2057 B	C++	Wizmann
 
 /*

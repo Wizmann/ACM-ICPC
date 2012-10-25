@@ -1,3 +1,39 @@
+/*
+Roads
+Time Limit: 1000MS		Memory Limit: 65536KB
+
+Description
+The kingdom of Farland has N cities connected by M roads. Some roads are paved with stones, others are just country roads. Since paving the road is quite expensive, the roads to be paved were chosen in such a way that for any two cities there is exactly one way to get from one city to another passing only the stoned roads. 
+
+The kingdom has a very strong bureaucracy so each road has its own ordinal number ranging from 1 to M: the stoned roads have numbers from 1 to N-1 and other roads have numbers from N to M. Each road requires some money for support, i-th road requires ci coins per year to keep it intact. Recently the king has decided to save some money and keep financing only some roads. Since he wants his people to be able to get from any city to any other, he decided to keep supporting some roads in such a way, that there is still a path between any two cities. 
+
+It might seem to you that keeping the stoned roads would be the good idea, however the king did not think so. Since he did not like to travel, he did not know the difference between traveling by a stoned road and travelling by a muddy road. Thus he ordered you to bring him the costs of maintaining the roads so that he could order his wizard to choose the roads to keep in such a way that the total cost of maintaining them would be minimal. 
+
+Being the minister of communications of Farland, you want to help your people to keep the stoned roads. To do this you want to fake the costs of maintaining the roads in your report to the king. That is, you want to provide for each road the fake cost of its maintaining di in such a way, that stoned roads form the set of roads the king would keep. However, to lower the chance of being caught, you want the value of sum(i = 1..M, |ci-di|) to be as small as possible. 
+
+You know that the king's wizard is not a complete fool, so if there is the way to choose the minimal set of roads to be the set of the stoned roads, he would do it, so ties are allowed. 
+Input
+The first line of the input file contains N and M (2 ≤ N ≤ 60, N-1 ≤ M ≤ 400). Next M lines contain three integer numbers ai, bi and ci each — the numbers of the cities the road connects (1 ≤ ai ≤ N, 1 ≤ bi ≤ N, ai ≠ bi) and the cost of maintaining it (1 ≤ ci ≤ 10 000). 
+Output
+Output M lines — for each road output di that should be reported to be its maintainance cost so that he king would choose first N-1 roads to be the roads to keep and the specified sum is minimal possible. 
+Sample Input
+
+Input
+4 5 
+4 1 7 
+2 1 5 
+3 4 4 
+4 2 5 
+1 3 1 
+
+Output
+4 
+5 
+4 
+5 
+4 
+*/
+
 //Result:Wizmann	SGU 206	Accepted	1603 KB	31 ms	Visual Studio 8 C++	2386 B
 
 /*问题简述：

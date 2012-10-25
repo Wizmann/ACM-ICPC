@@ -1,3 +1,64 @@
+/*
+Alice's mooncake shop
+Time Limit: 1000MS 		Memory Limit: 32768KB
+
+Description
+The Mid-Autumn Festival, also known as the Moon Festival or Zhongqiu Festival is a popular harvest festival celebrated by Chinese people, dating back over 3,000 years to moon worship in China's Shang Dynasty. The Zhongqiu Festival is held on the 15th day of the eighth month in the Chinese calendar, which is in September or early October in the Gregorian calendar. It is a date that parallels the autumnal equinox of the solar calendar, when the moon is at its fullest and roundest.
+
+The traditional food of this festival is the mooncake. Chinese family members and friends will gather to admire the bright mid-autumn harvest moon, and eat mooncakes under the moon together. In Chinese, “round”(圆) also means something like “faultless” or “reuion”, so the roundest moon, and the round mooncakes make the Zhongqiu Festival a day of family reunion.
+
+Alice has opened up a 24-hour mooncake shop. She always gets a lot of orders. Only when the time is K o’clock sharp( K = 0,1,2 …. 23) she can make mooncakes, and We assume that making cakes takes no time. Due to the fluctuation of the price of the ingredients, the cost of a mooncake varies from hour to hour. She can make mooncakes when the order comes,or she can make mooncakes earlier than needed and store them in a fridge. The cost to store a mooncake for an hour is S and the storage life of a mooncake is T hours. She now asks you for help to work out a plan to minimize the cost to fulfill the orders.
+
+Input
+The input contains no more than 10 test cases.
+For each test case:
+The first line includes two integers N and M. N is the total number of orders. M is the number of hours the shop opens.
+The next N lines describe all the orders. Each line is in the following format:
+
+month date year H R
+
+It means that on a certain date, a customer orders R mooncakes at H o’clock. “month” is in the format of abbreviation, so it could be "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov" or "Dec". H and R are all integers.
+All the orders are sorted by the time in increasing order.
+The next line contains T and S meaning that the storage life of a mooncake is T hours and the cost to store a mooncake for an hour is S.
+Finally, M lines follow. Among those M lines, the ith line( i starts from 1) contains a integer indicating the cost to make a mooncake during the ith hour . The cost is no more than 10000. Jan 1st 2000 0 o'clock belongs to the 1st hour, Jan 1st 2000 1 o'clock belongs to the 2nd hour, …… and so on.
+
+(0<N <= 2500; 0 < M,T <=100000; 0<=S <= 200; R<=10000 ; 0<=H<24)
+
+The input ends with N = 0 and M = 0.
+ 
+
+Output
+You should output one line for each test case: the minimum cost.
+
+Sample Input
+1 10 
+Jan 1 2000 9 10 
+5 2 
+20 
+20 
+20 
+10 
+10 
+8 
+7
+9 
+5 
+10 
+0 0
+ 
+
+Sample Output
+70
+
+Hint
+
+“Jan 1 2000 9 10” means in Jan 1st 2000 at 9 o'clock , there's a consumer ordering 10 mooncakes. 
+Maybe you should use 64-bit signed integers. The answer will fit into a 64-bit signed integer.
+ 
+*/
+ 
+
+
 //Result:2012-10-04 19:56:05	Accepted	4122	218MS	8248K	2717 B	G++	Wizmann
 #include <cstdio>
 #include <cstdlib>

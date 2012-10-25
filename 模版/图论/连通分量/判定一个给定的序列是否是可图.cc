@@ -1,4 +1,47 @@
 /*
+Frogs' Neighborhood
+Time Limit: 5000MS		Memory Limit: 10000KB
+
+Description
+未名湖附近共有N个大小湖泊L1, L2, ..., Ln(其中包括未名湖)，每个湖泊Li里住着一只青蛙Fi(1 ≤ i ≤ N)。如果湖泊Li和Lj之间有水路相连，则青蛙Fi和Fj互称为邻居。现在已知每只青蛙的邻居数目x1, x2, ..., xn，请你给出每两个湖泊之间的相连关系。
+
+Input
+第一行是测试数据的组数T(0 ≤ T ≤ 20)。每组数据包括两行，第一行是整数N(2 < N < 10)，第二行是N个整数，x1, x2,..., xn(0 ≤ xi ≤ N)。
+
+Output
+对输入的每组测试数据，如果不存在可能的相连关系，输出"NO"。否则输出"YES"，并用N×N的矩阵表示湖泊间的相邻关系，即如果湖泊i与湖泊j之间有水路相连，则第i行的第j个数字为1，否则为0。每两个数字之间输出一个空格。如果存在多种可能，只需给出一种符合条件的情形。相邻两组测试数据之间输出一个空行。
+
+Sample Input
+3
+7
+4 3 1 5 4 2 1 
+6
+4 3 1 4 2 0 
+6
+2 3 1 1 2 1 
+Sample Output
+YES
+0 1 0 1 1 0 1 
+1 0 0 1 1 0 0 
+0 0 0 1 0 0 0 
+1 1 1 0 1 1 0 
+1 1 0 1 0 1 0 
+0 0 0 1 1 0 0 
+1 0 0 0 0 0 0 
+
+NO
+
+YES
+0 1 0 0 1 0 
+1 0 0 1 1 0 
+0 0 0 0 0 1 
+0 1 0 0 0 0 
+1 1 0 0 0 0 
+0 0 1 0 0 0 
+*/
+
+
+/*
 * Havel-Hakimi定理
     * 判定一个给定的序列是否是可图的。
     * 判定过程
@@ -8,127 +51,75 @@
 */
 
 
-//Result:Wizmann    POJ 1236    Accepted    760 KB    16 ms    G++    1864 B
+//Result:wizmann	1659	Accepted	736K	0MS	G++	1168B	2012-09-19 16:11:12
 #include <cstdio>
-#include <cstdlib>
 #include <cstring>
+#include <cstdlib>
 #include <iostream>
 #include <algorithm>
-#include <vector>
-#include <stack>
 
 using namespace std;
 
 #define print(x) cout<<x<<endl
 #define input(x) cin>>x
-#define SIZE 128
-
-vector<int> g[SIZE];
-int n;
-char instack[SIZE];
-int low[SIZE];
-int nr;
-stack<int> st;
-int dfn[SIZE],scc[SIZE],num[SIZE],sccnr=0;
-
-void init()
-{
-    for(int i=0;i<SIZE;i++) g[i].clear();
-    memset(instack,0,sizeof(instack));
-    memset(scc,0,sizeof(scc));
-    memset(num,0,sizeof(num));
-    memset(low,0,sizeof(low));
-    memset(dfn,0,sizeof(dfn));
-    while(!st.empty()) st.pop();
-    nr=1;sccnr=0;
-}
-
-void tarjan(int x)
-{
-    low[x]=dfn[x]=nr++;
-    st.push(x);
-    instack[x]=1;
-    
-    for(int i=0;i<(int)g[x].size();i++)
-    {
-        int next=g[x][i];
-        if(!dfn[next])
-        {
-            tarjan(next);
-            low[x]=min(low[x],low[next]);
-        }
-        else if(instack[next])
-        {
-            low[x]=min(low[x],dfn[next]);
-        }
-    }
-
-    if(dfn[x]==low[x])
-    {
-        sccnr++;
-        while(1)
-        {
-            int t=st.top();
-            instack[t]=0;
-            st.pop();
-            scc[t]=sccnr;
-            num[sccnr]++;
-            if(t==x) break;
-        }
-    }
-}
-
-int out[SIZE],in[SIZE];
+#define SIZE 12
 
 int main()
 {
-    freopen("input.txt","r",stdin);
-    int tmp;
-    while(input(n))
-    {
-        init();
-        
-        memset(out,0,sizeof(out));
-        memset(in,0,sizeof(int));
-        for(int i=0;i<n;i++)
-        {
-            while(1)
-            {
-                scanf("%d",&tmp);
-                if(!tmp) break;
-                g[i].push_back(--tmp);
-            }
-        }
-        
-        
-        for(int i=0;i<n;i++)
-        {
-            if(!dfn[i]) tarjan(i);
-        }
+	freopen("input.txt","r",stdin);
+	int T,n;
+	pair<int,int> array[SIZE];
+	int g[SIZE][SIZE];
+	input(T);
+	while(T--)
+	{
+		memset(g,0,sizeof(g));
+		input(n);
+		for(int i=0;i<n;i++)
+		{
+			scanf("%d",&(array[i].first));
+			array[i].second=i;
+		}
+		bool flag=true;
+		for(int i=0;i<n;i++)
+		{
+			if(!flag) break;
+			sort(array,array+n,greater<pair<int,int> >());
+			if(array[0].first>n-1)
+			{
+				flag=false;
+				break;
+			}
+			
+			for(int j=1;j<=array[0].first;j++)
+			{
+				array[j].first--;
+				if(array[j].first<0)
+				{
+					flag=false;
+					break;
+				}
+				g[array[0].second][array[j].second]=g[array[j].second][array[0].second]=1;
+			}
+			array[0].first=0;
+		}
 
-        for(int i=0;i<n;i++)
-        {
-            out[scc[i]]=g[i].size();
-            for(int j=0;j<(int)g[i].size();j++)
-            {
-                int k=g[i][j];
-                if(scc[i]!=scc[k]) in[scc[k]]++;
-            }
-        }
-
-        
-        int inz,outz;
-        inz=outz=0;
-        for(int i=1;i<=sccnr;i++)
-        {
-            if(!in[i]) inz++;
-            if(!out[i]) outz++;
-        }
-        if(sccnr==1) printf("1\n0\n");
-        else printf("%d\n%d\n",inz,max(inz,outz));
-    }
-    return 0;
+		if(flag)
+		{
+			puts("YES");
+			for(int i=0;i<n;i++)
+			{
+				for(int j=0;j<n;j++)
+				{
+					if(j) printf(" ");
+					printf("%d",g[i][j]);
+				}
+				puts("");
+			}
+		}
+		else puts("NO");
+		puts("");
+	}
+	return 0;
 }
-
-
 

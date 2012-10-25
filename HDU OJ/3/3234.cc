@@ -1,3 +1,58 @@
+/*
+Exclusive-OR
+Time Limit: 3000MS		Memory Limit: Unknown
+
+Description
+
+You are not given n non-negative integers X0, X1,..., Xn-1 less than 220, but they do exist, and their values never change.
+I'll gradually provide you some facts about them, and ask you some questions.
+There are two kinds of facts, plus one kind of question:
+
+Format	 Meaning
+I p v	 I tell you Xp = v
+I p q v	 I tell you Xp XOR Xq = v
+Q k p1 p2...pk	 Please tell me the value of Xp1 XOR Xp2 XOR...XOR Xpk
+
+
+Input
+There will be at most 10 test cases. Each case begins with two integers n and Q (1n20, 000, 2Q40, 000). Each of the following lines contains either a fact or a question, formatted as stated above. The k parameter in the questions will be a positive integer not greater than 15, and the v parameter in the facts will be a non-negative integer less than 220. The last case is followed by n = Q = 0, which should not be processed.
+Output
+For each test case, print the case number on its own line, then the answers, one on each one. If you can't deduce the answer for a particular question, from the facts I provide you before that question, print ``I don't know.", without quotes. If the i-th fact (don't count questions) cannot be consistent with all the facts before that, print ``The first i facts are conflicting.", then keep silence for everything after that (including facts and questions). Print a blank line after the output of each test case.
+Sample Input
+2 6 
+I 0 1 3
+Q 1 0 
+Q 2 1 0
+I 0 2 
+Q 1 1 
+Q 1 0 
+3 3 
+I 0 1 6
+I 0 2 2
+Q 2 1 2
+2 4 
+I 0 1 7
+Q 2 0 1
+I 0 1 8
+Q 2 0 1
+0 0
+Sample Output
+Case 1: 
+I don't know. 
+3 
+1 
+2 
+
+Case 2: 
+4 
+
+Case 3: 
+7 
+The first 2 facts are conflicting.
+
+*/
+
+
 //Result:2011-10-10 16:08:51	Accepted	3234	234MS	524K	2241 B	G++	Foc_Kuuy
 #include <cstdio>
 #include <cstdlib>

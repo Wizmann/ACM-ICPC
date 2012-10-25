@@ -150,7 +150,7 @@ namespace NUMBER
 				}
 			}
 		}
-		void Find_factor(llint n,llint c)
+		void Find_factor(llint n,llint c=SIZE)
 		{
 			if(n==1) return;
 			if(miller_rabin(n,5))
@@ -175,8 +175,6 @@ namespace NUMBER
 
 int main()
 {
-	freopen("1006.in","r",stdin);
-	//freopen("out.txt","w",stdout);
 	int T;
 	llint x;
 	input(T);
@@ -187,7 +185,7 @@ int main()
 		llint ans=0;
 		pr.init();
 		scanf("%I64d",&x);
-		pr.Find_factor(x,128);
+		pr.Find_factor(x);
 		mp.clear();
 		for(int i=0;i<pr.cnt;i++)
 		{

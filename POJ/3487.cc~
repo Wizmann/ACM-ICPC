@@ -16,6 +16,73 @@
 //输出：
 //稳定婚姻，按男士名字的字典序排列
 
+//The Stable Marriage Problem
+//Time Limit: 1000MS 		Memory Limit: 65536KB
+//Description
+//
+//The stable marriage problem consists of matching members of two different sets
+//according to the member’s preferences for the other set’s members. The input 
+//for our problem consists of:
+//
+//    a set M of n males;
+//    a set F of n females;
+//    for each male and female we have a list of all the members of the opposite 
+//    gender in order of preference (from the most preferable to the least).
+//
+//A marriage is a one-to-one mapping between males and females. A marriage is 
+//called stable, if there is no pair (m, f) such that f ∈ F prefers m ∈ M to her
+//current partner and m prefers f over his current partner. The stable marriage 
+//A is called male-optimal if there is no other stable marriage B, where any male 
+//matches a female he prefers more than the one assigned in A.
+//
+//Given preferable lists of males and females, you must find the male-optimal 
+//stable marriage.
+//
+//Input
+//
+//The first line gives you the number of tests. The first line of each test case 
+//contains integer n (0 < n < 27). Next line describes n male and n female names. 
+//Male name is a lowercase letter, female name is an upper-case letter. Then go 
+//n lines, that describe preferable lists for males. Next n lines describe 
+//preferable lists for females.
+//
+//Output
+
+//For each test case find and print the pairs of the stable marriage, which is 
+//male-optimal. The pairs in each test case must be printed in lexicographical 
+//order of their male names as shown in sample output. Output an empty line 
+//between test cases.
+
+//Sample Input
+//
+//2
+//3
+//a b c A B C
+//a:BAC
+//b:BAC
+//c:ACB
+//A:acb
+//B:bac
+//C:cab
+//3
+//a b c A B C
+//a:ABC
+//b:ABC
+//c:BCA
+//A:bac
+//B:acb
+//C:abc
+//
+//Sample Output
+//
+//a A
+//b B
+//c C
+//
+//a B
+//b A
+//c C
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>

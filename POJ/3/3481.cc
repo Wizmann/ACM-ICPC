@@ -22,6 +22,7 @@ private:
         {
             size=0;
         }
+        ~TreapNode(){delete left;delete right;}
     };
     TreapNode *root,*null;
     
