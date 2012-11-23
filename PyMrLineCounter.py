@@ -11,7 +11,7 @@ if(__name__=='__main__'):
 	for root, dirs, files in os.walk(sys.path[0]):
 		for item in files:
 			ext=item.split('.')[-1]
-			if(ext in ['cc','java','cpp','c','py','cxx','hs']):
+			if(ext in ['cc','java','cpp','c','py','cxx','hs','scala','scl']):
 				path=root+'/'+item
 				if('模版' in path):
 					continue
