@@ -1,0 +1,13 @@
+object A
+{
+    def main(args: Array[String])
+    {
+        val n = readLine().toInt
+        val colors=Array.ofDim[Int](n,2)
+        for (i <- 0 until n)
+        {
+            colors(i)=readLine.split(" ").map(_.toInt)
+        }
+        println((for(x<- colors.iterator; y<-colors.iterator) yield(x,y)).filter(x => x._1(0) == x._2(1)).length)
+    }
+}

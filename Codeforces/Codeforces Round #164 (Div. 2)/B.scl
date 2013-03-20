@@ -1,0 +1,8 @@
+object B
+{
+    def main(args: Array[String])
+    {
+        val n = readLine.toInt
+        println( (for(i<-0 until n) yield (i+1)*(n-i)-i) sum)
+    }
+}
