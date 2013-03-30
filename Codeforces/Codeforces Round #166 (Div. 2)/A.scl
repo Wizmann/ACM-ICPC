@@ -1,0 +1,9 @@
+//3129213	 Feb 14, 2013 7:04:59 PM	Wizmann	 A - Beautiful Year	 Scala	Accepted	 421 ms	 300 KB
+object A 
+{
+    def main(args: Array[String])
+    {
+        val n = readInt
+        println((n+1 to 9999) filter(_.toString.distinct.size >= 4) head)
+    }
+}

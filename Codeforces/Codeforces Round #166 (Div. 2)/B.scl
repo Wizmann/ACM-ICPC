@@ -1,0 +1,54 @@
+import collection.mutable.Map
+import collection.mutable.ArrayBuffer
+
+object B
+{
+    def main(args: Array[String])
+    {
+        val MAXI = 200000
+        val prePrimeBuffer = ArrayBuffer[Int]()
+        val visit=new Array[Boolean](MAXI+1)
+        prePrimeBuffer += 2
+        for(i<-3 until MAXI by 2 if !visit(i))
+        {
+            prePrimeBuffer+=i
+            var j=2
+            while(i*j<=MAXI) {visit(i*j)=true;j+=1}
+        }
+        
+        val prePrime = prePrimeBuffer toArray
+        val Array(n,m) = readLine.split(" ").map(_.toInt)
+        val mat = Array.ofDim[Int](n,m)
+        
+        for(i <- 0 until n)
+        {
+            mat(i) = readLine.split(" ").map(_.toInt)
+        }
+        val matT = mat.transpose
+        //print(mat map (_ map ("%2d" format _) mkString " ") mkString "\n")
+        
+        def nextPrime(target:Int):Int={
+            var i=0
+            var j=prePrime.size-1
+            while(i<j){
+                val mid=(i+j)/2
+                if(prePrime(mid)==target) return prePrime(mid)
+                else if(prePrime(mid)<target) i=mid+1
+                else j=mid
+            }
+        
+            prePrime(i)
+        }
+        
+        def slove(mm: Array[Array[Int]]): List[Int] =
+        {
+            val sz = mm.size
+            val ans = for(i <- 0 until sz) 
+                    yield (mm(i).map((x) => (nextPrime(x) - x))).sum
+            ans.toList
+        }
+        val aa = slove(mat)
+        val bb = slove(matT)
+        println(Array(aa.min,bb.min).min)
+    }
+}
