@@ -4,7 +4,8 @@ class Solution {
  * 这题出的人干事？
 */
 public:
-    int atoi(const char *str) {
+    int atoi(const char *str)
+    {
         int sig = 1;
         int i = 0;
         long long ans = 0;
