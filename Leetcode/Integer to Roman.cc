@@ -3,9 +3,9 @@ public:
     string intToRoman(int num) {
         string ans = "";
         int base = 10;
-        while (num < base/10) {
-            int x = num % base / (base / 10);
-            ans += _digit_to_roman(x);
+        while (num >= base/10) {
+            int x = num % base / (base / 10) * (base / 10);
+            ans = _digit_to_roman(x) + ans;
             base *= 10;
         }
         return ans;
@@ -14,17 +14,14 @@ public:
     string _digit_to_roman(int num)
     {
         string one, five, ten;
-        int base = -1;
         if (num > 0 && num < 10) {
             one  = "I";
             five = "V";
             ten  = "X";
-            base = 1;
         } else if (num >= 10 && num < 100) {
             one  = "X";
             five = "L";
             ten  = "C";
-            base = 10;
         } else if (num >= 100 && num < 1000) {
             one  = "C";
             five = "D";
