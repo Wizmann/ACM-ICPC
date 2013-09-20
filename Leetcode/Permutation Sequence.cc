@@ -2,39 +2,44 @@ class Solution {
 public:
     int numbers[12];
     string getPermutation(int n, int k) {
-        for (int i = 0; i < n ; i++) {
-            numbers[i] = i + 1;
+        for (int i = 1; i <= n; i++) {
+            numbers[i-1] = i;
         }
         
-        while (--k) {
+        k--;
+        int maxi = 1;
+        for (int i = 1; i <= n; i++) {
+            maxi *= i;
+        }
+        k %= maxi;
+        
+        while (k--) {
             next_perm(n);
         }
+
         string res;
         for (int i = 0; i < n; i++) {
-            res += '0' + numbers[i];
+            res += numbers[i] + '0';
         }
         return res;
     }
     
-    void next_perm(int n){
-        bool done = false;
+    void next_perm(int n) {
         for (int i = n - 2; i >= 0; i--) {
             int ii = i + 1;
             if (numbers[i] < numbers[ii]) {
-                bool done = false;
-                for (int j = n - 1; j > i; j--) {
-                    if (numbers[j] >= numbers[i]) {
-                        swap(numbers[j], numbers[i]);
-                        reverse(numbers + i + 1, numbers + n);
-                        done = true;
-                        return;
-                    }
-                }
-
+                int p = get_max_pos(n, i);
+                swap(numbers[i], numbers[p]);
+                reverse(numbers + i + 1, numbers + n);
+                break;
             }
         }
-        if (not done) {
-            reverse(numbers, numbers + n);
+    }
+    
+    int get_max_pos(int n, int p) {
+        for (int i = n - 1; i > p; i--) {
+            if (numbers[i] >= numbers[p]) return i;
         }
+        return -1;
     }
 };
