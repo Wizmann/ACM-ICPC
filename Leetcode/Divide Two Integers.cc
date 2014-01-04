@@ -1,35 +1,21 @@
 class Solution {
 public:
     typedef long long llint;
-    int divide(llint dividend, llint divisor) {
-    	int sig = ((dividend < 0) ^ (divisor < 0)) == 1 ? -1: 1;
-        dividend = abs(dividend);
-        divisor = abs(divisor);
-        
-        if (dividend < divisor) {
-            return 0;
-        }
-        
-        int res = 0;
-        int now = 0;
-        llint sum = 0;
-        
-        while (true) {
-            llint next = sum + (divisor << now);
-            if (next < dividend) {
-                res += 1 << now;
-                now++;
-                sum = next;
-                if (sum + divisor > dividend) {
-                    break;
-                }
-            } else if (next == dividend) {
-                res += 1 << now;
+    int divide(int dividend, int divisor) {
+        int sig = ((dividend < 0) ^ (divisor < 0)) ? -1 : 1;
+        return sig * do_solve(abs(llint(dividend)), abs(llint(divisor)));
+    }
+    
+    int do_solve(llint a, llint b) {
+        int ans = 0;
+        for (int i = 0;/* PASS */; i++) {
+            if (a < (b << i)) {
                 break;
-            } else {
-                now--;
             }
+            ans = i;
         }
-        return sig == 1 ? res : -res;
+        
+        if ((b << ans) > a) return 0;
+        else return (1 << ans) | do_solve(a - (b << ans), b);
     }
 };

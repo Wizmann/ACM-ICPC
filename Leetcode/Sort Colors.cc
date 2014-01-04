@@ -1,19 +1,12 @@
 class Solution {
 public:
-    void sortColors(int A[], int n) 
-    {
-        int p = 0;
-        move(A, n, 0, p);
-        move(A, n, 1, p);
-        move(A, n, 2, p);
-    }
-    
-    void move(int A[], int n, int x, int& p)
-    {
-        for (int i = p; i < n; i++) {
-            if (A[i] == x) {
-                swap(A[i], A[p]);
-                p++;
+    void sortColors(int A[], int n) {
+        int l = 0, r = n - 1;
+        for (int i = 0; i <= r; /*pass*/) {
+            switch(A[i]) {
+                case 0: swap(A[i++], A[l++]); break;
+                case 2: swap(A[i], A[r--]); break;
+                default: i++; break;
             }
         }
     }

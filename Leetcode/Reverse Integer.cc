@@ -1,40 +1,18 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <algorithm>
-
-using namespace std;
-
-#define print(x) cout<<x<<endl
-#define input(x) cin>>x
-
-class Solution 
-{
+class Solution {
 public:
-    int reverse(int x) 
-    {
-        char s[1024];
-        bool flag = true;
-        if(x<0)
-        {
-            x=-x;
-            flag=false;
+    int reverse(int x) {
+        int g = 1;
+        if (x < 0) g = -1;
+        
+        int res = 0;
+        
+        while (x != 0) {
+            int t = abs(x % 10);
+            x /= 10;
+            
+            res = res * 10 + t;
         }
-        sprintf(s,"%d", x);
-        int l = 0, r = strlen(s)-1;
-        while(l<r)
-        {
-            swap(s[l],s[r]);
-            l++;r--;
-        }
-        return (flag?1:-1) * atoi(s);
+        
+        return res * g;
     }
 };
-
-int main()
-{
-    Solution S;
-    print(S.reverse(0));
-    return 0;
-}
