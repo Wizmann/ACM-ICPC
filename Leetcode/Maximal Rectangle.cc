@@ -1,51 +1,47 @@
 class Solution {
 public:
-    static const int INF = 1<<28;
-    int maximalRectangle(vector<vector<char> > &matrix)
-    {
-        int y = matrix.size();
-        if (y == 0) {
-            return 0;
-        }
-        int x = matrix[0].size();
-        int height[y+ 5][x + 5];
-        
-        memset(height, 0, sizeof(height));
-        
-        for (int i = 0; i < y; i++) {
-            for (int j = 0; j < x; j++) {
-                height[i][j] = matrix[i][j] - '0';
-                if (height[i][j] && i - 1 >= 0) {
-                    height[i][j] += height[i-1][j];
+    int maximalRectangle(vector<vector<char> > &matrix) {
+        int yy = matrix.size();
+        int xx = matrix.empty()? 0: matrix[0].size();
+        memset(sum, 0, sizeof(sum));
+        for (int i = 0; i < xx; i++) {
+            int ss = 0;
+            for (int j = yy - 1; j >= 0; j--) {
+                if (matrix[j][i] == '1') {
+                    ss++;
+                } else {
+                    ss = 0;
                 }
+                sum[j][i] = ss;
             }
         }
         
+        
         int ans = 0;
-        for (int i = 0; i < y; i++) {
-            ans = max(ans, solve(height[i], x));
+        for (int i = 0; i < yy; i++) {
+            ans = max(ans, calc(sum[i], xx));
         }
         return ans;
     }
     
-    int solve(int height[], int x)
-    {
-        int ans = 0;
+    int calc(int *s, int size) {
         stack<int> st;
-        height[x] = 0;
-        
-        for (int i = 0; i <= x; i++) {
-            if (st.empty() || height[i] > height[st.top()]) {
+        int ans = 0;
+
+        for (int i = 0; i <= size; i++) {
+            if (st.empty() || s[i] > s[st.top()]) {
                 st.push(i);
             } else {
-                while (!st.empty() && height[i] <= height[st.top()]) {
-                    int t = st.top();
+                while (!st.empty() && s[i] <= s[st.top()]) {
+                    int now = st.top();
                     st.pop();
-                    ans = max(ans, height[t] * (st.empty()? i: i - st.top() - 1));
+                    ans = max(ans, s[now] * (st.empty()? i : i - st.top() - 1));
                 }
                 st.push(i);
             }
         }
         return ans;
     }
+    static const int SIZE = 512;
+    int sum[SIZE][SIZE];
 };
