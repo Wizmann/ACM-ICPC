@@ -11,59 +11,45 @@ using namespace std;
 #define input(x) cin >> x
 
 const int SIZE = 10;
-const int TIME = 1000000;
+int factorial[SIZE + 1];
+vector<int> nums;
 
-int _find_greater(const vector<int>& vec, int x)
+void init()
 {
-    int n = vec.size();
-    for (int i = n - 1; i > x; i--) {
-        if (vec[i] > vec[x]) {
-            return i;
-        }
+    int r = 1;
+    factorial[0] = 1;
+    for (int i = 1; i <= SIZE; i++) {
+        factorial[i] = r;
+        r *= (i + 1);
     }
-    return -1;
+    for (int i = 0; i < SIZE; i++) {
+        nums.push_back(i);
+    }
 }
 
-
-void _next_permutation(vector<int>& vec)
+vector<int> solve(int n)
 {
-    bool done = false;
-    int n = vec.size();
+    vector<int> ans;
+    n %= factorial[SIZE];
 
-    for (int i = n - 2; i >= 0; i--) {
-        int ii = i + 1;
-        if (vec[i] < vec[ii]) {
-            int p = _find_greater(vec, i);
-            swap(vec[i], vec[p]);
-            reverse(vec.begin() + ii, vec.end());
-            done = true;
-            break;
-        }
+    for (int i = SIZE - 1; i >= 0; i--) {
+        int v = n / factorial[i];
+        ans.push_back(nums[v]);
+        nums.erase(nums.begin() + v);
+        n %= factorial[i];
     }
-
-    if (!done) {
-        reverse(vec.begin(), vec.end());
-    }
+    return ans;
 }
+
 
 int main()
 {
-    vector<int> vec;
-    for (int i = 0; i < SIZE; i++)  {
-        vec.push_back(i);
-    }
-    
-    int t = TIME % (1LL * 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 10) - 1;
-    while (t--) {
-        _next_permutation(vec);
-        
-
-    }
-
+    init();
+    int n = 1000000 - 1; // one MILLION
+    vector<int> ans = solve(n);
     for (int i = 0; i < SIZE; i++) {
-        printf("%d", vec[i]);
+        printf("%d", ans[i]);
     }
     puts("");
-    
     return 0;
 }
