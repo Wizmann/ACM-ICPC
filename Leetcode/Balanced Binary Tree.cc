@@ -10,32 +10,26 @@
 class Solution {
 public:
     bool isBalanced(TreeNode *root) {
-        int x;
+        res = true;
         if (!root) {
             return true;
         }
-        return _isBalanced(root, x);
+        do_is_balanced(root);
+        return res;
     }
     
-    bool _isBalanced(TreeNode *root, int& depth)
-    {
-        int left_depth = 0;
-        int right_depth = 0;
+    int do_is_balanced(TreeNode *root) {
+        if (!root) {
+            return 0;
+        }
+        int l = do_is_balanced(root -> left);
+        int r = do_is_balanced(root -> right);
         
-        bool left_bal = true;
-        if (root->left) {
-            left_bal = _isBalanced(root->left, left_depth);
+        if (abs(l - r) > 1) {
+            res = false;
         }
-        bool right_bal = true;
-        if (root->right) {
-            right_bal = _isBalanced(root->right, right_depth);
-        }
-        
-        depth = max(left_depth, right_depth) + 1;
-        if (!left_bal || !right_bal) return false;
-        else {
-            if (abs(left_depth - right_depth) > 1) return false;
-            else return true;
-        }
+        return max(l, r) + 1;
     }
+private:
+    bool res;
 };
