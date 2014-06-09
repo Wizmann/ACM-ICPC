@@ -1,69 +1,69 @@
+const int mx[4] = {-1, 1, 0, 0};
+const int my[4] = {0 , 0, 1, -1};
+
 class Solution {
 public:
-    vector<vector<char> > board;
-    int n,m;
-    const int mx[4] = {0, 1, 0, -1};
-    const int my[4] = {1, 0 ,-1, 0};
-    
-    void solve(vector<vector<char>> &i_board) {
-        board = i_board;
-        
+    void solve(vector<vector<char>> &board) {
+        if (board.empty()) {
+            return;
+        }
         n = board.size();
-        m = n;
-        
+        m = board[0].size();
+        for (int i = 0; i < n; i++) {
+            do_fill(i, 0, board);
+            do_fill(i, m - 1, board);
+        }
         for (int i = 0; i < m; i++) {
-            if (board[0][i] == 'O') {
-                dfs(0, i);
-            }
-            if (board[n-1][i] == 'O') {
-                dfs(n-1, i);
-            }
+            do_fill(0, i, board);
+            do_fill(n - 1, i, board);
         }
-        
-        for (int i = 0; i < n; i++) {
-            if (board[i][0] == 'O') {
-                dfs(i, 0);
-            }
-            if (board[i][m - 1] == 'O') {
-                dfs(i, m-1);
-            }
-        }
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if(board[i][j] == '#') {
-                    board[i][j] = 'O';
-                } else {
-                    board[i][j] = 'X';
-                }
-            }
-        }
-        i_board = board;
+        prettify(board);
     }
     
-    void dfs(int y, int x)
-    {
-        stack<pair<int, int> > st;
-        st.push(make_pair(y, x));
-        while (!st.empty()) {
-            y = st.top().first;
-            x = st.top().second;
-            st.pop();
-            
-            board[y][x] = '#';
-            for (int i = 0; i < 4; i++) {
-                int next_x = x + mx[i];
-                int next_y = y + my[i];
-                
-                if (next_x >= 0 && 
-                        next_x < n && 
-                        next_y >= 0 && 
-                        next_y < n) {
-                    if (board[next_y][next_x] == 'O') {
-                        st.push(make_pair(next_y, next_x));
+    void do_fill(int y, int x, vector<vector<char> > &board) {
+        if (board[y][x] != 'O') {
+            return;
+        } else {
+            queue<Point> q;
+            q.push(Point(y, x));
+            while (!q.empty()) {
+                Point now = q.front();
+                q.pop();
+                board[now.y][now.x] = 'y';
+                for (int i = 0; i < 4; i++) {
+                    Point next = now;
+                    next.y += my[i];
+                    next.x += mx[i];
+                    
+                    if (inMap(next) && board[next.y][next.x] == 'O') {
+                        board[next.y][next.x] = 'y';
+                        q.push(next);
                     }
                 }
             }
         }
-    }    
+    }
+private:
+    struct Point {
+        int y, x;
+        Point(int iy, int ix): y(iy), x(ix) {}
+    };
+    
+    bool inMap(const Point& p) {
+        return p.y >= 0 && p.y < n && p.x >= 0 && p.x < m;
+    }
+    
+    void prettify(vector<vector<char> >& board) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                } else if (board[i][j] == 'y') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+
+    int n, m;
 };
