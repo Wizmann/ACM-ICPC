@@ -1,27 +1,25 @@
-const int SIZEA = 20000;
-const int SIZEB = 100;
-
-int dp[SIZEA][SIZEB];
-
 class Solution {
 public:
     int numDistinct(string S, string T) {
-        memset(dp, 0, sizeof(dp));
-        dp[0][0] = 1;
-        for (int i = 1; i <= S.size(); i++) {
-            for (int j = 1; j <= T.size(); j++) {
-                dp[i][j] = 0;
-                if (S[i-1] == T[j-1]) {
-                    for (int k = 0; k < i; k++) {
-                        dp[i][j] += dp[k][j-1];
-                    }
+        int ls = S.size();
+        int lt = T.size();
+        vector<vector<int> > dp;
+        dp.resize(ls + 5);
+        for (auto iter = dp.begin(); iter != dp.end(); ++iter) {
+            iter -> resize(lt + 5);
+        }
+        for (int i = 0; i <= ls; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 0; i < lt; i++) {
+            for (int j = 0; j < ls; j++) {
+                if (T[i] == S[j]) {
+                    dp[j + 1][i + 1] += dp[j][i] + dp[j][i + 1];
+                } else {
+                    dp[j + 1][i + 1] += dp[j][i + 1];
                 }
             }
         }
-        int ans = 0;
-        for (int i = 1; i <= S.size(); i++) {
-            ans += dp[i][T.size()];
-        }
-        return ans;
+        return dp[ls][lt];
     }
 };

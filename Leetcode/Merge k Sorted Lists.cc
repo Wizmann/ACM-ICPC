@@ -6,44 +6,53 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+ 
+#include <queue>
 
-const int INF = 1 << 28;
 
 class Solution {
 public:
     ListNode *mergeKLists(vector<ListNode *> &lists) {
-        ListNode *head = NULL;
-        ListNode *now  = NULL;
+        ListNode *res = NULL;
+        ListNode *tail = NULL;
+        priority_queue<Pointer, vector<Pointer>, greater<Pointer> > pq;
+        if (lists.empty()) {
+            return NULL;
+        }
+        for (int i = 0; i < (int)lists.size(); i++) {
+            if (!lists[i]) continue;
+            pq.push(Pointer(lists[i] -> val, i));
+        }
         while (true) {
-            int min_value = INF;
-            int min_ptr = -1;
-            for (int i = 0; i < lists.size(); i++) {
-                if (lists[i] == NULL) {
-                    continue;
-                } else {
-                    if ((lists[i]->val) < min_value) {
-                        min_value = lists[i]->val;
-                        min_ptr = i;
-                    }
-                }
-            }
+            if (pq.empty()) break;
             
-            if (min_ptr == -1){
-                break;
+            Pointer now = pq.top();
+            pq.pop();
+            
+            int ptr = now.ptr;
+            int val = now.val;
+            
+            if (!res) {
+                res = tail = new ListNode(val);
             } else {
-                if (!head) {
-                    head = lists[min_ptr];
-                    now = head;
-                } else {
-                    now -> next = lists[min_ptr];
-                    now = now -> next;
-                }
-                lists[min_ptr] = lists[min_ptr]->next;
+                tail -> next = new ListNode(val);
+                tail = tail -> next;
+            }
+            lists[ptr] = lists[ptr] -> next;
+            if (lists[ptr]) {
+                pq.push(Pointer(lists[ptr] -> val, ptr));
             }
         }
-        if (now) {
-            now->next = NULL;
-        }
-        return head;
+        return res;
     }
+private:
+    struct Pointer {
+        int val;
+        int ptr;
+        Pointer(int ival, int iptr): val(ival), ptr(iptr) {}
+        
+        bool operator > (const Pointer& p) const {
+            return val > p.val;
+        }
+    };
 };
