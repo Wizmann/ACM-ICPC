@@ -20,7 +20,6 @@ int cnt[SIZE];
 int dis[SIZE];
 vector<int> g[SIZE];
 
-
 int n, m;
 
 void init()
