@@ -10,33 +10,35 @@
 class Solution {
 public:
     vector<vector<int> > zigzagLevelOrder(TreeNode *root) {
-        queue<pair<TreeNode*, int> > q;
-        q.push(make_pair(root, 0));
         vector<vector<int> > res;
-        while (!q.empty()) {
-            pair<TreeNode*, int> now = q.front();
-            q.pop();
-            
-            int lv = now.second;
-            TreeNode* pnode = now.first;
-            
-            if (!pnode) {
-                continue;
-            }
-            
-            if (lv == res.size()) {
-                res.push_back(vector<int>());
-            }
-            
-            res[lv].push_back(pnode -> val);
-            
-            q.push(make_pair(pnode -> left, lv + 1));
-            q.push(make_pair(pnode -> right, lv + 1));
+        if (!root) {
+            return res;
         }
-        for (int i = 0; i < res.size(); i++) {
-            if (i & 1) {
-                reverse(res[i].begin(), res[i].end());
+        queue<TreeNode*> q[2];
+        int ptr = 0, cnt = 0;
+        q[ptr].push(root);
+        
+        while (!q[ptr].empty()) {
+            int qtr = ptr ^ 1;
+            q[qtr] = queue<TreeNode*> ();
+            vector<int> v;
+            while (!q[ptr].empty()) {
+                TreeNode *now = q[ptr].front();
+                q[ptr].pop();
+                v.push_back(now -> val);
+                if (now -> left) {
+                    q[qtr].push(now -> left);
+                }
+                if (now -> right) {
+                    q[qtr].push(now -> right);
+                }
             }
+            if (cnt % 2) {
+                reverse(v.begin(), v.end());
+            }
+            cnt++;
+            ptr = qtr;
+            res.push_back(v);
         }
         return res;
     }

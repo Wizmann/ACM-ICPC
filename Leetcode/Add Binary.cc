@@ -1,35 +1,19 @@
 class Solution {
 public:
     string addBinary(string a, string b) {
+        string c;
+        int maxlen = max(a.length(), b.length());
         reverse(a.begin(), a.end());
         reverse(b.begin(), b.end());
-        
-        int sz = max(a.length(), b.length());
-        int va, vb, g = 0;
-        string c;
-        for (int i = 0 ; i <= sz; i++) {
-            if (i == sz && g == 0) {
-                break;
+        for (int i = 0, g = 0; i < maxlen + 1; i++) {
+            int u = i >= a.length() ? 0: a[i] - '0';
+            int v = i >= b.length() ? 0: b[i] - '0';
+            g += u + v;
+            if (g || i != maxlen) {
+                c = char('0' + (g & 1)) + c;
             }
-            if (i > a.length()) {
-                va = 0; 
-            } else {
-                va = a[i] == '1';
-            }
-            
-            if (i > b.length()) {
-                vb = 0;
-            } else {
-                vb = b[i] == '1';
-            }
-            
-            int v = va + vb + g;
-            g = v / 2;
-            v = v % 2;
-            
-            c += v? '1' : '0';
+            g >>= 1;
         }
-        reverse(c.begin(), c.end());
         return c;
     }
 };

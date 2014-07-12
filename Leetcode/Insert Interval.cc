@@ -10,44 +10,33 @@
 class Solution {
 public:
     vector<Interval> insert(vector<Interval> &intervals, Interval newInterval) {
-        for (vector<Interval>::iterator iter = intervals.begin();
-                    iter != intervals.end();
-                    /*Nope*/) {
-            if (intersect(*iter, newInterval)) {
-                iter = intervals.erase(iter);
-            } else {
-                ++iter;
-            }
-        }
-
         vector<Interval> res;
-        if (intervals.size() == 0) {
-            res.push_back(newInterval);
-            return res;
-        }
-        for (vector<Interval>::iterator iter = intervals.begin();
-                    iter != intervals.end();
-                    ++iter) {
-            if (iter->end < newInterval.start ||
-                        iter->start > newInterval.end) {
-                res.push_back(*iter);
+        auto iter = intervals.begin();
+        for (/* pass */; iter != intervals.end(); ++iter) {
+            Interval& now = *iter;
+            if (now.end < newInterval.start) {
+                res.push_back(now);
             } else {
-                res.push_back(newInterval);
+                break;
             }
+        }
+        for (/* pass */; iter != intervals.end(); ++iter) {
+            Interval& now = *iter;
+            if (now.start <= newInterval.end) {
+                newInterval = merge_interval(now, newInterval);
+            } else {
+                break;
+            }
+        }
+        res.push_back(newInterval);
+        for (/* pass */; iter != intervals.end(); ++iter) {
+            Interval& now = *iter;
+            res.push_back(now);
         }
         return res;
     }
-
-    bool intersect(const Interval& now, Interval& next) 
-    {
-        if ( (next.start - now.start) * (next.end - now.start) < 0 ||
-             (next.start - now.end  ) * (next.end - now.end  ) < 0 ||
-             (now.start - next.start) * (now.end - next.start) < 0 ||
-             (now.start - next.end  ) * (now.end - next.end  ) < 0 ) {
-            next.start = min(next.start, now.start);
-            next.end   = min(next.end,   now.end  );
-            return true;
-        }
-        return false;
+private:
+    Interval merge_interval(const Interval& a, const Interval& b) {
+        return Interval(min(a.start, b.start), max(a.end, b.end));
     }
 };
