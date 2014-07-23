@@ -1,47 +1,36 @@
-class Solution {
-public:
-    ListNode *left, *right;
-    ListNode *lefttail, *righttail;
-
-    ListNode *partition(ListNode *head, int x) 
-    {
-        left=right=lefttail=righttail=NULL;
-        ListNode *ptr = head;
-        while(ptr)
-        {
-            if(ptr->val < x)
-            {
-                Insert(left, lefttail, ptr->val);
+/** 
+ * Definition for singly-linked list. 
+ * struct ListNode { 
+ *     int val; 
+ *     ListNode *next; 
+ *     ListNode(int x) : val(x), next(NULL) {} 
+ * }; 
+ */  
+class Solution {  
+public:  
+    ListNode *partition(ListNode *head, int x) {
+        pair<ListNode*, ListNode*> left, right;
+        left = right = make_pair<ListNode*, ListNode*>((ListNode*)NULL, (ListNode*)NULL);
+        while (head != NULL) {
+            auto& now = head -> val < x ? left: right;
+            
+            if (now.first == NULL) {
+                now.first = now.second = head;
+            } else {
+                (now.second) -> next = head;
+                now.second = head;
             }
-            else
-            {
-                Insert(right, righttail, ptr->val);
-            }
-            ptr = ptr->next;
+            
+            head = head -> next;
+            (now.second) -> next = NULL;
         }
-        if(left)
-        {
-            lefttail->next = right;
-            return left;
+        
+        if (left.first) {
+            (left.second) -> next = right.first;
+        } else {
+            left = right;
         }
-        else if(right)
-        {
-            return right;
-        }
-        else return NULL;
-    }
-    void Insert(ListNode*& head, ListNode*& tail, int val)
-    {
-        if(!head)
-        {
-            head = new ListNode(val);
-            tail = head;
-        }
-        else
-        {
-            ListNode *tmp = new ListNode(val);
-            tail->next = tmp;
-            tail = tail->next;
-        }
+        right.second = NULL;
+        return left.first;
     }
 };
