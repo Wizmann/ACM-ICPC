@@ -17,11 +17,12 @@ public:
         }
         
         while (nowNode) {
-            ListNode *nextNode = nowNode;
+            ListNode *headNode = nowNode;
+            ListNode *tailNode = nowNode;
             int step = 0;
             for (int i = 0; i < k - 1; i++) {
-                if (nextNode -> next) {
-                    nextNode = nextNode -> next;
+                if (tailNode -> next) {
+                    tailNode = tailNode -> next;
                     step++;
                 } else {
                     break;
@@ -29,13 +30,14 @@ public:
             }
             
             if (step != k - 1) {
-                *pre = nowNode;
+                *pre = headNode;
                 break;
             }
             
-            ListNode *nextBlock = nextNode -> next;
-            *pre = _reverseK(nowNode, nextNode);
-            pre = &(nowBlock -> next);
+            ListNode *nextBlock = tailNode -> next;
+            *pre = _reverseK(headNode, tailNode);
+            headNode -> next = nextBlock;
+            pre = &(headNode -> next);
             nowNode = nextBlock;
         }
         return head;
