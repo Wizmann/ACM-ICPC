@@ -1,64 +1,41 @@
 class Solution {
 public:
     vector<vector<int> > fourSum(vector<int> &num, int target) {
-        m_ans.clear();
-        st.clear();
-        sort(num.begin(), num.end());
-        vector<vector<int> > tmp;
-        do_sum(4, num, target, tmp, 0, num.size() - 1);
-        
-        for (auto iter = m_ans.begin(); iter != m_ans.end(); /* pass */) {
-            sort(iter -> begin(), iter -> end());
-            if (st.find(*iter) != st.end()) {
-                iter = m_ans.erase(iter);
-            } else {
-                st.insert(*iter);
-                ++iter;
-            }
-        }
-        return m_ans;
-    }
-    
-    void do_sum(int n, vector<int>& num, int target, vector<vector<int> >& ans, int l, int r) {
-        if (n == 2) {
-            two_sum(num, target, ans, l, r);
-        } else {
-            ans.clear();
-            for (int i = l; i < r; i++) {
-                int nl = i + 1;
-                int nr = r;
-                int nt = target - num[i];
-                
-                vector<vector<int> > tmp;
-                do_sum(n - 1, num, nt, tmp, nl, nr);
-                
-                for (auto iter = tmp.begin(); iter != tmp.end(); ++iter) {
-                    iter -> push_back(num[i]);
-                    ans.push_back(*iter);
+        ans.clear();
+        mmp.clear();
+        int n = num.size();
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int s = num[i] + num[j];
+                mmp.insert(mkpair(s, i, j));
+                auto range = mmp.equal_range(target-s);
+                for (auto iter = range.first; iter != range.second; ++iter) {
+                    auto p = iter -> second;
+                    int a = p.first, b = p.second;
+                    if (a != i && a != j && b != i && b != j) {
+                        append_record(num, a, b, i, j);
+                    }
                 }
             }
-            if (n == 4) {
-                m_ans.insert(m_ans.end(), ans.begin(), ans.end());
-            }
         }
-    }
-    
-    void two_sum(vector<int>& num, int target, vector<vector<int> >& ans, int l, int r) {
-        while (l < r) {
-            while (l < r && num[l] + num[r] > target) r--;
-            while (l < r && num[l] + num[r] >= target) {
-                if (num[l] + num[r] == target) {
-                    vector<int> v;
-                    v.push_back(num[l]);
-                    v.push_back(num[r]);
-                    ans.push_back(v);
-                }
-                r--;
-            }
-            l++;
-        }
+        vector<vector<int> > res;
+        copy(ans.begin(), ans.end(), back_inserter(res));
+        return res;
     }
 private:
-    vector<vector<int> > m_ans;
-    set<vector<int> > st;
+    void append_record(vector<int> &num, int a, int b, int c ,int d) {
+        vector<int> vec({a, b, c, d});
+        for (int i = 0; i < 4; i++) {
+            vec[i] = num[vec[i]];
+        }
+        sort(vec.begin(), vec.end());
+        ans.insert(vec);
+    }
+    pair<int, pair<int, int> > mkpair(int s, int a, int b) {
+        return make_pair<int, pair<int, int> >(int(s),
+                make_pair<int, int>(int(a), int(b)));
+    }
+private:
+    set<vector<int> > ans;
+    unordered_multimap<int, pair<int, int> > mmp;
 };

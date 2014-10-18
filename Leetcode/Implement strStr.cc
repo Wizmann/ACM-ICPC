@@ -1,29 +1,38 @@
 class Solution {
 public:
-    char *strStr(char *haystack, char *needle) {
-        int len_h = strlen(haystack);
-        int len_n = strlen(needle);
-        
-        if (0 == len_n) {
-            return haystack;
-        }
-        
-        for (int i = 0; i < len_h; i++) {
-            if (haystack[i] == needle[0]) {
-                if (i + len_n > len_h) {
-                    continue;
-                } else {
-                    bool flag = true;
-                    for (int j = 0; j < len_n; j++) {
-                        if (haystack[i+j] != needle[j]) {
-                            flag = false;
-                            break;
-                        }
-                    }
-                    if (flag) return haystack + i;
-                }
+    char *strStr(char *heystack, char *needle) {
+        int n = strlen(heystack);
+        int m = strlen(needle);
+        next = new int[m + 5];
+        get_next(needle, m);
+
+        int i, j;
+        for (i = 0, j = 0; i < n && j < m; /* pass */) {
+            if (j == -1 || heystack[i] == needle[j]) {
+                i++; j++;
+            } else {
+                j = next[j];
             }
         }
-        return NULL;
+        delete [] next;
+        if (j == m) {
+            return heystack + i - m;
+        } else {
+            return nullptr;
+        }
     }
+private:
+    void get_next(char *needle, int n) {
+        next[0] = -1;
+        for (int pre = -1, suf = 0; suf < n; /* pass */) {
+            if (pre == -1 || needle[pre] == needle[suf]) {
+                pre++; suf++;
+                next[suf] = pre;
+            } else {
+                pre = next[pre];
+            }
+        }
+    }
+
+    int* next;
 };
