@@ -9,20 +9,21 @@
  */
 class Solution {
 public:
-    void flatten(TreeNode *root) {
-        if (!root) return;
-        if (root -> left) {
-            TreeNode* tn = rightmost(root -> left);
-            tn -> right = root -> right;
-            root -> right = root -> left;
-            root -> left = NULL;
+    TreeNode* flatten(TreeNode *root) {
+        if (!root) {
+            return root;
         }
-        flatten(root -> right);
-    }
-    TreeNode* rightmost(TreeNode* root) {
-        while (root && root -> right) {
-            root = root -> right;
+        TreeNode* left_rightmost = flatten(root->left);
+        
+        if (left_rightmost) {
+            left_rightmost->right = root->right;
+            root->right = root->left;
+            root->left = NULL;
         }
-        return root;
+        if (root->right) {
+            return flatten(root->right);
+        } else {
+            return root;
+        }
     }
 };
