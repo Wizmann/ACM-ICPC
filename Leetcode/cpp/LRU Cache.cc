@@ -1,53 +1,44 @@
 class LRUCache{
 public:
-    struct Entry {
-        int key, value;
-        Entry(){}
-        Entry(int ikey, int ivalue): key(ikey), value(ivalue) {}
-    };
-
-    LRUCache(int icap): capacity(icap) {}
+    LRUCache(int capacity) {
+        _map.clear();
+        _list.clear();
+        _cap = capacity;
+    }
     
     int get(int key) {
-        if (mp.find(key) == mp.end()) {
+        if (_map.find(key) == _map.end()) {
             return -1;
         }
-        int res = mp[key] -> value;
-        move_front(key);
-        return res;
+        int value = _map[key]->second;
+        erase(key);
+        set(key, value);
+        return value;
     }
-
+    
     void set(int key, int value) {
-        if (mp.find(key) != mp.end()) {
-            mp[key] -> value = value;
-            move_front(key);
-        } else {
-            Entry res(key, value);
-            if (lst.size() >= capacity) {
-                pop_back();
+        if (_map.find(key) == _map.end()) {
+            if (_map.size() >= _cap) {
+                erase_last();
             }
-            lst.push_front(res);
-            mp[key] = lst.begin();
+        } else {
+            erase(key);
         }
+        _list.push_front({key, value});
+        _map[key] = _list.begin();
     }
-    
 private:
-    map<int, list<Entry>::iterator> mp;
-    list<Entry> lst;
-    int capacity;
-    
-    void move_front(int key) {
-        //ASSERT_NE(mp.find(key), mp.end())
-        Entry e = *mp[key];
-        auto iter = mp[key];
-        lst.erase(iter);
-        lst.push_front(e);
-        mp[key] = lst.begin();
+    void erase(int key) {
+        auto iter = _map[key];
+        _list.erase(iter);
+        _map.erase(_map.find(key));
     }
-    
-    void pop_back() {
-        Entry e = *(--lst.end());
-        mp.erase(e.key);
-        lst.pop_back();
+    void erase_last() {
+        int key = _list.rbegin()->first;
+        erase(key);
     }
+private:
+    unordered_map<int, list<pair<int, int> >::iterator> _map;
+    list<pair<int, int> > _list;
+    int _cap;
 };
