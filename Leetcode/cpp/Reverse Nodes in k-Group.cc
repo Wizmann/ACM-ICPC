@@ -9,55 +9,49 @@
 class Solution {
 public:
     ListNode *reverseKGroup(ListNode *head, int k) {
-        ListNode **pre = &head;
-        ListNode *nowNode = head;
-        
-        if (k == 1) {
-            return head;
+        ListNode* prev = NULL;
+        if (!head) {
+            return NULL;
         }
         
-        while (nowNode) {
-            ListNode *headNode = nowNode;
-            ListNode *tailNode = nowNode;
-            int step = 0;
-            for (int i = 0; i < k - 1; i++) {
-                if (tailNode -> next) {
-                    tailNode = tailNode -> next;
-                    step++;
-                } else {
-                    break;
-                }
-            }
+        ListNode* cur = head;
+        
+        while (1) {
+            ListNode* tail = move_forward(cur, k - 1);
             
-            if (step != k - 1) {
-                *pre = headNode;
+            if (tail == NULL) {
                 break;
             }
-            
-            ListNode *nextBlock = tailNode -> next;
-            *pre = _reverseK(headNode, tailNode);
-            headNode -> next = nextBlock;
-            pre = &(headNode -> next);
-            nowNode = nextBlock;
+            ListNode* next = tail->next;
+            ListNode* p = reverse_list(tail->next, cur, tail);
+            if (prev) {
+                prev -> next = p;
+            } else {
+                head = p;
+            }
+            prev = cur;
+            cur = next;
+        }
+        return head;
+    }
+private:
+    ListNode* move_forward(ListNode* head, int k) {
+        for (int i = 0; i < k; i++) {
+            if (head) {
+                head = head -> next;
+            }
         }
         return head;
     }
     
-    ListNode* _reverseK(ListNode* nowNode, ListNode* nextNode)
-    {
-        ListNode *nextBlock = nextNode -> next;
-        nextNode -> next = NULL;
-        return _reverse(nextBlock, nowNode);
-    }
-    
-    ListNode* _reverse(ListNode* preNode, ListNode* nowNode)
-    {
-        ListNode *_next = nowNode -> next;
-        nowNode -> next = preNode;
-        if (_next == NULL) {
-            return nowNode;
+    ListNode* reverse_list(ListNode* next, ListNode* cur, ListNode* tail) {
+        if (cur != tail) {
+            ListNode* p = cur->next;
+            cur->next = next;
+            return reverse_list(cur, p, tail);
         } else {
-            return _reverse(nowNode, _next);
+            tail->next = next;
+            return tail;
         }
     }
 };

@@ -1,38 +1,34 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <algorithm>
-
-using namespace std;
-
-#define print(x) cout<<x<<endl
-#define input(x) cin>>x
-
 class Solution {
 public:
-    double findMedianSortedArrays(int A[], int m, int B[], int n) 
-    {
-        int *C = new int[m+n+5];
-        int i=0, j=0, p=0;
-        for(/*pass*/;i<m && j<n;/*pass*/)
-        {
-            if(A[i]<B[j]) C[p++] = A[i++];
-            else C[p++] = B[j++];
+    double findMedianSortedArrays(int A[], int m, int B[], int n) {
+        int tot = m + n;
+        if (tot & 1) {
+            return do_findKth(A, m, B, n, tot / 2 + 1);
+        } else {
+            return (do_findKth(A, m, B, n, tot / 2) +
+                    do_findKth(A, m, B, n, tot / 2 + 1)) / 2;
         }
-        while(i<m) C[p++] = A[i++];
-        while(j<n) C[p++] = B[j++];
-
-        if((m+n)%2==0) return (C[(m+n-1)/2] + C[(m+n)/2])/2.;
-        else return C[(m+n-1)/2];
+    }
+private:
+    double do_findKth(int A[], int m, int B[], int n, int k) {
+        if (m > n) {
+            return do_findKth(B, n, A, m, k);
+        }
+        if (m == 0) {
+            return B[k - 1];
+        }
+        if (k == 1) {
+            return min(A[0], B[0]);
+        }
+        int pa = min(k >> 1, m);
+        int pb = k - pa;
+        
+        if (A[pa - 1] < B[pb - 1]) {
+            return do_findKth(A + pa, m - pa, B, n, k - pa);
+        } else if (A[pa - 1] > B[pb - 1]) {
+            return do_findKth(A, m, B + pb, n - pb, k - pb);
+        } else {
+            return A[pa - 1];
+        }
     }
 };
-
-int main()
-{
-    Solution S;
-    int A[] = {1,1,3,3};
-    int B[] = {1,1,3,3};
-    print(S.findMedianSortedArrays(A,4, B, 4));
-    return 0;
-}

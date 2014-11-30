@@ -6,9 +6,6 @@ class Solution:
         st = []
         ans, n = 0, len(height)
         for i in xrange(n):
-            if not st or height[st[-1]] < height[i]:
-                st.append(i)
-                continue
             while st and height[st[-1]] >= height[i]:
                 now   = st.pop()
                 left  = 0 if not st else st[-1] + 1
