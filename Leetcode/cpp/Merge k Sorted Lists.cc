@@ -6,53 +6,48 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
- 
-#include <queue>
 
+struct cmp {
+    bool operator() (const ListNode* a, const ListNode* b) {
+        if (!a) {
+            return false;
+        }
+        if (!b) {
+            return true;
+        }
+        return a->val > b->val;
+    }
+};
 
 class Solution {
 public:
     ListNode *mergeKLists(vector<ListNode *> &lists) {
-        ListNode *res = NULL;
-        ListNode *tail = NULL;
-        priority_queue<Pointer, vector<Pointer>, greater<Pointer> > pq;
         if (lists.empty()) {
             return NULL;
         }
-        for (int i = 0; i < (int)lists.size(); i++) {
-            if (!lists[i]) continue;
-            pq.push(Pointer(lists[i] -> val, i));
+        ListNode *head = NULL, *cur = NULL;
+        priority_queue<ListNode*, vector<ListNode*>, cmp> pq;
+        for (auto node: lists) {
+            pq.push(node);
         }
-        while (true) {
-            if (pq.empty()) break;
-            
-            Pointer now = pq.top();
+        while (!pq.empty()) {
+            auto now = pq.top();
             pq.pop();
-            
-            int ptr = now.ptr;
-            int val = now.val;
-            
-            if (!res) {
-                res = tail = new ListNode(val);
+            if (!now) {
+                continue;
+            }
+            auto next = now->next;
+            if (!head) {
+                head = cur = now;
             } else {
-                tail -> next = new ListNode(val);
-                tail = tail -> next;
+                cur->next = now;
+                cur = cur->next;
             }
-            lists[ptr] = lists[ptr] -> next;
-            if (lists[ptr]) {
-                pq.push(Pointer(lists[ptr] -> val, ptr));
+            cur->next = NULL;
+            if (next) {
+                pq.push(next);
             }
         }
-        return res;
+        return head;
     }
-private:
-    struct Pointer {
-        int val;
-        int ptr;
-        Pointer(int ival, int iptr): val(ival), ptr(iptr) {}
-        
-        bool operator > (const Pointer& p) const {
-            return val > p.val;
-        }
-    };
 };
