@@ -31,7 +31,6 @@ int n;
 vector<Card> cards;
 
 int main() {
-    freopen("D.txt", "r", stdin);
     input(n);
     cards.resize(n);
     for (int i = 0; i < n; i++) {
@@ -42,47 +41,37 @@ int main() {
         input(cards[i].cost);
     }
 
-    unordered_map<int, int> mps[2];
+    unordered_map<int, int> mp;
     for (auto& card: cards) {
-        if (mps[0].find(card.step) == mps[0].end()) {
-            mps[0][card.step] = INF;
+        if (mp.find(card.step) == mp.end()) {
+            mp[card.step] = INF;
         }
-        mps[0][card.step] = min(mps[0][card.step], card.cost);
+        mp[card.step] = min(mp[card.step], card.cost);
     }
 
-    int ptr = 0;
-    for (int i = 0; i < n - 1; i++) {
-        auto& now = mps[ptr];
-        auto& next = mps[ptr^1];
-
-        ptr ^= 1;
-        next.clear();
-        for (int j = 0; j < n; j++) {
-            int thres = now.find(1) != now.end()? now[1]: INF;
-            for (auto& p: now) {
-                auto step = p.first;
-                auto cost = p.second;
-                
-                if (step != 1 && cost >= thres) {
-                    continue;
-                }
-                
-                int g = gcd(step, cards[j].step);
-
-                if (next.find(g) == next.end()) {
-                    next[g] = INF;
-                }
-                
-                if (g == step) {
-                    next[g] = min(next[g], cost);
-                }
-
-                next[g] = min(next[g], cost + cards[j].cost);
+    for (int i = 0; i < n; i++) {
+        int thres = mp.find(1) != mp.end()? mp[1]: INF;
+        for (auto& p: mp) {
+            auto step = p.first;
+            auto cost = p.second;
+            
+            if (step != 1 && cost >= thres) {
+                continue;
             }
+            
+            int g = gcd(step, cards[i].step);
+
+            if (mp.find(g) == mp.end()) {
+                mp[g] = INF;
+            }
+            
+            if (g == step) {
+                mp[g] = min(mp[g], cost);
+            }
+
+            mp[g] = min(mp[g], cost + cards[i].cost);
         }
     }
-
-    auto& mp = mps[ptr];
 
     if (mp.find(1) == mp.end()) {
         print("-1");
