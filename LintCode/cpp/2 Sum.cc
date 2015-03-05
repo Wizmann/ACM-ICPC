@@ -1,3 +1,4 @@
+// Time: O(nlogn), Space: O(1)
 class Solution {
 public:
     /*
@@ -28,4 +29,28 @@ public:
         return vector<int>({-1, -1});
     }
 };
+
+// Time: O(n), Space: O(n)
+
+class Solution {
+public:
+    /*
+     * @param numbers : An array of Integer
+     * @param target : target = numbers[index1] + numbers[index2]
+     * @return : [index1+1, index2+1] (index1 < index2)
+     */
+    vector<int> twoSum(vector<int> &nums, int target) {
+        unordered_map<int, int> mp;
+        for (int i = 0; i < nums.size(); i++) {
+            int u = nums[i];
+            int v = target - u;
+            if (mp.find(v) != mp.end()) {
+                return vector<int>({mp[v], i + 1});
+            }
+            mp[u] = i + 1;
+        }
+        return vector<int>();
+    }
+};
+
 
