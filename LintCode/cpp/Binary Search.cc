@@ -7,15 +7,19 @@ public:
      */
     int binarySearch(vector<int> &array, int target) {
         int n = array.size();
+        
         int l = 0, r = n - 1;
         while (l <= r) {
             int m = (l + r) >> 1;
-            if (array[m] >= target) {
-                r = m - 1;
-            } else {
+            if (array[m] < target) {
                 l = m + 1;
+            } else {
+                r = m - 1;
             }
         }
-        return array[r + 1] == target? r + 1: -1;
+        if (array[l] == target) {
+            return l;
+        }
+        return -1;
     }
 };
