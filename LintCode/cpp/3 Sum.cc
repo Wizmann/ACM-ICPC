@@ -5,42 +5,34 @@ public:
      * @return : Find all unique triplets in the array which gives the sum of zero.
      */
     vector<vector<int> > threeSum(vector<int> &nums) {
+        vector<vector<int> > res;
         int n = nums.size();
-        _res.clear();
         sort(nums.begin(), nums.end());
         for (int i = 0; i < n; i++) {
-            if (i > 0 && nums[i - 1] == nums[i]) {
+            if (i && nums[i - 1] == nums[i]) {
                 continue;
             }
-            int u = nums[i];
+            int p = i + 1;
+            int q = n - 1;
             
-            two_sum(nums, i);
-        }
-        return _res;
-    }
-private:
-    void two_sum(const vector<int>& vec, int st) {
-        int n = vec.size();
-        int val = vec[st];
-        int l = st + 1, r = n - 1;
-        while (l < r) {
-            int u = vec[l] + vec[r] + val;
-            if (u == 0) {
-                _res.push_back(vector<int>({val, vec[l], vec[r]}));
-            }
-            if (u <= 0) {
-                do {
-                    l++;
-                } while (l < r && vec[l] == vec[l - 1]);
-            }
-            if (u >= 0) {
-                do {
-                    r--;
-                } while (l < r && vec[r] == vec[r + 1]);
+            while (p < q) {
+                int s = nums[i] + nums[p] + nums[q];
+                if (s == 0) {
+                    res.push_back({nums[i], nums[p], nums[q]});
+                }
+                if (s <= 0) {
+                    do {
+                        p++;
+                    } while (p < q && nums[p - 1] == nums[p]);
+                }
+                if (s >= 0) {
+                    do {
+                        q--;
+                    } while (p < q && nums[q + 1] == nums[q]);
+                }
             }
         }
+        return res;
     }
-private:
-    vector<vector<int> > _res;
 };
 

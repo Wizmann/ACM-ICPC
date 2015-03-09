@@ -1,36 +1,42 @@
 template <typename T>
-class MaxHeap: public priority_queue<T, vector<T>, less<T> > {};
+class MinHeap: public priority_queue<T, vector<T>, greater<T> > {};
 
 template <typename T>
-class MinHeap: public priority_queue<T, vector<T>, greater<T> > {};
+class MaxHeap: public priority_queue<T, vector<T>, less<T> > {};
 
 class Solution {
 public:
+    /**
+     * @param nums: A list of integers.
+     * @return: The median of numbers
+     */
     vector<int> medianII(vector<int> &nums) {
-        MaxHeap<int> max_heap;
-        MinHeap<int> min_heap;
         vector<int> res;
         
-        for (auto num: nums) {
-            if (max_heap.empty() || max_heap.top() > num) {
-                max_heap.push(num);
+        int n = nums.size();
+        
+        MaxHeap<int> left;
+        MinHeap<int> right;
+        
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+            
+            if (left.empty() || num < left.top()) {
+                left.push(num);
             } else {
-                min_heap.push(num);
+                right.push(num);
             }
             
-            while (max_heap.size() > min_heap.size() + 1) {
-                int u = max_heap.top();
-                max_heap.pop();
-                min_heap.push(u);
+            while (left.size() > right.size() + 1) {
+                right.push(left.top());
+                left.pop();
             }
             
-            while (max_heap.size() < min_heap.size()) {
-                int u = min_heap.top();
-                min_heap.pop();
-                max_heap.push(u);
+            while (right.size() > left.size()) {
+                left.push(right.top());
+                right.pop();
             }
-
-            res.push_back(max_heap.top());
+            res.push_back(left.top());
         }
         return res;
     }
