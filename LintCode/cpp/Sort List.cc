@@ -18,58 +18,46 @@ public:
                     using constant space complexity.
      */
     ListNode *sortList(ListNode *head) {
-        if (!head || !head->next) {
-            return head;
+        if (!head) {
+            return NULL;
         }
-        
-        int u = head->val;
-        int ptr = 0;
-        
+
+        ListNode* pivot = head;
+        ListNode* t = head->next;
+
+        int flag = 0;
+
         ListNode* left = NULL;
-        ListNode* left_tail = NULL;
-        
         ListNode* right = NULL;
-        ListNode* right_tail = NULL;
-        
-        ListNode* cur = head->next;
-        
-        while (cur) {
-            ListNode* next = cur->next;
-            ptr ^= (cur->val == u);
-            if (cur->val < u || (cur->val == u && ptr == 0)) {
-                if (!left) {
-                    left = left_tail = cur;
-                } else {
-                    left_tail->next = cur;
-                    left_tail = cur;
-                }
-                left_tail->next = NULL;
+
+        while (t) {
+            ListNode* next = t->next;
+            if (t->val < pivot->val
+                    || (flag && t->val == pivot->val)) {
+                t->next = left;
+                left = t;
             } else {
-                if (!right) {
-                    right = right_tail = cur;
-                } else {
-                    right_tail->next = cur;
-                    right_tail = cur;
-                }
-                right_tail->next = NULL;
+                t->next = right;
+                right = t;
             }
-            cur = next;
+
+            flag ^= (t->val == pivot->val);
+            t = next;
         }
-        
-        left = sortList(left);        
+        left = sortList(left);
         right = sortList(right);
-        
-        head->next = NULL;
+
+        pivot->next = right;
         if (!left) {
-            head->next = right;
-            return head;
+            return pivot;
         }
-        cur = left;
-        while (cur->next) {
-            cur = cur->next;
+        ListNode* left_tail = left;
+        while (left_tail->next) {
+            left_tail = left_tail->next;
         }
-        cur->next = head;
-        head->next = right;
+        left_tail->next = pivot;
         return left;
     }
 };
+
+
