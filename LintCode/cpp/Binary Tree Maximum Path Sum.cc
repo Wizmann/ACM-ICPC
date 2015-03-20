@@ -20,22 +20,23 @@ public:
         if (!root) {
             return 0;
         }
-        ans = -INF;
-        _maxPathSum(root);
+        ans = -0x3f3f3f3f;
+        do_maxPathSum(root);
         return ans;
     }
 private:
-    static const int INF = 0x3f3f3f3f;
-    int ans;
-private:
-    int _maxPathSum(TreeNode *root) {
+    int do_maxPathSum(TreeNode *root) {
         if (!root) {
             return 0;
         }
-        int left =  max(0, _maxPathSum(root->left));
-        int right = max(0, _maxPathSum(root->right));
-        
-        ans = max(ans, root->val + left + right);
-        return max(root->val + left, root->val + right);
+
+        int l_value = max(0, do_maxPathSum(root->left));
+        int r_value = max(0, do_maxPathSum(root->right));
+        ans = max(ans, l_value + r_value + root->val);
+
+        return max(l_value, r_value) + root->val;
     }
+private:
+    int ans;
 };
+
