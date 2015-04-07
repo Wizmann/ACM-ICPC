@@ -9,27 +9,23 @@
 class Solution {
 public:
     ListNode *removeNthFromEnd(ListNode *head, int n) {
-        int x = 0;
-        return _do_remove(NULL, head, n, x);
+        ListNode lead(-1);
+        lead.next = head;
+        dfs(&lead, n + 1);
+        return lead.next;
     }
-    
-    ListNode *_do_remove(ListNode *pre, ListNode *now, int n, int &x) {
-        if (now -> next) {
-            _do_remove(now, now -> next, n, x);
-        } else {
-            x = 1;
+private:
+    int dfs(ListNode* cur, int pos) {
+        if (!cur) {
+            return 0;
         }
-        ListNode *res = now;
-        if (x == n) {
-            if (NULL == pre) {
-                res = now -> next;
-            } else {
-                pre -> next = now -> next;
-                res = NULL;
-            }
-            delete now;
+        int p = dfs(cur->next, pos) + 1;
+        if (p == pos) {
+            ListNode* t = cur->next;
+            ListNode* tt = t->next;
+            cur->next = tt;
+            delete t;
         }
-        x++;
-        return res;
+        return p;
     }
 };

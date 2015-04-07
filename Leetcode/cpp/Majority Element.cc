@@ -2,60 +2,45 @@ class Solution {
 public:
     int majorityElement(vector<int> &num) {
         int n = num.size();
-        return kth_element(num, (n + 1) / 2);
+        return kth_element(num, 0, n, n / 2 + 1);
     }
 private:
-    int kth_element(vector<int>& num, int k) {
-        int n = num.size();
-        return kth_element(num, 0, n, k);
+    int partition(vector<int>& vec, int l, int r) {
+        int ll = 0;
+        int rr = r - l - 1;
+        int pivot = vec[l];
+        int ptr = 0;
+        while (ll <= rr) {
+            while (ll <= rr && 
+                    (vec[l + ll] < pivot || 
+                            (vec[l + ll] == pivot && ptr == 0))) {
+                ptr ^= (vec[l + ll] == pivot);
+                ll++;
+            }
+            while (ll <= rr &&
+                    (vec[l + rr] > pivot ||
+                            (vec[l + rr] == pivot && ptr == 1))) {
+                ptr ^= (vec[l + rr] == pivot);
+                rr--;
+            }
+            if (ll <= rr) {
+                swap(vec[l + ll], vec[l + rr]);
+                ll++;
+                rr--;
+            }
+        }
+        swap(vec[l], vec[l + rr]);
+        return rr;
     }
     
-    int kth_element(vector<int>& num, int st, int end, int k) {
-        int pivot_idx = partition(num, st, end);
-        if (pivot_idx - st + 1 == k) {
-            return num[pivot_idx];
-        }
-        if (pivot_idx - st >= k) {
-            return kth_element(num, st, pivot_idx, k);
+    int kth_element(vector<int>& vec, int l, int r, int k) {
+        int p = partition(vec, l, r);
+        if (p + 1 == k) {
+            return vec[l + p];
+        } else if (p + 1 < k) {
+            return kth_element(vec, l + p + 1, r, k - p - 1);
         } else {
-            return kth_element(num, pivot_idx + 1, end, k - (pivot_idx - st) - 1);
+            return kth_element(vec, l, l + p, k);
         }
-    }
-    
-    int partition(vector<int>& num, int st, int end) {
-        int pivot_idx = (rand() % (end - st)) + st;
-        int pivot = num[pivot_idx];
-        swap(num[pivot_idx], num[st]);
-        
-        int l = st, r = end - 1;
-        int flag = 0;
-        
-        while (l <= r) {
-            while (l <= r && num[l] <= pivot) {
-                if (num[l] < pivot) {
-                    // pass
-                } else if (flag == 0) {
-                    flag ^= 1;
-                } else {
-                    break;
-                }
-                l++;
-            }
-            while (l <= r && num[r] >= pivot) {
-                if (num[r] > pivot) {
-                    // pass
-                } else if (flag == 1) {
-                    flag ^= 1;
-                } else {
-                    break;
-                }
-                r--;
-            }
-            if (l <= r) {
-                swap(num[l++], num[r--]);
-            }
-        }
-        swap(num[st], num[r]);
-        return r;
     }
 };

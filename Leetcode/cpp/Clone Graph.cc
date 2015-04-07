@@ -8,42 +8,30 @@
  */
 class Solution {
 public:
+    typedef UndirectedGraphNode Node;
+public:
     UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
         if (!node) {
-            return NULL;
+            return nullptr;
         }
-        map<int, UndirectedGraphNode*> mp;
-        set<int> visited;
-        queue<UndirectedGraphNode*> q;
-        q.push(node);
-        
-        while (!q.empty()) {
-            UndirectedGraphNode* now = q.front();
-            q.pop();
-            
-            if (visited.find(now -> label) != visited.end()) {
-                continue;
-            } else {
-                visited.insert(now -> label);
-            }
-            
-            UndirectedGraphNode* cl = NULL;
-            if (mp.find(now -> label) == mp.end()) {
-                mp[now -> label] = new UndirectedGraphNode(now -> label);
-            }
-            
-            cl = mp[now -> label];
-            for (auto iter = (now -> neighbors).begin(); 
-                    iter != (now -> neighbors).end(); 
-                    ++iter) {
-                UndirectedGraphNode* next = *iter;
-                if (mp.find(next -> label) == mp.end()) {
-                    mp[next -> label] = new UndirectedGraphNode(next -> label);
-                }
-                (cl -> neighbors).push_back(mp[next -> label]);
-                q.push(next);
-            }
-        }
-        return mp[node -> label];
+        mp.clear();
+        return dfs(node);
     }
+private:
+    Node* dfs(Node* node) {
+        if (mp.find(node) != mp.end()) {
+            return mp[node];
+        }
+        
+        Node* _node = new Node(-1);
+        *_node = *node;
+        mp[node] = _node;
+        
+        for (auto& neighbor: _node->neighbors) {
+            neighbor = dfs(neighbor);
+        }
+        return _node;
+    }
+private:
+    unordered_map<Node*, Node*> mp;
 };

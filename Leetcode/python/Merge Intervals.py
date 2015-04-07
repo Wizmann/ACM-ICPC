@@ -4,22 +4,22 @@
 #         self.start = s
 #         self.end = e
 
-INF = 0xdeadbeef
-
 class Solution:
     # @param intervals, a list of Interval
     # @return a list of Interval
     def merge(self, intervals):
-        if not intervals:
-            return []
+        INF = 0xdeadbeef
         intervals.append(Interval(INF, INF))
         intervals.sort(key=lambda x: x.start)
         res = []
-        now = intervals[0]
+        cur = intervals[0]
+        
         for interval in intervals:
-            if interval.start <= now.end:
-                now.end = max(interval.end, now.end)
+            if interval.start > cur.end:
+                res.append(cur)
+                cur = interval
             else:
-                res.append(now)
-                now = interval
+                cur.end = max(interval.end, cur.end)
+        
         return res
+            

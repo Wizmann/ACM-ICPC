@@ -1,43 +1,59 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
 
-char str[400010];
-int next[400010];
-int result[400010];
-int len;
+using namespace std;
 
-void get_next()
-{
-	next[0]=-1;
-	for(int i=0,j=-1;i<len;i++,j++,next[i]=j)
-	{
-		while(j>=0&&str[i]!=str[j]) j=next[j];
-	}
+#define print(x) cout << x << endl
+#define input(x) cin >> x
+
+const int SIZE = 412345;
+
+int n;
+int next[SIZE];
+char name[SIZE];
+vector<int> ans;
+
+void get_next() {
+    for (int pre = -1, suf = 0;
+            suf < n; /* pass */) {
+        if (pre == -1 || name[pre] == name[suf]) {
+            pre++; suf++;
+            next[suf] = pre;
+        } else {
+            pre = next[pre];
+        }
+    }
 }
 
-int main()
-{
-	freopen("input.txt","r",stdin);
-	while(scanf("%s",str)!=EOF)
-	{
-		memset(result,0,sizeof(result));
-		len=strlen(str);
-		get_next();
-		
-		int pos=len;
-		int pad=0;
-		while(pos!=0)
-		{
-			result[++pad]=pos;
-			pos=next[pos];
-		}
-		while(pad>1)
-		{
-			printf("%d ",result[pad]);
-			pad--;
-		}
-		printf("%d\n",result[pad]);
-	}
-	return 0;
+void get_ans() {
+    int p = n;
+    while (next[p]) {
+        ans.push_back(next[p]);
+        p = next[p];
+    }
+    reverse(ans.begin(), ans.end());
+    ans.push_back(n);
+}
+
+int main() {
+    while (scanf("%s", name) != EOF) {
+        n = strlen(name);
+        memset(next, -1, sizeof(next));
+        ans.clear();
+        get_next();
+        get_ans();
+        for (int i = 0; i < (int)ans.size(); i++) {
+            if (i) {
+                printf(" ");
+            }
+            printf("%d", ans[i]);
+        }
+        puts("");
+    }
+    return 0;
 }

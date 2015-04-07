@@ -1,4 +1,4 @@
-//Result:wizmann	3261	Accepted	1516K	125MS	C++	3081B
+//Result:wizmann    3261    Accepted    1516K   125MS   C++ 3081B
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
@@ -46,120 +46,120 @@ int height[SIZE];
 
 int cmpSuffix(const void *a,const void *b)
 {
-	int ta=*(int*)a,tb=*(int*)b;
-	return memo[ta]-memo[tb];
+    int ta=*(int*)a,tb=*(int*)b;
+    return memo[ta]-memo[tb];
 }
 
 int cmp(const void *a,const void *b)
 {
-	int x=*(int*)a;
-	int y=*(int*)b;
-	if(rank[x]!=rank[y]) return 1;
-	else
-	{
-		if(rank[x+spow]!=rank[y+spow]) return 1;
-		else return 0;
-	}
+    int x=*(int*)a;
+    int y=*(int*)b;
+    if(rank[x]!=rank[y]) return 1;
+    else
+    {
+        if(rank[x+spow]!=rank[y+spow]) return 1;
+        else return 0;
+    }
 }
 
 void creatSuffixArray()
 {
-	for(int i=0;i<pad;i++) sarray[i]=i;
-	qsort(sarray,pad,sizeof(int),cmpSuffix);//后辍排序
-	
-	for(int i=0,j=0;i<pad;i++)
-	{
-		if(i>0 && memo[sarray[i]]!=memo[sarray[i-1]]) j++;
-		rank[sarray[i]]=j;//后辍排名
-	}
-	
-	int tmpstr[SIZE];
-	int nextRank[SIZE];
-	for(spow=1;spow<pad;spow<<=1)//2倍增算法
-	{
-		memset(tmpstr,0,sizeof(tmpstr));
-		for(int i=0;i<pad;i++)
-		{
-			if(sarray[i]+spow<pad) tmpstr[rank[sarray[i]+spow]]++;
-			else tmpstr[rank[sarray[i]]]++;
-		}
-		for(int i=1;i<pad;i++) tmpstr[i]+=tmpstr[i-1];
-		for(int i=pad-1;i>=0;i--)
-		{
-			if(sarray[i]+spow<pad) mark[--tmpstr[rank[sarray[i]+spow]]]=sarray[i];
-			else mark[--tmpstr[rank[sarray[i]]]]=sarray[i];
-		}
-		memset(tmpstr,0,sizeof(tmpstr));
-		for(int i=0;i<pad;i++) tmpstr[rank[mark[i]]]++;
-		for(int i=1;i<pad;i++) tmpstr[i]+=tmpstr[i-1];
-		for(int i=pad-1;i>=0;i--) sarray[--tmpstr[rank[mark[i]]]]=mark[i];
-		for(int i=0,j=0;i<pad;i++)
-		{
-			if(i>0&&cmp(&sarray[i],&sarray[i-1])!=0) j++;
-			nextRank[sarray[i]]=j;
-		}
-		memcpy(rank,nextRank,sizeof(rank));
-		//更新排名，要求严格的字典序
-	}
+    for(int i=0;i<pad;i++) sarray[i]=i;
+    qsort(sarray,pad,sizeof(int),cmpSuffix);//后辍排序
+    
+    for(int i=0,j=0;i<pad;i++)
+    {
+        if(i>0 && memo[sarray[i]]!=memo[sarray[i-1]]) j++;
+        rank[sarray[i]]=j;//后辍排名
+    }
+    
+    int tmpstr[SIZE];
+    int nextRank[SIZE];
+    for(spow=1;spow<pad;spow<<=1)//2倍增算法
+    {
+        memset(tmpstr,0,sizeof(tmpstr));
+        for(int i=0;i<pad;i++)
+        {
+            if(sarray[i]+spow<pad) tmpstr[rank[sarray[i]+spow]]++;
+            else tmpstr[rank[sarray[i]]]++;
+        }
+        for(int i=1;i<pad;i++) tmpstr[i]+=tmpstr[i-1];
+        for(int i=pad-1;i>=0;i--)
+        {
+            if(sarray[i]+spow<pad) mark[--tmpstr[rank[sarray[i]+spow]]]=sarray[i];
+            else mark[--tmpstr[rank[sarray[i]]]]=sarray[i];
+        }
+        memset(tmpstr,0,sizeof(tmpstr));
+        for(int i=0;i<pad;i++) tmpstr[rank[mark[i]]]++;
+        for(int i=1;i<pad;i++) tmpstr[i]+=tmpstr[i-1];
+        for(int i=pad-1;i>=0;i--) sarray[--tmpstr[rank[mark[i]]]]=mark[i];
+        for(int i=0,j=0;i<pad;i++)
+        {
+            if(i>0&&cmp(&sarray[i],&sarray[i-1])!=0) j++;
+            nextRank[sarray[i]]=j;
+        }
+        memcpy(rank,nextRank,sizeof(rank));
+        //更新排名，要求严格的字典序
+    }
 }
 
 void creatHeight()
 {
-	int k=0;
-	for(int i=0,j=0;i<pad;i++)
-	{
-		if(rank[i]==0) height[rank[i]]=k=0;
-		else
-		{
-			if(k>0) k--;
-			j=sarray[rank[i]-1];
-			while(memo[i+k]==memo[j+k]) k++;
-			height[rank[i]]=k;
-		}
-	}
+    int k=0;
+    for(int i=0,j=0;i<pad;i++)
+    {
+        if(rank[i]==0) height[rank[i]]=k=0;
+        else
+        {
+            if(k>0) k--;
+            j=sarray[rank[i]-1];
+            while(memo[i+k]==memo[j+k]) k++;
+            height[rank[i]]=k;
+        }
+    }
 }
 
 int judge(int len)
 {
-	int sum=0;
-	for(int i=1;i<pad;i++)
-	{
-		if(height[i]>=len)
-		{
-			sum++;
-			if(sum==kcount-1) return 1;
-		}
-		else sum=0;
-	}
-	return 0;
+    int sum=0;
+    for(int i=1;i<pad;i++)
+    {
+        if(height[i]>=len)
+        {
+            sum++;
+            if(sum==kcount-1) return 1;
+        }
+        else sum=0;
+    }
+    return 0;
 }
 int main()
 {
-	freopen("input.txt","r",stdin);
-	input(n>>kcount);
-	pad=0;
-	for(int i=0;i<n;i++) input(memo[i]);
-	memo[n++]=-1;
-	pad=n;
-	creatSuffixArray();
-	creatHeight();
-	
-	/*
-	for(int i=0;i<pad;i++)
-	{
-		int t=sarray[i];
-		for(int j=t;j<pad;j++) printf("%d ",memo[j]);
-		print("");
-	}
-	*/
-	
-	int i=0,j=pad;
-	while(i<=j)
-	{
-		int mid=(i+j)/2;
-		if(judge(mid)) i=mid+1;
-		else j=mid-1;
-	}
-	print(j);
-	return 0;
+    freopen("input.txt","r",stdin);
+    input(n>>kcount);
+    pad=0;
+    for(int i=0;i<n;i++) input(memo[i]);
+    memo[n++]=-1;
+    pad=n;
+    creatSuffixArray();
+    creatHeight();
+    
+    /*
+    for(int i=0;i<pad;i++)
+    {
+        int t=sarray[i];
+        for(int j=t;j<pad;j++) printf("%d ",memo[j]);
+        print("");
+    }
+    */
+    
+    int i=0,j=pad;
+    while(i<=j)
+    {
+        int mid=(i+j)/2;
+        if(judge(mid)) i=mid+1;
+        else j=mid-1;
+    }
+    print(j);
+    return 0;
 }
