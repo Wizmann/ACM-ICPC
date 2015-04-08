@@ -1,47 +1,47 @@
+const int INF = 0x3f3f3f3f;
+
 class Solution {
 public:
     int maximalRectangle(vector<vector<char> > &matrix) {
-        int yy = matrix.size();
-        int xx = matrix.empty()? 0: matrix[0].size();
-        memset(sum, 0, sizeof(sum));
-        for (int i = 0; i < xx; i++) {
-            int ss = 0;
-            for (int j = yy - 1; j >= 0; j--) {
-                if (matrix[j][i] == '1') {
-                    ss++;
-                } else {
-                    ss = 0;
-                }
-                sum[j][i] = ss;
-            }
+        int n = matrix.size();
+        if (n == 0) {
+            return 0;
+        }
+        int m = matrix[0].size();
+        if (m == 0) {
+            return 0;
         }
         
-        
         int ans = 0;
-        for (int i = 0; i < yy; i++) {
-            ans = max(ans, calc(sum[i], xx));
+        vector<int> vec;
+        vec.resize(m);
+        fill(vec.begin(), vec.end(), 0);
+        vec.push_back(-1);
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <m; j++) {
+                vec[j] = (matrix[i][j] == '0'? 0: vec[j] + 1);
+            }
+            ans = max(ans, _maxRect(vec));
         }
         return ans;
     }
-    
-    int calc(int *s, int size) {
+private:
+    int _maxRect(const vector<int>& vec) {
+        size_t n = vec.size();
         stack<int> st;
         int ans = 0;
-
-        for (int i = 0; i <= size; i++) {
-            if (st.empty() || s[i] > s[st.top()]) {
-                st.push(i);
-            } else {
-                while (!st.empty() && s[i] <= s[st.top()]) {
-                    int now = st.top();
-                    st.pop();
-                    ans = max(ans, s[now] * (st.empty()? i : i - st.top() - 1));
-                }
-                st.push(i);
+        
+        for (size_t i = 0; i < n; i++) {
+            while (!st.empty() && vec[i] <= vec[st.top()]) {
+                int u = st.top();
+                st.pop();
+                int left = st.empty()? 0: st.top() + 1;
+                int right = i - 1;
+                ans = max(ans, vec[u] * (right - left + 1));
             }
+            st.push(i);
         }
         return ans;
     }
-    static const int SIZE = 512;
-    int sum[SIZE][SIZE];
 };
