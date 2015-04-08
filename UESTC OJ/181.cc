@@ -1,5 +1,4 @@
-// Result: Wizmann	181	Accepted	1080 KB	7 MS	C++	1015 B	
-2015-04-07 23:27:49
+// Result: Wizmann	181	Accepted	1080 KB	7 MS	C++	1015 B	2015-04-07 23:27:49
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
