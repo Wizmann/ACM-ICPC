@@ -84,8 +84,6 @@ bool get_whole() {
 }
 
 int main() {
-    
-    //freopen("input.txt", "r", stdin);
     int T, cas = 1;
     input(T);
     while (T--) {
