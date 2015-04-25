@@ -12,11 +12,15 @@ using namespace std;
 #define input(x) cin >> x
 
 const int SIZE = 1234;
-const int MOD = 100007;
+const int MOD = 10007;
 
 int n;
 int dp[SIZE][SIZE];
 string word;
+
+int do_mod(int value) {
+    return ((value % MOD) + MOD) % MOD;
+}
 
 int solve() {
     memset(dp, 0, sizeof(dp));
@@ -28,13 +32,12 @@ int solve() {
             int l = j;
             int r = i + j;
             if (word[l] == word[r]) {
-                int a = dp[l][r - 1];
-                int b = dp[l + 1][r];
-                
-                dp[l][r] = (a + b + 1) % MOD;
+                dp[l][r] = do_mod(
+                    dp[l][r - 1] + dp[l + 1][r] + 1);
+            } else {
+                dp[l][r] = do_mod(
+                    dp[l][r - 1] + dp[l + 1][r] - dp[l + 1][r - 1]);
             }
-            dp[l][r] = max(dp[l][r], 
-                dp[l][r - 1] + dp[l + 1][r] - dp[l + 1][r - 1]) % MOD;
         }
     }
     return dp[0][n - 1];
@@ -46,7 +49,7 @@ int main() {
     while (T--) {
         input(word);
         n = word.size();
-        printf("Case #%d: %d\n", cas++, solve() % MOD);
+        printf("Case %d: %d\n", cas++, solve() % MOD);
     }
     return 0;
 }

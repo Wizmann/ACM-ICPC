@@ -1,42 +1,44 @@
+#include <cmath>
 #include <cstdio>
-#include <cstdlib>
-#include <cstring>
+#include <vector>
 #include <iostream>
 #include <algorithm>
-#include <vector>
-
 using namespace std;
 
 #define print(x) cout << x << endl
 #define input(x) cin >> x
 
-const int SIZE = 123456;
-const int INF = 0x3f3f3f3f;
+string word;
 
-int n;
-int dp[2][SIZE];
-char word[SIZE];
+int solve() {
+    int A = 0;
+    int B = 0;
+    bool first = true;
+    
+    for (auto c: word) {
+        if (c == 'A') {
+            A += first? 0: 1;
+            A = min(A, B);
+            
+            B = A + 1;
+        } else {
+            B += first? 0: 1;
+            B = min(A, B);
+            
+            A = B + 1;
+        }
+        
+        first = false;
+    }
+    return min(A, B);
+}
 
 int main() {
     int T;
     input(T);
     while (T--) {
-        input(word);
-        n = strlen(word);
-        memset(dp, 0, sizeof(dp));
-
-        dp[0][0] = dp[0][1] = 0;
-        for (int i = 1; i <= n; i++) {
-            char c = word[i - 1];
-            if (c == 'A') {
-                dp[0][i] = min(dp[0][i - 1] + 1, dp[1][i - 1]);
-                dp[1][i] = dp[1][i - 1] + 1;
-            } else {
-                dp[1][i] = min(dp[1][i - 1] + 1, dp[0][i - 1]);
-                dp[0][i] = dp[0][i - 1] + 1;
-            }
-        }
-        print(min(dp[0][n], dp[1][n]));
+        input(word); 
+        print(solve());
     }
     return 0;
 }
