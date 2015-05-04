@@ -7,23 +7,23 @@ public:
      */    
     void sortColors2(vector<int> &colors, int k) {
         int n = colors.size();
-        int kk = k + 1;
         for (auto& c: colors) {
-            int cc = c % kk;
-            colors[cc - 1] += kk;
+            c--;
         }
-        int p = 0;
-        int q = 0;
-        while (p < n && q < n) {
-            int u = colors[q] / kk;
-            for (int i = 0; i < u; i++) {
-                colors[p] = (colors[p] / kk) * kk + q + 1;
-                p++;
+        for (int i = 0; i < n; i++) {
+            int u = colors[i] % k;
+            colors[u] += k;
+        }
+        for (int i = 0, j = 0; i < k; i++) {
+            int u = colors[i] / k;
+            for (int p = 0; p < u; p++) {
+                colors[p + j] = (colors[p + j] / k) * k;
+                colors[p + j] += i;
             }
-            q++;
+            j += u;
         }
         for (auto& c: colors) {
-            c %= kk;
+            c = (c % k) + 1;
         }
     }
 };
