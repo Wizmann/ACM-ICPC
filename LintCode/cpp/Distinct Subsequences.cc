@@ -5,31 +5,27 @@ public:
      * @return: Count the number of distinct subsequences
      */
     int numDistinct(string &S, string &T) {
-        int lenS = S.size();
-        int lenT = T.size();
-        
         memset(dp, 0, sizeof(dp));
+        int n = S.size();
+        int m = T.size();
         
-        for (int i = 0; i <= lenS; i++) {
+        for (int i = 0; i <= n; i++) {
             dp[i][0] = 1;
         }
         
-        for (int i = 1; i <= lenS; i++) {
-            for (int j = 1; j <= lenT; j++) {
-                char ss = S[i - 1];
-                char tt = T[j - 1];
-                
-                if (ss == tt) {
-                    dp[i][j] = dp[i - 1][j - 1];
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                if (S[i - 1] == T[j - 1]) {
+                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
                 }
-                dp[i][j] += dp[i - 1][j];
             }
         }
-        return dp[lenS][lenT];
+        return dp[n][m];
     }
-public:
-    static const size_t SIZE = 512;
 private:
+    static const int SIZE = 1024;
     int dp[SIZE][SIZE];
 };
 
