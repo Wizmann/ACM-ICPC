@@ -1,54 +1,62 @@
 class Solution {
 public:
-    vector<vector<int> > fourSum(vector<int> &nums, int target) {
-        int cnt = 0;
-        unordered_multimap<int, pair<int, int> > mp;
-        unordered_map<int, int> cntmp;
-        set<vector<int> > st;
-        
-        for (const auto& num: nums) {
-            cntmp[num]++;
-        }
-        
-        nums.clear();
-        for (auto& p: cntmp) {
-            auto key = p.first;
-            auto value = p.second;
-            
-            for (int i = 0; i < min(value, 4); i++) {
-                nums.push_back(key);
-            }
-        }
-        
+    /**
+     * @param numbers: Give an array numbersbers of n integer
+     * @param target: you need to find four elements that's sum of target
+     * @return: Find all unique quadruplets in the array which gives the sum of 
+     *          zero.
+     */
+    vector<vector<int> > fourSum(vector<int> nums, int target) {
+        res.clear();
         int n = nums.size();
+        unordered_multimap<int, pair<int, int> > mp;
+        sort(nums.begin(), nums.end());
         for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                int s = nums[i] + nums[j];
-                auto range = mp.equal_range(target - s);
-                for (auto iter = range.first; iter != range.second; ++iter) {
-                    if (overlap({i, j}, iter->second)) {
-                        continue;
-                    }
-                    cnt++;
-                    vector<int> tuple4({
-                            nums[i], nums[j],
-                            nums[iter->second.first], nums[iter->second.second]
-                    });
-                    sort(tuple4.begin(), tuple4.end());
-                    st.insert(tuple4);
+            if (i - 4 >= 0 && nums[i - 4] == nums[i]) {
+                continue;
+            }
+            for (int j = i + 1 ; j < n; j++) {
+                if (j - 4 >= 0 && nums[j - 4] == nums[j]) {
+                    continue;
                 }
-                mp.insert({s, {i, j}});
+                int a = nums[i];
+                int b = nums[j];
+                
+                auto p = mp.equal_range(target - (a + b));
+                
+                for (auto iter = p.first; iter != p.second; ++iter) {
+                    detect(nums, iter->second, {i, j});
+                }
+                
+                mp.insert({
+                    a + b, {i, j}
+                });
             }
         }
-        vector<vector<int> > res;
-        copy(st.begin(), st.end(), back_inserter(res));
-        return res;
+        vector<vector<int> > res_vec;
+        copy(res.begin(), res.end(), back_inserter(res_vec));
+        return res_vec;
     }
 private:
-    bool overlap(const pair<int, int>& a, const pair<int, int>& b) {
-        return a.first  == b.first  || 
-               a.first  == b.second ||
-               a.second == b.first  || 
-               a.second == b.second;
+    void detect(const vector<int>& nums, pair<int, int> pa, pair<int, int> pb) {
+        int a = pa.first;
+        int b = pa.second;
+        int c = pb.first;
+        int d = pb.second;
+        
+        if (a == c || a == d || b == c || b == d) {
+            return;
+        }
+        vector<int> tmp({
+            nums[a],
+            nums[b],
+            nums[c],
+            nums[d]
+        });
+        sort(tmp.begin(), tmp.end());
+        res.insert(tmp);
     }
+private:
+    set<vector<int> > res;
 };
+
