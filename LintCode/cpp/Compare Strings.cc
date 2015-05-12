@@ -7,19 +7,24 @@ public:
      *           else return false
      */
     bool compareStrings(string A, string B) {
-        memset(cnt, 0, sizeof(cnt));
-        for (auto c: A) {
-            cnt[c]++;
+        sort(A.begin(), A.end());
+        sort(B.begin(), B.end());
+        
+        int n = A.size();
+        int m = B.size();
+        int i = 0;
+        int j = 0;
+        
+        for (i = 0, j = 0; i < n && j < m; /* pass */) {
+            if (A[i] == B[j]) {
+                i++;
+                j++;
+            } else {
+                i++;
+            }
         }
-        bool flag = true;
-        for (auto c: B) {
-            cnt[c]--;
-            flag &= (cnt[c] >= 0);
-        }
-        return flag;
+        
+        return j == m;
     }
-private:
-    static const int SIZE = 256;
-    int cnt[SIZE];
 };
 
