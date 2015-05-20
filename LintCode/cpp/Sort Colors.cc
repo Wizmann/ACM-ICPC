@@ -6,21 +6,22 @@ public:
      */    
     void sortColors(vector<int> &nums) {
         int n = nums.size();
-        int p = 0, q = n - 1;
-        for (int i = p; i <= q; /* pass */) {
-            if (nums[i] == 0) {
-                if (i == p) {
-                    i++;
-                    p++;
-                } else {
-                    swap(nums[i], nums[p]);
-                    p++;
-                }
-            } else if (nums[i] == 2) {
-                swap(nums[i], nums[q]);
-                q--;
-            } else {
-                i++;
+        int l = 0;
+        int r = n - 1;
+        int ptr = 0;
+        
+        while (ptr <= r) {
+            switch(nums[ptr]) {
+                case 0: {
+                    swap(nums[ptr], nums[l]);
+                    ptr = max(ptr, ++l);
+                } break;
+                case 1: {
+                    ptr++;
+                } break;
+                case 2: {
+                    swap(nums[ptr], nums[r--]);
+                } break;
             }
         }
     }
