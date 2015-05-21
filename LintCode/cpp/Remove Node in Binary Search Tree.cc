@@ -18,72 +18,54 @@ public:
      * @return: The root of the binary search tree after removal.
      */
     TreeNode* removeNode(TreeNode* root, int value) {
-        if (!root) {
-            return NULL;
+        if (root == nullptr) {
+            return nullptr;
         }
-        TreeNode *p = find_node(root, value);
-        if (!p) {
-            return root;
-        }
-        TreeNode *left  = p->left;
-        TreeNode *right = p->right;
-        if (p == root) {
-            root = left? left: right;
-        }
-        if (left && root != left) {
-            insert_node(root, left);
-        }
-        if (right && root != right) {
-            insert_node(root, right);
-        }
-        return root;
-    }
-private:
-    TreeNode* find_node(TreeNode* root, int value) {
-        if (!root) {
-            return NULL;
-        }
-        if (root->val == value) {
-            return root;
-        }
-        if (root->left) {
-            if (root->left->val == value) {
-                TreeNode *res = root->left;
-                root->left = NULL;
-                return res;
-            } else if (root->val > value) {
-                return find_node(root->left, value);
+        TreeNode fake_root(numeric_limits<int>::max());
+        fake_root.left = root;
+        
+        TreeNode** pre = nullptr;
+        TreeNode* cur = &fake_root;
+        
+        while (cur && cur->val != value) {
+            if (value < cur->val) {
+                pre = &(cur->left);
+                cur = cur->left;
+            }  else {
+                pre = &(cur->right);
+                cur = cur->right;
             }
         }
         
-        if (root->right) {
-            if (root->right->val == value) {
-                TreeNode *res = root->right;
-                root->right = NULL;
-                return res;
-            } else if (root->val < value) {
-                return find_node(root->right, value);
-            }
+        if (cur == nullptr) {
+            return root;
         }
-        return NULL;
+
+        *pre = do_remove(cur);
+        return fake_root.left;
     }
-    
-    void insert_node(TreeNode* root, TreeNode* node) {
-        if (!root) {
-            return;
+private:
+    TreeNode* do_remove(TreeNode *root) {
+        if (root == nullptr) {
+            return nullptr;
         }
-        if (node->val < root->val) {
-            if (!root->left) {
-                root->left = node;
-            } else {
-                insert_node(root->left, node);
+        if (root->left == nullptr && root->right == nullptr) {
+            delete root;
+            return nullptr;
+        }
+        if (root->left) {
+            auto cur = root->left;
+            while (cur->right) {
+                cur = cur->right;
             }
+            cur->right = root->right;
+            auto res = root->left;
+            delete root;
+            return res;
         } else {
-            if (!root->right) {
-                root->right = node;
-            } else {
-                insert_node(root->right, node);
-            }
+            auto res = root->right;
+            delete root;
+            return res;
         }
     }
 };
