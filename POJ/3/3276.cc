@@ -1,65 +1,60 @@
-//Result:wizmann	3276	Accepted	264K	344MS	C++	855B	
-
-#include <cstdio>
+#include <iostream>
 #include <cstdlib>
 #include <cstring>
-#include <iostream>
+#include <cstdlib>
+#include <vector>
 
 using namespace std;
 
-#define print(x) cout<<x<<endl
-#define input(x) cin>>x
-#define SIZE 5010
+#define print(x) cout << x << endl
+#define input(x) cin >> x
+
+const int INF = 0x3f3f3f3f;
 
 int n;
-char pos[SIZE];
-char head[SIZE];
 
-int main()
-{
-	char ch[3];
-	input(n);
-	head[0]=1;
-	for(int i=1;i<=n;i++)
-	{
-		input(ch);
-		if(*ch=='B') head[i]=0;
-		else head[i]=1;
+int solve(vector<int> cows, int k) {
+    int step = 0;
+    for (int i = 1; i + k <= n + 1; i++) {
+        if (cows[i] == 1) {
+        	cows[i] = 0;
+            cows[i + k] ^= 1;
+            step++;
+        }
+    }
+    for (int i = 1; i <= n; i++) {
+        if (cows[i] == 1) {
+            return INF;
+        }
+    }
+    return step;
+}
 
-		if(head[i]==head[i-1]) pos[i]=1;
-		else pos[i]=0;
-	}
-
-	int m=1<<25,k=0,sum;
-	char tmp[SIZE];
-	for(int i=1;i<=n;i++)
-	{
-		sum=0;
-		memcpy(tmp,pos,sizeof(pos));
-		for(int j=1;j<=n-i+1;j++)
-		{
-			if(!tmp[j])
-			{
-				tmp[j]=1;
-				tmp[j+i]^=1;
-				sum++;
-			}
-		}
-		bool flag=true;
-		for(int j=1;j<=n;j++)
-		{
-			if(!tmp[j])
-			{
-				flag=false;
-				break;
-			}
-		}
-		if(flag)
-		{
-			m=min(m,sum);
-			k=i;
-		}
-	}
-	print(k<<' '<<m);
+int main() {
+    string cow;
+    vector<int> cows;
+	while(input(n)) {
+        cows.clear();
+        cows.resize(n + 5);
+        int pre = 0;
+        int cur = -1;
+        for (int i = 1; i <= n; i++) {
+            input(cow);
+            cur = (cow[0] == 'F'? 0: 1);
+            cows[i] = (pre == cur? 0: 1);
+            pre = cur;
+        }
+        int step = INF;
+        int num = -1;
+        
+        for (int i = 1; i <= n; i++) {
+            int step_ = solve(cows, i);
+            if (step_ < step) {
+                step = step_;
+                num = i;
+            }
+        }
+        print(num << ' ' << step);
+    }
 	return 0;
 }
