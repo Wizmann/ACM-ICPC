@@ -21,5 +21,5 @@ if(__name__ == '__main__'):
             '模版' not in root and item.split('.')[-1] in EXTS)])
         code_lines += sum(code_list)
         code_files += len(code_list)
-    print "Total problem sloved :", code_files
+    print "Total problems sloved :", code_files
     print "Total lines of your code :", code_lines
