@@ -6,37 +6,42 @@ public:
      */
     int median(vector<int> &nums) {
         int n = nums.size();
-        return kth_element(nums, 0, n, (n + 1) / 2);
-    }
-private:
-    int kth_element(vector<int>& nums, int st, int end, int k) {
-        int pivot_idx = partition(nums, st, end);
-        if (pivot_idx - st + 1 == k) {
-            return nums[pivot_idx];
-        }
-        if (pivot_idx - st >= k) {
-            return kth_element(nums, st, pivot_idx, k);
-        } else {
-            return kth_element(nums, pivot_idx + 1, end, k - (pivot_idx - st) - 1);
-        }
+        return *my_kth_element(nums.begin(), nums.end(), (n + 1) / 2);
     }
     
-    int partition(vector<int>& nums, int st, int end) {
-        int l = st, r = end - 1;
-        int pivot = nums[st];
+private:
+    vector<int>::iterator my_kth_element(
+            vector<int>::iterator st,
+            vector<int>::iterator end,
+            int k) {
+        int pivot = *st;
+        
+        auto l = st;
+        auto r = end - 1;
+        
         while (l <= r) {
-            while (l <= r && nums[l] <= pivot) {
+            while (l <= r && *l <= pivot) {
                 l++;
             }
-            while (l <= r && nums[r] > pivot) {
+            while (l <= r && *r > pivot) {
                 r--;
             }
             if (l <= r) {
-                swap(nums[l++], nums[r--]);
+                iter_swap(l, r);
+                l++;
+                r--;
             }
         }
-        swap(nums[st], nums[r]);
-        return r;
+        
+        auto pivot_iter = r;
+        iter_swap(st, r);
+        
+        if (distance(st, pivot_iter) == k - 1) {
+            return pivot_iter;
+        } else if (distance(st, pivot_iter) > k - 1) {
+            return my_kth_element(st, pivot_iter, k);
+        } else {
+            return my_kth_element(pivot_iter + 1, end, k - distance(st, pivot_iter) - 1);
+        }
     }
 };
-
