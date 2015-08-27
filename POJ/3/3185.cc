@@ -1,124 +1,56 @@
-//Result:wizmann	3185	Accepted	728K	16MS	G++	2340B
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include <algorithm>
-#include <iostream>
- 
+#include <vector>
+#include <queue>
+
 using namespace std;
- 
-#define print(x) cout<<x<<endl
-#define input(x) cin>>x
-#define SIZE 20
- 
-/*
- * 先用高斯消元法求出正确解，然后通过穷举自由元dfs求出最优解
- */
- 
-int mat[SIZE+5][SIZE+5];
-int ptr;
-int ans[SIZE],x[SIZE];
-int tmp_mat[SIZE+5][SIZE+5];
- 
-void init()
-{
-    for(int i=0;i<SIZE;i++)
-    {
-        if(i-1>=0) mat[i][i-1]=1;
-        mat[i][i]=1;
-        if(i+1<SIZE) mat[i][i+1]=1;
+
+#define print(x) cout << x << endl
+#define input(x) cin >> x
+
+const int N = 20;
+const int INF = 0x3f3f3f3f;
+
+int main() {
+    freopen("input.txt", "r", stdin);
+    int t = 0;
+    int status = 0;
+    for (int i = 0; i < N; i++) {
+        input(t);
+        status = (status << 1) | t;
     }
-}
- 
-int dfs(int v)
-{
-    if(v==20)
-    {
-        int temp=0;  
-        for(int i=0;i<SIZE;i++) x[i]=ans[i];  
-        memcpy(tmp_mat,mat,sizeof(mat));
-        for(int i=ptr-1;i>=0;i--)
-        {  
-            for(int j=i+1;j<SIZE;j++)
-            {
-                tmp_mat[i][SIZE]^=(x[j]&tmp_mat[i][j]);
-                //设定自由元后，再次进行高斯消元，确定正确答案，从而求出最优解
-            }
-            x[i]=tmp_mat[i][SIZE];  
-        }  
-        for(int i=0;i<SIZE;i++)
-        {
-            if(x[i]) temp++;  
+
+    vector<int> dp(1 << 20, INF);
+    queue<int> q;
+    q.push(status);
+    dp[status] = 0;
+
+    while (!q.empty()) {
+        int cur = q.front();
+        if (cur == 0) {
+            break;
         }
-        return temp;  
-    }
-    ans[v]=0;  
-    int res=dfs(v+1);  
-    ans[v]=1;  
-    res=min(res,dfs(v+1));  
-    return res;
-} 
- 
- 
-int gauss()
-{
-    for(int row=0,col=0;row<SIZE&&col<SIZE;col++)
-    {
-        int zptr=-1;
-        for(int i=row;i<SIZE;i++)
-        {
-            if(mat[i][col])
-            {
-                zptr=i;
-                break;
+        q.pop();
+
+        for (int i = 0; i < N; i++) {
+            int next = cur;
+            if (i - 1 >= 0) {
+                next ^= 1 << (i - 1);
+            }
+            next ^= (1 << i);
+            if (i + 1 < N) {
+                next ^= 1 << (i + 1);
+            }
+            if (dp[next] == INF) {
+                dp[next] = dp[cur] + 1;
+                q.push(next);
             }
         }
-        if(zptr==-1)
-        {
-            //print(col);
-            continue;
-        }
-        for(int i=0;i<=SIZE;i++)
-        {
-            swap(mat[row][i],mat[zptr][i]);
-        }
- 
-        for(int i=0;i<SIZE;i++) if(i!=row)
-        {
-            if(!mat[i][col]) continue;
-            for(int j=0;j<=SIZE;j++)
-            {
-                mat[i][j]^=mat[row][j];
-            }
-        }
-        row++;
-        ptr=row;
     }
-    if(ptr==SIZE) 
-    {
-        int ans=0;
-        for(int i=0;i<SIZE;i++)
-        {
-            if(mat[i][SIZE]) ans++;
-        }
-        return ans;
-    }
-    else return dfs(ptr);
-}
- 
- 
- 
-int main()
-{
-	freopen("n.txt","r",stdin);
-    int a;
-    init();
-    for(int i=0;i<SIZE;i++)
-    {
-        input(a);
-        mat[i][SIZE]=a;
-    }
-    print(gauss());
+    print(dp[0]);
     return 0;
 }
+
+

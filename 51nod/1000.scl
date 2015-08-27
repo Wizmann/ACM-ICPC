@@ -1,0 +1,7 @@
+object Solution {
+    def main(args: Array[String]) {
+        System.out.println(
+            readLine split(" ") map(_.toInt) sum
+        );
+    }
+}

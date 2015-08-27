@@ -1,51 +1,58 @@
-struct ScanLine {
+struct Node {
     int pos;
-    int nr;
+    int height;
     int status;
+};
+
+function<int(const Node&, const Node&)> node_cmp = [](const Node& a, const Node& b) {
+    if (a.pos != b.pos) {
+        return a.pos < b.pos;
+    }
+    return a.height * a.status > b.height * b.status;
 };
 
 class Solution {
 public:
     vector<pair<int, int>> getSkyline(vector<vector<int>>& buildings) {
-        int n = buildings.size();
-
-        vector<ScanLine> scanlines;
-
-        for (int i = 0; i < n; i++) {
-            auto& b = buildings[i];
-            scanlines.push_back({b[0], i, 1});
-            scanlines.push_back({b[1], i, -1});
+        vector<Node> nodes;
+        for (auto building: buildings) {
+            nodes.push_back({
+                building[0],
+                building[2],
+                1
+            });
+            nodes.push_back({
+                building[1],
+                building[2],
+                -1
+            });
         }
+        sort(nodes.begin(), nodes.end(), node_cmp);
         
-        sort(scanlines.begin(), scanlines.end(), [](const ScanLine& sa, const ScanLine& sb) {
-            return sa.pos < sb.pos;
-        });
-        
-        multiset<int> st;
-        st.insert(0);
-        
-        vector<pair<int, int>> res;
-        
-        int preh = 0;
-        for (int i = 0; i < n * 2; /* pass */) {
-            int cur = scanlines[i].pos;
-            
-            while (i < n * 2 && scanlines[i].pos == cur) {
-                auto& s = scanlines[i];
-                if (s.status == 1) {
-                    st.insert(buildings[s.nr][2]);
-                } else {
-                    auto iter = st.find(buildings[s.nr][2]);
-                    st.erase(iter);
+        multiset<int> mst;
+        vector<pair<int, int> > ans;
+        int pre_h = -1;
+        int pre_x = -1;
+        for (auto node: nodes) {
+            if (node.status == 1) {
+                if (node.height > pre_h) {
+                    pre_x = node.pos;
+                    pre_h = node.height;
+                    ans.push_back({pre_x, pre_h});
                 }
-                i++;
-            }
-            int curh = *st.rbegin();
-            if (preh != curh) {
-                res.push_back({cur, curh});
-                preh = curh;
+                mst.insert(node.height);
+            } else {
+                int u = node.height;
+                mst.erase(mst.find(u));
+                if (mst.empty()) {
+                    ans.push_back({node.pos, 0});
+                } else if (*mst.rbegin() < pre_h) {
+                    pre_h = *mst.rbegin();
+                    pre_x = node.pos;
+                    ans.push_back({pre_x, pre_h});
+                }
             }
         }
-        return res;
+        return ans;
     }
 };

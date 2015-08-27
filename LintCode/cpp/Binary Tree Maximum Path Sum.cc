@@ -17,26 +17,22 @@ public:
      * @return: An integer
      */
     int maxPathSum(TreeNode *root) {
-        if (!root) {
-            return 0;
-        }
-        ans = -0x3f3f3f3f;
+        ans = numeric_limits<int>::min();
         do_maxPathSum(root);
         return ans;
     }
 private:
-    int do_maxPathSum(TreeNode *root) {
-        if (!root) {
+    int do_maxPathSum(TreeNode* root) {
+        if (root == nullptr) {
             return 0;
         }
-
-        int l_value = max(0, do_maxPathSum(root->left));
-        int r_value = max(0, do_maxPathSum(root->right));
-        ans = max(ans, l_value + r_value + root->val);
-
-        return max(l_value, r_value) + root->val;
+        int left = max(0,
+            do_maxPathSum(root->left));
+        int right = max(0,
+            do_maxPathSum(root->right));
+        ans = max(ans, root->val + left + right);
+        return root->val + max(left, right);
     }
 private:
     int ans;
 };
-

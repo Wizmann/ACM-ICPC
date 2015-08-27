@@ -1,49 +1,36 @@
-const int INF = 1 << 25;
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
 
-struct cmp {
-    Interval it;
-    cmp(const Interval& i_it)
-    {
-        it = i_it;
-    }
-    bool operator ()(const Interval& a, const Interval& b)
-    {
-        return a.start < b.start;
-    }
-};
+const int INF = 0x3f3f3f3f;
 
- 
 class Solution {
 public:
-    vector<Interval> merge(vector<Interval> &intervals)
-    {
+    vector<Interval> merge(vector<Interval>& intervals) {
+        intervals.push_back({INF, INF});
+        sort(intervals.begin(), intervals.end(), [](const Interval& a, const Interval& b) {
+            return a.start < b.start;
+        });
+    
         vector<Interval> res;
-        if (!intervals.size()) {
-            return res;
-        } else {
-            intervals.push_back(Interval(INF, INF));
-        }
-        sort(intervals.begin(), intervals.end(), cmp(intervals[0]));
-        int st  = intervals[0].start;
-        int end = intervals[0].end;
-        for (int i = 0; i < intervals.size(); i++) {
-            if (in_interval(intervals[i], st, end)) {
-                end = max(end, intervals[i].end);
+        int head = intervals[0].start;
+        int tail = intervals[0].end;
+        
+        for (auto interval: intervals) {
+            if (interval.start > tail) {
+                res.push_back({head, tail});
+                head = interval.start;
+                tail = interval.end;
             } else {
-                res.push_back(Interval(st, end));
-                st  = intervals[i].start;
-                end = intervals[i].end; 
+                tail = max(tail, interval.end);
             }
         }
         return res;
-    }
-
-    bool in_interval(const Interval& interval, int st, int end)
-    {
-        if (1LL * (interval.start - st) * (interval.start - end) <= 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 };
