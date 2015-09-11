@@ -1,32 +1,28 @@
 class Solution {
 public:
     vector<string> generateParenthesis(int n) {
-        vector<string> res;
-        vector<char> s;
-        solve(0, 0, n * 2, s, res);
+        res.clear();
+        string buffer = "";
+        dfs(n, 0, buffer);
         return res;
     }
-    
-    void solve(int l, int r, int n, vector<char>& s, vector<string>& res)
-    {
-        if (l + r == n) {
-            string t;
-            for (int i = 0; i < s.size(); i++) {
-                t += s[i];
-            }
-            res.push_back(t);
+private:
+    void dfs(int u, int v, string& buffer) {
+        if (u == 0 && v == 0) {
+            res.push_back(buffer);
+            return;
         }
-        
-        if (l <  n / 2) {
-            s.push_back('(');
-            solve(l + 1, r, n, s, res);
-            s.pop_back();
+        if (v > 0) {
+            buffer.push_back(')');
+            dfs(u, v - 1, buffer);
+            buffer.pop_back();
         }
-        
-        if (r + 1 <= l) {
-            s.push_back(')');
-            solve(l, r + 1, n, s, res);
-            s.pop_back();
+        if (u > 0) {
+            buffer.push_back('(');
+            dfs(u - 1, v + 1, buffer);
+            buffer.pop_back();
         }
-    }            
+    }
+private:
+    vector<string> res;
 };
