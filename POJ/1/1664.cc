@@ -1,39 +1,43 @@
 #include <cstdio>
-#include <cstdlib>
 #include <cstring>
+#include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
 #define print(x) cout << x << endl
 #define input(x) cin >> x
 
-const int SIZE = 12;
+typedef long long llint;
 
-int dp[SIZE][SIZE];
-int n, m;
+const llint MOD = 1000000007LL;
 
-void init()
-{
-    memset(dp, 0, sizeof(dp));
-    dp[0][0] = 1;
-    for (int i = 1; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            dp[i][j] = dp[i - 1][j] + (j - i >= 0? dp[i][j - i]: 0);
+int ans = 0;
+
+void dfs(int n, int m, int pre) {
+    if (m == 0) {
+        if (n == 0) {
+            ans++;
         }
+        return;
+    }
+    for (int i = pre; i <= n; i++) {
+        dfs(n - i, m - 1, i);
     }
 }
 
-int main()
-{
+int main() {
+    freopen("input.txt", "r", stdin);
     int T;
+    int n, m;
     input(T);
-    init();
     while (T--) {
-        scanf("%d%d", &m, &n);
-        printf("%d\n", dp[n][m]);
+        ans = 0;
+        input(n >> m);
+        dfs(n, m, 0);
+        print(ans);
     }
     return 0;
 }
-
