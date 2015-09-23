@@ -1,50 +1,52 @@
 class Solution {
+    static const int INF = 0x3f3f3f3f;
 public:
-    int maxProfit(int k, vector<int> &prices) {
+    int maxProfit(int k, vector<int>& prices) {
         int n = prices.size();
         int ans = 0;
-        if (k == 0 || n == 0) {
+        
+        if (n == 0) {
             return 0;
         }
         
         if (k >= n / 2) {
+            int a = -prices[0];
+            int b = 0;
             for (int i = 1; i < n; i++) {
-                if (prices[i - 1] < prices[i]) {
-                    ans += prices[i] - prices[i - 1];
-                }
+                int aa = max(a, b - prices[i]);
+                int bb = max(b, a + prices[i]);
+                a = aa;
+                b = bb;
             }
-            return ans;
+            return max(a, b);
         }
         
-        vector<vector<int> > dp;
-        dp.resize(2);
-        for (auto& subdp: dp) {
-            subdp.resize(n);
-        }
-       
-        for (int i = 0; i < n; i++) {
-            if (i == 0) {
-                dp[0][i] = -prices[0];
-            } else {
-                dp[0][i] = max(dp[0][i - 1], -prices[i]);
-            }
+        vector<int> dp[2];
+        for (int i = 0; i < 2; i++) {
+            dp[i].resize(n);
+            fill(dp[i].begin(), dp[i].end(), 0);
         }
         
-        for (int i = 1; i < 2 * k; i++) {
-            int p = i % 2;
+        
+        int ptr = 0;
+        
+        for (int i = 0; i < min(n, 2 * k); i++) {
+            int next = ptr ^ 1;
+            fill(dp[next].begin(), dp[next].end(), -INF);
+            
             for (int j = i; j < n; j++) {
-                dp[p][j] = -INF;
-                int s = i % 2? 1: -1;
-                if (j == i) {
-                    dp[p][j] = s * prices[j] + dp[p^1][j - 1];
+                if (ptr == 0) {
+                    dp[next][j] = dp[ptr][j] - prices[j];
                 } else {
-                    dp[p][j] = max(dp[p][j - 1], s * prices[j] + dp[p^1][j - 1]);
+                    dp[next][j] = dp[ptr][j] + prices[j];
                 }
-                ans = max(ans, dp[p][j]);
+                if (j - 1 >= 0) {
+                    dp[next][j] = max(dp[next][j], dp[next][j - 1]);
+                }
+                ans = max(ans, dp[next][j]);
             }
-        }        
+            ptr = next;
+        }
         return ans;
     }
-private:
-    static const int INF = 0x3f3f3f3f;
 };
