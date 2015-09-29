@@ -1,34 +1,61 @@
 class Solution {
 public:
-    double findMedianSortedArrays(int A[], int m, int B[], int n) {
-        int tot = m + n;
-        if (tot & 1) {
-            return do_findKth(A, m, B, n, tot / 2 + 1);
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+        int m = nums2.size();
+        
+        if (n + m == 0) {
+            return 0.0;
+        }
+        
+        if ((n + m) % 2 == 0) {
+            double a = do_find_kth(
+                nums1.begin(), nums1.end(),
+                nums2.begin(), nums2.end(),
+                (n + m) / 2);
+            double b = do_find_kth(
+                nums1.begin(), nums1.end(),
+                nums2.begin(), nums2.end(),
+                (n + m) / 2 + 1);
+            return (a + b) / 2;
         } else {
-            return (do_findKth(A, m, B, n, tot / 2) +
-                    do_findKth(A, m, B, n, tot / 2 + 1)) / 2;
+            return do_find_kth(
+                nums1.begin(), nums1.end(),
+                nums2.begin(), nums2.end(),
+                (n + m) / 2 + 1);
         }
     }
 private:
-    double do_findKth(int A[], int m, int B[], int n, int k) {
-        if (m > n) {
-            return do_findKth(B, n, A, m, k);
+    int do_find_kth(
+            vector<int>::iterator nums1_begin, vector<int>::iterator nums1_end,
+            vector<int>::iterator nums2_begin, vector<int>::iterator nums2_end,
+            int k) {
+        int n = distance(nums1_begin, nums1_end);
+        int m = distance(nums2_begin, nums2_end);
+        if (n < m) {
+            return do_find_kth(nums2_begin, nums2_end, nums1_begin, nums1_end, k);
         }
-        if (m == 0) {
-            return B[k - 1];
-        }
-        if (k == 1) {
-            return min(A[0], B[0]);
-        }
-        int pa = min(k >> 1, m);
-        int pb = k - pa;
         
-        if (A[pa - 1] < B[pb - 1]) {
-            return do_findKth(A + pa, m - pa, B, n, k - pa);
-        } else if (A[pa - 1] > B[pb - 1]) {
-            return do_findKth(A, m, B + pb, n - pb, k - pb);
+        if (nums2_begin == nums2_end) {
+            return *(nums1_begin + k - 1);
+        }
+        
+        if (k == 1) {
+            return min(*nums1_begin, *nums2_begin);
+        }
+        
+        int idx_2 = min(k / 2, m);
+        int idx_1 = k - idx_2;
+        
+        int u = *(nums1_begin + idx_1 - 1);
+        int v = *(nums2_begin + idx_2 - 1);
+        
+        if (u < v) {
+            return do_find_kth(nums1_begin + idx_1, nums1_end, nums2_begin, nums2_end, k - idx_1);
+        } else if (u > v) {
+            return do_find_kth(nums1_begin, nums1_end, nums2_begin + idx_2, nums2_end, k - idx_2);
         } else {
-            return A[pa - 1];
+            return u;
         }
     }
 };

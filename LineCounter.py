@@ -6,8 +6,11 @@ EXTS = set([
     'cc', 'cpp', 'c', 'cxx',
     'java'
     'py',
-    'hs', 'scala', 'scl',
-    'sh'])
+    'hs',
+    'scala', 'scl',
+    'cs',
+    'sh',
+    'sql'])
 
 
 def LineCounter(i_path):
@@ -17,8 +20,13 @@ def LineCounter(i_path):
 if(__name__ == '__main__'):
     code_lines, code_files = 0, 0
     for root, dirs, files in os.walk(sys.path[0]):
-        code_list = map(LineCounter, [os.path.join(root, item) for item in files if(
-            '模版' not in root and item.split('.')[-1] in EXTS)])
+        code_list = map(LineCounter, [
+            os.path.join(root, item) 
+            for item in files 
+                if('模版' not in root 
+                    and item.split('.')[-1] in EXTS)
+            ]
+        )
         code_lines += sum(code_list)
         code_files += len(code_list)
     print "Total problems sloved :", code_files
