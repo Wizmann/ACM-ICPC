@@ -1,74 +1,106 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
-#define MAX 1025
+using namespace std;
 
-int baum[MAX][MAX];
-int n;
+#define print(x) cout << x << endl
+#define input(x) cin >> x
 
-inline int lowbit(int x)
-{
-	return x&(-x);
-}
+typedef long long llint;
 
-void ins(int x,int y,int c)
-{
-	int t=y;
-	while(x<MAX)
-	{
-		y=t;
-		while(y<MAX)
-		{
-			baum[y][x]+=c;
-			y+=lowbit(y);
-		}
-		x+=lowbit(x);
-	}
-}
+inline int lowbit(int x) { return x & (-x); }
 
-int getsum(int x,int y)
-{
-	int res=0,t=y;
-	while(x>0)
-	{
-		y=t;
-		while(y>0)
-		{
-			res+=baum[y][x];
-			y-=lowbit(y);
-		}
-		x-=lowbit(x);
-	}
-	return res;
-}
+struct BITree {
+    vector<llint> _tree;
 
-int sum(int x1,int y1,int x2,int y2)
-{
-	return getsum(x2,y2)+getsum(x1-1,y1-1)-getsum(x2,y1-1)-getsum(x1-1,y2);
-}
+    void init(int size) {
+        _tree.resize(size + 1);
+    }
 
-int main()
-{
-	freopen("input.txt","r",stdin);
-	int cmd;
-	int a,b,c,d;
-	while(1)
-	{
-		scanf("%d",&cmd);
-		if(cmd==0) scanf("%d",&n);
-		else if(cmd==1)
-		{
-			scanf("%d%d%d",&a,&b,&c);
-			ins(a+1,b+1,c);
-		}
-		else if(cmd==2)
-		{
-			scanf("%d%d%d%d",&a,&b,&c,&d);
-			int res=sum(a+1,b+1,c+1,d+1);
-			printf("%d\n",res);
-		}
-		else break;
-	}
-	return 0;
+    void add(int pos, int value) {
+        while (pos < _tree.size()) {
+            _tree[pos] += value;
+            pos += lowbit(pos);
+        }
+    }
+
+    llint sum(int pos) {
+        llint res = 0;
+        while (pos > 0) {
+            res += _tree[pos];
+            pos -= lowbit(pos);
+        }
+        return res;
+    }
+
+    llint sum(int a, int b) {
+        return sum(b) - sum(a - 1);
+    }
+};
+
+struct BITree_2D {
+    vector<BITree> _tree;
+
+    void init(int n, int m) {
+        _tree.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
+            _tree[i].init(m);
+        }
+    }
+
+    void add(int y, int x, int value) {
+        while (y < _tree.size()) {
+            _tree[y].add(x, value);
+            y += lowbit(y);
+        }
+    }
+
+    llint sum(int y, int x) {
+        llint res = 0;
+        while (y > 0) {
+            res += _tree[y].sum(x);
+            y -= lowbit(y);
+        }
+        return res;
+    }
+
+    llint sum(int y1, int x1, int y2, int x2) {
+        llint a = sum(y2, x2);
+        llint b = sum(y1 - 1, x1 - 1);
+        llint c = sum(y2, x1 - 1);
+        llint d = sum(y1 - 1, x2);
+
+        return a - c - d + b;
+    }
+};
+
+int main() {
+    freopen("input.txt", "r", stdin);
+    int a, b, c, d, e;
+    BITree_2D tree;
+    while (input(a) && a != 3) {
+        if (a == 0) {
+            input(b);
+            tree.init(b, b);
+        }
+        if (a == 1) {
+            scanf("%d%d%d", &b, &c, &d);
+            b++;
+            c++;
+            tree.add(c, b, d);
+        }
+        if (a == 2) {
+            scanf("%d%d%d%d", &b, &c, &d, &e);
+            b++;
+            c++;
+            d++;
+            e++;
+            print(tree.sum(c, b, e, d));
+        }
+    }
+    return 0;
 }

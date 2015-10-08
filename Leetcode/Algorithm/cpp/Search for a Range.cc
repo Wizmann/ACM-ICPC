@@ -1,48 +1,40 @@
 class Solution {
 public:
-    vector<int> searchRange(int A[], int n, int target) {
-        int a = lb(A, n, target);
-        int b = ub(A, n, target) - 1;
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int a = distance(nums.begin(), my_lower_bound(nums.begin(), nums.end(), target));
+        int b = distance(nums.begin(),   my_upper_bound(nums.begin(), nums.end(), target));
+        int n = nums.size();
         
-        if (A[a] != target) a = b = -1;
-        if (A[b] != target) a = b = -1;
+        if (a >= n || nums[a] != target || b - 1 >= n || nums[b - 1] != target) {
+            return {-1, -1};
+        }
         
-        vector<int> vec;
-        vec.push_back(a);
-        vec.push_back(b);
-        
-        return vec;
+        return {a, b - 1};
     }
-    
-    int lb(int A[], int n, int target) {
-        int first = 0;
-        while (n) {
-            int half = n >> 1;
-            int mid = first + half;
-            
-            if (A[mid] < target) {
-                first = mid + 1;
-                n = n - half - 1;
+private:
+    vector<int>::iterator my_lower_bound(vector<int>::iterator begin, vector<int>::iterator end, int target) {
+        --end;
+        while (begin <= end) {
+            auto mid = begin + distance(begin, end) / 2;
+            if (*mid >= target) {
+                end = mid - 1;
             } else {
-                n = half;
+                begin = mid + 1;
             }
         }
-        return first;
+        return begin;
     }
     
-    int ub(int A[], int n, int target) {
-        int first = 0;
-        while (n) {
-            int half = n >> 1;
-            int mid = first + half;
-            
-            if (A[mid] <= target) {
-                first = mid + 1;
-                n = n - half - 1;
+    vector<int>::iterator my_upper_bound(vector<int>::iterator begin, vector<int>::iterator end, int target) {
+        --end;
+        while (begin <= end) {
+            auto mid = begin + distance(begin, end) / 2;
+            if (*mid > target) {
+                end = mid - 1;
             } else {
-                n = half;
+                begin = mid + 1;
             }
         }
-        return first;
+        return begin;
     }
 };
