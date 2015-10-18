@@ -1,12 +1,9 @@
-class Solution:
-    # @param {integer} n
-    # @return {boolean}
+class Solution(object):
     def isHappy(self, n):
-        st = set([1])
-        while n not in st:
-            st.add(n)
-            n = sum(
-                map(lambda x: x ** 2,
-                map(int,
-                str(n))))
-        return n == 1
+        s = set()
+        while n != 1:
+            if n in s:
+                return False
+            s.add(n)
+            n = sum(map(lambda x: int(x) ** 2, str(n)))
+        return True
