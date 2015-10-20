@@ -1,38 +1,44 @@
 class Solution {
 public:
-    char *strStr(char *heystack, char *needle) {
-        int n = strlen(heystack);
-        int m = strlen(needle);
-        next = new int[m + 5];
-        get_next(needle, m);
-
-        int i, j;
+    int strStr(string haystack, string needle) {
+        if (needle.empty()) {
+            return 0;
+        }
+        
+        vector<int> next;
+        kmp_get_next(needle, next);
+        
+        int n = haystack.size();
+        int m = needle.size();
+        
+        int i = 0;
+        int j = 0;
         for (i = 0, j = 0; i < n && j < m; /* pass */) {
-            if (j == -1 || heystack[i] == needle[j]) {
-                i++; j++;
+            if (j == -1 || haystack[i] == needle[j]) {
+                i++;
+                j++;
             } else {
                 j = next[j];
             }
         }
-        delete [] next;
+        
         if (j == m) {
-            return heystack + i - m;
-        } else {
-            return nullptr;
+            return i - m;
         }
+        return -1;
     }
 private:
-    void get_next(char *needle, int n) {
-        next[0] = -1;
-        for (int pre = -1, suf = 0; suf < n; /* pass */) {
+    void kmp_get_next(const string& needle, vector<int>& next) {
+        int n = needle.size();
+        next = vector<int>(n + 1, -1);
+        for (int pre = -1, suf = 0; pre < n && suf < n; /* pass */) {
             if (pre == -1 || needle[pre] == needle[suf]) {
-                pre++; suf++;
+                pre++;
+                suf++;
                 next[suf] = pre;
             } else {
                 pre = next[pre];
             }
         }
     }
-
-    int* next;
 };
