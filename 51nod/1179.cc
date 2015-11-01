@@ -32,9 +32,11 @@ int solve() {
             int a = i;
             int b = num / a;
             
-            if (a <= b) {
+            if (a < b) {
                 mp[a]++;
                 mp[b]++;
+            } else if (a == b) {
+                mp[a]++;
             }
         }
     }
