@@ -4,57 +4,45 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <string>
 
 using namespace std;
 
 #define print(x) cout << x << endl
 #define input(x) cin >> x
 
-const int MOD = 1000000000 + 7;
-
-typedef long long llint;
-
 int n;
-vector<llint> dp[2];
 
-int init(int n) {
-    int maxi = n * 9 + 1;
-    
-    dp[0] = vector<llint>(maxi, 0);
-    dp[1] = vector<llint>(maxi, 0);
-    
-    int ptr = 0;
-    dp[0][0] = 1;
-    
-    for (int i = 0; i < n; i++) {
-        int next = ptr ^ 1;
-        dp[next] = vector<llint>(maxi, 0);
-        for (int j = n * 9; j >= 0; j--) {
-            if (dp[ptr][j]) {
-                for (int k = 0; k <= 9; k++) {
-                    if (j + k < maxi) {
-                        dp[next][j + k] += dp[ptr][j];
-                        dp[next][j + k] %= MOD;
-                    }
-                }
-            }
-        }
-        ptr = next;
+void solve(vector<int>& nums) {
+    vector<int> tmp(n + 1, 0);
+    for (int i = 1; i <= n; i++) {
+        int u = nums[i];
+        int l = i - u - 1;
+        int r = i;
+        tmp[i] += i - 1;
+        tmp[i - 1] -= i - 1;
+        tmp[r] += 1;
+        tmp[l] -= 1;
     }
-    return ptr;
+    vector<int> ans(n + 1, 0);
+
+    int g = 0;
+    for (int i = n; i > 0; i--) {
+        g += tmp[i];
+        ans[i] = g;
+    }
+    for (int i = 1; i <= n; i++) {
+        printf("%d ", ans[i]);
+    }
+    puts("");
 }
 
 int main() {
+    freopen("input.txt", "r", stdin);
     input(n);
-    int ptr = init(n);
-    llint ans = 0;
-    
-    for (int i = 0; i <= n * 9; i++) {
-        ans += (dp[ptr][i] * dp[ptr][i]) % MOD;
-        ans -= (dp[ptr ^ 1][i] * dp[ptr][i]) % MOD;
-        ans = ((ans % MOD) + MOD) % MOD;
+    vector<int> nums(n + 1, 0);
+    for (int i = 1; i <= n; i++) {
+        scanf("%d", &nums[i]);
     }
-    print(ans);
+    solve(nums);
     return 0;
 }
