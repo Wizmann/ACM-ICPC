@@ -10,6 +10,7 @@ EXTS = set([
     'scala', 'scl',
     'cs',
     'sh',
+    'go',
     'sql'])
 
 
