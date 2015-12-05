@@ -1,14 +1,14 @@
 class Solution {
 public:
     int hIndex(vector<int>& citations) {
-        // assert(citations is sorted)
         int n = citations.size();
-        for (int i = 0; i < n; i++) {
-            int h_idx = n - i;
-            if (h_idx <= citations[i]) {
-                return h_idx;
+        int ans = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            int cnt = n - i;
+            if (citations[i] >= cnt) {
+                ans = max(ans, cnt);
             }
         }
-        return 0;
+        return ans;
     }
 };

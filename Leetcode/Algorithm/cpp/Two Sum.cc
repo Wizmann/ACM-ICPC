@@ -1,27 +1,26 @@
 class Solution {
 public:
-    vector<int> twoSum(vector<int> &numbers, int target) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        mp.clear();
-        for(int i=0;i<(int)numbers.size();i++)
-        {
-            int x = numbers[i];
-            mp[x]=i;
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int n = nums.size();
+        vector<int> idx(n, 0);
+        for (int i = 0; i < n; i++) {
+            idx[i] = i;
         }
-        for(int i=0;i<(int)numbers.size();i++)
-        {
-            int x = numbers[i];
-            int y = target - x;
-
-            if(mp.find(y)!=mp.end())
-            {
-                vector<int> ans;
-                ans.push_back(i+1);
-                ans.push_back(mp[y]+1);
-                return ans;
+        sort(idx.begin(), idx.end(), [&](const int a, const int b) {
+            return nums[a] < nums[b];
+        });
+        int p = 0;
+        int q = n - 1;
+        while (p < q) {
+            int s = nums[idx[p]] + nums[idx[q]];
+            if (s > target) {
+                q--;
+            } else if (s < target) {
+                p++;
+            } else {
+                return {min(idx[p], idx[q]) + 1, max(idx[p], idx[q]) + 1};
             }
         }
+        return {};
     }
-    map<int, int> mp;
 };

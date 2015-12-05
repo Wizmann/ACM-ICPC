@@ -1,49 +1,21 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <algorithm>
-
-using namespace std;
-
-#define print(x) cout<<x<<endl
-#define input(x) cin>>x
-
-class Solution 
-{
+class Solution {
 public:
-    static const int ALPHA = 26;
-    int lengthOfLongestSubstring(string s) 
-    {
-        int front = 0, rear = 0;
-        int l = s.length();
-        int hash = 0;
+    int lengthOfLongestSubstring(string s) {
+        bool hash[256] = {0};
+        int p = 0;
+        int n = s.size();
         int ans = 0;
-        for(/*pass*/;front<l && rear<l;/*pass*/)
-        {
-            int now = s[front]-'a';
-            if(hash & (1<<now))
-            {
-                while(true)
-                {
-                    int pre = s[rear]-'a';
-                    hash ^= (1<<pre);
-                    rear++;
-                    if(pre==now) break;
-                }
+        
+        for (int i = 0; i < n; i++) {
+            int c = static_cast<int>(s[i]);
+            while (hash[c]) {
+                int cc = static_cast<int>(s[p]);
+                hash[cc] = false;
+                p++;
             }
-            hash ^= (1<<now);
-            ans = max(ans, front - rear + 1);
-            front++;
+            hash[c] = true;
+            ans = max(ans, i - p + 1);
         }
         return ans;
     }
 };
-
-int main()
-{
-    Solution S;
-    print(S.lengthOfLongestSubstring("abcabcbb"));
-    print(S.lengthOfLongestSubstring("bbbbbbbb"));
-    return 0;
-}
