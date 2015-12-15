@@ -5,27 +5,24 @@ public:
      * @return: The length of longest common subsequence of A and B.
      */
     int longestCommonSubsequence(string A, string B) {
-        int la = A.size();
-        int lb = B.size();
-        int ans = 0;
-        memset(dp, 0, sizeof(dp));
+        int n = A.size();
+        int m = B.size();
         
-        for (int i = 1; i <= la; i++) {
-            for (int j = 1; j <= lb; j++) {
-                int ca = A[i - 1];
-                int cb = B[j - 1];
-                dp[i][j] = max(dp[i][j], dp[i][j - 1]);
+        vector<vector<int> > dp(n + 1, vector<int>(m + 1, 0));
+        
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                char c1 = A[i - 1];
+                char c2 = B[j - 1];
+                
                 dp[i][j] = max(dp[i][j], dp[i - 1][j]);
-                if (ca == cb) {
+                dp[i][j] = max(dp[i][j], dp[i][j - 1]);
+                if (c1 == c2) {
                     dp[i][j] = max(dp[i][j], dp[i - 1][j - 1] + 1);
                 }
-                ans = max(ans, dp[i][j]);
             }
         }
-        return ans;
+        return dp[n][m];
     }
-private:
-    static const int SIZE = 1024;
-    int dp[SIZE][SIZE];
 };
 

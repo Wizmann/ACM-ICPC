@@ -5,18 +5,17 @@ public:
      * @return: The length of LIS (longest increasing subsequence)
      */
     int longestIncreasingSubsequence(vector<int> nums) {
-        vector<int> vec;
-        int ans = 0;
+        vector<int> st;
         for (auto num: nums) {
-            if (vec.empty() || num >= *vec.rbegin()) {
-                vec.push_back(num);
+            if (st.empty() || num >= *st.rbegin()) {
+                st.push_back(num);
+                continue;
             } else {
-                auto iter = lower_bound(vec.begin(), vec.end(), num);
+                auto iter = lower_bound(st.begin(), st.end(), num);
                 *iter = num;
             }
-            ans = max(ans, (int)vec.size());
         }
-        return ans;
+        return st.size();
     }
 };
 
