@@ -5,18 +5,15 @@ def do_solve(ns):
     ones = sum(ns)
     zeros = n - ones
 
-    assert ones + zeros == n
+    if ones == 0:
+        return 0
 
     res = 0
     a, b = 1, 1
+    
     y = pow(2, zeros, MOD)
-    for i in xrange(1, ones + 1):
-        a = a * (ones - i + 1) % MOD
-        b = b * pow(i, MOD - 2, MOD) % MOD
-        if i % 2 != 0:
-            c = (a * b * y) % MOD
-            res = (res + c) % MOD
-    return res
+    x = pow(2, ones - 1, MOD)
+    return x * y % MOD
 
 def solve():
     n = int(raw_input())
