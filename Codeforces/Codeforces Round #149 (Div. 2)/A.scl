@@ -2,10 +2,10 @@ import java.util.Scanner
 
 object Main extends App
 {
-	val sc=new Scanner(System.in)
-	val x,y,a,b=sc.nextInt()
-	val ans=for(i<-List.range(a,x+1) ;
-				j<-List.range(b,y+1) if (i>j)) yield i.toString+' '+j.toString
-	println(ans.length)
-	println(ans.mkString("\n"))
+    val sc=new Scanner(System.in)
+    val x,y,a,b=sc.nextInt()
+    val ans=for(i<-List.range(a,x+1) ;
+                j<-List.range(b,y+1) if (i>j)) yield i.toString+' '+j.toString
+    println(ans.length)
+    println(ans.mkString("\n"))
 }
