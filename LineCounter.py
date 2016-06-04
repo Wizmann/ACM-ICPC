@@ -11,6 +11,7 @@ EXTS = set([
     'cs',
     'sh',
     'go',
+    'fs',
     'sql'])
 
 
