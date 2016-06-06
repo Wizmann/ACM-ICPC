@@ -4,7 +4,8 @@ import sys
 import os
 EXTS = set([
     'cc', 'cpp', 'c', 'cxx',
-    'java'
+    'java',
+    'js',
     'py',
     'hs',
     'scala', 'scl',
