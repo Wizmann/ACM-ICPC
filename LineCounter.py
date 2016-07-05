@@ -9,6 +9,7 @@ EXTS = set([
     'py',
     'hs',
     'scala', 'scl',
+    'erl',
     'cs',
     'sh',
     'go',
