@@ -14,7 +14,8 @@ EXTS = set([
     'sh',
     'go',
     'fs',
-    'sql'])
+    'sql',
+    'swift'])
 
 
 def LineCounter(i_path):
