@@ -1,9 +1,10 @@
+from primes1m import primes
 def is_prime(x):
-    i = 2
-    while i * i <= x:
-        if x % i == 0:
+    for prime in primes:
+        if prime * prime > x:
+            break
+        if x % prime == 0:
             return False
-        i += 1
     return True
 
 
