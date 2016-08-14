@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 import sys
 import os
+
 EXTS = set([
     'cc', 'cpp', 'c', 'cxx',
     'java',
@@ -29,6 +30,7 @@ if(__name__ == '__main__'):
             os.path.join(root, item) 
             for item in files 
                 if('模版' not in root 
+                    and 'utils' not in root
                     and item.split('.')[-1] in EXTS)
             ]
         )

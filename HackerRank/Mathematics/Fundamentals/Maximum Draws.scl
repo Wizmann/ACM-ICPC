@@ -1,0 +1,11 @@
+import java.util.Scanner;
+object Solution {
+    def main(args: Array[String]) {
+        val cin = new Scanner(System.in);
+        val T = cin.nextInt();
+        for (i <- 0 until T) {
+            val n = cin.nextInt();
+            println(n + 1);
+        }
+    }
+}

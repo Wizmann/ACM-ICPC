@@ -1,0 +1,13 @@
+object Solution {
+
+    def main(args: Array[String]) {
+        val sc = new java.util.Scanner (System.in);
+        var T = sc.nextInt();
+        var a0 = 0;
+        while(a0 < T){
+            var N = sc.nextInt();
+            a0+=1;
+            println(1L * N * (N - 1) / 2);
+        }
+    }
+}

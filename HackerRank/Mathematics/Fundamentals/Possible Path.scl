@@ -1,0 +1,23 @@
+import scala.math._;
+
+object Solution {
+    def gcd(a: Int, b: Int): Int = {
+        if (a % b == 0) {
+            return b;
+        }
+        return gcd(b, a % b);
+    }
+    def main(args: Array[String]) {
+        val T = readLine.toInt
+        for (case_ <- 0 until T) {
+            val Array(x1, y1, x2, y2) = readLine split(" ") map(_.toInt);
+            val g1 = gcd(x1, y1);
+            val g2 = gcd(x2, y2);
+            if (g1 == g2) {
+                println("YES");
+            } else {
+                println("NO")
+            }
+        }
+    }
+}
