@@ -8,6 +8,7 @@ EXTS = set([
     'java',
     'js',
     'py',
+    'php',
     'hs',
     'scala', 'scl',
     'erl',
