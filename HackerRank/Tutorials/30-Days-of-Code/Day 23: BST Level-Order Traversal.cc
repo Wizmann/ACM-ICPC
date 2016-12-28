@@ -1,63 +1,69 @@
 #include <iostream>
 #include <cstddef>
+#include <queue>
+#include <string>
+#include <cstdlib>
 
-using namespace std;	
+using namespace std;
 
 class Node{
 public:
     int data;
-    Node *left;
-    Node *right;
+    Node *left,*right;
     Node(int d){
-        data = d;
-        left = NULL;
-        right = NULL;
+        data=d;
+        left=right=NULL;
     }
 };
+
 class Solution{
 public:
-    Node* insert(Node* root, int data) {
-        if(root == NULL) {
+    Node* insert(Node* root, int data){
+        if(root==NULL){
             return new Node(data);
         }
-        else {
+        else{
             Node* cur;
-            if(data <= root->data){
-                cur = insert(root->left, data);
-                root->left = cur;
+            if(data<=root->data){
+                cur=insert(root->left,data);
+                root->left=cur;
             }
             else{
-                cur = insert(root->right, data);
-                root->right = cur;
-            }
-
+                cur=insert(root->right,data);
+                root->right=cur;
+            }           
             return root;
         }
     }
-    int getHeight(Node* root){
-        if (root == nullptr) {
-            return -1;
+
+    void levelOrder(Node * root) {
+        queue<Node*> q;
+        q.push(root);
+        while (!q.empty()) {
+            Node* cur = q.front();
+            q.pop();
+            
+            if (cur == nullptr) {
+                continue;
+            }
+            
+            printf("%d ", cur->data);
+            q.push(cur->left);
+            q.push(cur->right);
         }
-        return 1 + max(getHeight(root->left), getHeight(root->right));
+        puts("");
     }
-}; //End of Solution
+};//End of Solution
 
-int main() {
+int main(){
     Solution myTree;
-    Node* root = NULL;
-    int t;
-    int data;
-
-    cin >> t;
-
-    while(t-- > 0){
-        cin >> data;
-        root = myTree.insert(root, data);
+    Node* root=NULL;
+    int T,data;
+    cin>>T;
+    while(T-->0){
+        cin>>data;
+        root= myTree.insert(root,data);
     }
-    int height = myTree.getHeight(root);
-    cout << height;
-
+    myTree.levelOrder(root);
     return 0;
 }
-
-
