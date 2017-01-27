@@ -30,7 +30,7 @@ if(__name__ == '__main__'):
         code_list = map(LineCounter, [
             os.path.join(root, item) 
             for item in files 
-                if('模版' not in root 
+                if('Exemplars' not in root 
                     and 'utils' not in root
                     and item.split('.')[-1] in EXTS)
             ]
