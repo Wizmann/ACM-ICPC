@@ -6,10 +6,10 @@ bool deal(int nr)
 	for(int i=0;i<(int)g[nr].size();i++)
 	{
 		int next=g[nr][i];
-		if(!match[next])
+		if(match[next] == -1)
 		{
 			match[next]=true;
-			if(!pre[next] || deal(pre[next]))
+			if(pre[next] != -1 || deal(pre[next]))
 			{
 				pre[next]=nr;
 				return true;
@@ -22,11 +22,11 @@ bool deal(int nr)
 int hungary()
 {
 	int sum=0;
-	memset(pre,0,sizeof(pre));
+	memset(pre,-1,sizeof(pre));
 	
 	for(int i=0;i<n;i++)
 	{
-		memset(match,0,sizeof(match));
+		memset(match,-1,sizeof(match));
 		if(deal(i,match))
 		{
 			sum++;
