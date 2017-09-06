@@ -1,36 +1,43 @@
 class Solution {
 public:
-    bool isMatch(const char *s, const char *p) {
-        if (!(*s) && !(*p)) {
+    bool isMatch(string s, string p) {
+        return isMatch(s.c_str(), p.c_str());
+    }
+private:
+    bool isMatch(const char* s, const char* p) {
+        if (s == nullptr && p == nullptr) {
             return true;
         }
-
-        if (*p && *(p+1) == '*') {
-            int len = strlen(s);
-            bool res = false;
-            
-            res |= isMatch(s, p+2);
-            for (int i = 0; i < len && _match(*(s+i), *p); i++) {
-                res |= isMatch(s + i + 1, p + 2);
+        // cout << int(*s) << ' ' << int(*p) << endl;
+        if (*s == '\0' && *p == '\0') {
+            return true;
+        }
+        
+        if (mp.count({s, p}) != 0) {
+            return mp[{s, p}];
+        }
+        
+        if (*p && *(p + 1) == '*') {
+            bool flag = false;
+            const char* ss = s;
+            while (*ss && (*p == '.' || *ss == *p)) {
+                flag |= isMatch(ss + 1, p);
+                ss++;
             }
-            return res;
+            if (flag) {
+                return mp[{s, p}] = true;
+            }
+            return mp[{s, p}] = isMatch(s, p + 2);
+        } else if (*s) {
+            if (*s == *p || *p == '.') {
+                return mp[{s, p}] = isMatch(s + 1, p + 1);
+            } else {
+                return mp[{s, p}] = false;
+            }
+        } else {
+            return mp[{s, p}] = false;
         }
-        
-        if (_match(*s, *p)) {
-            return isMatch(s+1, p+1);
-        }
-        
-        return false;
     }
-
-    inline bool _match(char s, char pattern)
-    {
-        if (!s) {
-            return false;
-        }
-        if (pattern == s || pattern == '.') {
-            return true;
-        }
-        return false;
-    }
-}; 
+private:
+    map<pair<const char*, const char*>, bool> mp;
+};
