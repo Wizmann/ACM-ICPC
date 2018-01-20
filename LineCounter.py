@@ -37,5 +37,5 @@ if(__name__ == '__main__'):
         )
         code_lines += sum(code_list)
         code_files += len(code_list)
-    print "Total problems sloved :", code_files
+    print "Total problems solved :", code_files
     print "Total lines of your code :", code_lines
