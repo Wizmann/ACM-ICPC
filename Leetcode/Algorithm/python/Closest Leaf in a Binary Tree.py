@@ -9,47 +9,46 @@ INF = 10 ** 10
 
 class Solution(object):
     def findClosestLeaf(self, root, k):
-        if not root:
-            return None
-        
-        self.dfs1(root)
-        (dis, node) = self.dfs2(root, k, INF, None)
-        return node
+        self.res = INF
+        self.vertex = -1
+        self.dfs(root, k)
+        return self.vertex
     
-    def dfs1(self, root):
-        root.dis = [INF, None]
+    def dfs(self, root, target):
+        if not root:
+            return (INF, INF, INF)
         
-        if root.left:
-            res = self.dfs1(root.left)[:]
-            res[0] += 1
-            root.dis = min(root.dis, res)
-            
-        if root.right:
-            res = self.dfs1(root.right)[:]
-            res[0] += 1
-            root.dis = min(root.dis, res)
-            
         if not root.left and not root.right:
-            root.dis = [0, root]
-            
-        return root.dis
-        
-    
-    def dfs2(self, root, k, mini, prenode):
-        if not root:
-            return (INF, None)
-        
-        if root.dis[0] < mini:
-            mini = root.dis[0]
-            prenode = root
-
-        
-        if root.val == k:
-            if mini < root.dis[0]:
-                return (mini, prenode.dis[1].val)
+            if root.val == target:
+                self.res = 0
+                self.vertex = root.val
+                return (0, 0, root.val)
             else:
-                return (root.dis[0], root.dis[1].val)
+                return (0, INF, root.val)
+            
+        (d1, k1, v1) = self.dfs(root.left, target)
+        (d2, k2, v2) = self.dfs(root.right, target)
         
-        return min(self.dfs2(root.left, k, mini + 1, prenode), self.dfs2(root.right, k, mini + 1, prenode))
+        k = min(k1, k2)
         
-        
+        if root.val == target:
+            if self.res > d1 + 1:
+                self.res = d1 + 1
+                self.vertex = v1
+            if self.res > d2 + 1:
+                self.res = d2 + 1
+                self.vertex = v2
+            
+            k = -1
+        else:
+            if self.res > d1 + k2 + 2:
+                self.res = d1 + k2 + 2
+                self.vertex = v1
+            if self.res > d2 + k1 + 2:
+                self.res = d2 + k1 + 2
+                self.vertex = v2
+
+        if d1 < d2:
+            return (d1 + 1, k + 1, v1)
+        else:
+            return (d2 + 1, k + 1, v2) 
