@@ -27,6 +27,7 @@ public:
         memset(dp, -1, sizeof(dp));
         
         for (int i = 0; i < n; i++) {
+            flights[i][i] = 1;
             if (i == 0 || flights[0][i]) {
                 dp[0][i] = days[i][0];
             }
@@ -56,16 +57,3 @@ private:
     int m;
     int dp[111][111];
 };
-
-int main() {
-    Solution S;
-
-    vector<vector<int> > flights = {
-        {0, 1, 1}, {1, 0, 1}, {1, 1, 0}
-    };
-    vector<vector<int> > days = {
-        {1, 3, 1}, {6, 0, 3}, {3, 3, 3}
-    };
-    print(S.maxVacationDays(flights, days));
-    return 0;
-}
