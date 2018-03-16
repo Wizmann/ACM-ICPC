@@ -13,46 +13,34 @@ public:
         if (!root) {
             return nullptr;
         }
-        return do_delete(root, key);
+        TreeNode dummy_root(-1);
+        dummy_root.left = root;
+        do_delete(&(dummy_root.left), root, key);
+        return dummy_root.left;
     }
 private:
-    TreeNode* do_delete(TreeNode* cur, int key) {
-        if (cur == nullptr) {
-            return nullptr;
+    void do_delete(TreeNode** pre, TreeNode* root, int key) {
+        if (root == nullptr) {
+            return;
         }
-        int val = cur->val;
-        if (val > key) {
-            cur->left = do_delete(cur->left, key);
-            return cur;
-        } else if(val < key) {
-            cur->right = do_delete(cur->right, key);
-            return cur;
+        if (root->val > key) {
+            do_delete(&(root->left), root->left, key);
+        } else if (root->val < key) {
+            do_delete(&(root->right), root->right, key);
+        } else {
+            *pre = delete_node(root);
         }
-        
-        if (cur->right == nullptr) {
-            return cur->left;
-        } else if(cur->left == nullptr) {
-            return cur->right;
-        }
-        
-        TreeNode* left_maxi = find_max(cur->left);
-        if (left_maxi == cur->left) {
-            cur->left->right = cur->right;
-            return cur->left;
-        }
-        cur->val = left_maxi->val;
-        do_delete(cur->left, cur->val);
-        return cur;
     }
     
-    TreeNode* find_max(TreeNode* cur) {
-        if (cur == nullptr) {
-            return nullptr;
+    TreeNode* delete_node(TreeNode* root) {
+        if (root->left == nullptr) {
+            return root->right;
         }
-        if (cur->right) {
-            return find_max(cur->right);
-        } else {
-            return cur;
+        TreeNode* cur = root->left;
+        while (cur->right != nullptr) {
+            cur = cur->right;
         }
+        cur->right = root->right;
+        return root->left;
     }
 };
