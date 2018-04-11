@@ -8,10 +8,12 @@ public:
         vector<int> dp[2];
         int p = 0;
         dp[0] = vector<int>(n, -INF);
+        dp[1] = vector<int>(n, -INF);
         
         for (int i = 1; i <= m; i++) {
             int q = p ^ 1;
-            dp[q] = vector<int>(n, -INF);
+            fill(dp[q].begin(), dp[q].end(), -INF);
+            
             int pre = -INF;
             for (int j = 0; j < n; j++) {
                 if (S[j] == T[i - 1]) {
@@ -29,12 +31,10 @@ public:
         string res;
         int mini = INF;
         for (int i = 0; i < n; i++) {
-            if (dp[p][i] != INF) {
-                int l = i - dp[p][i] + 1;
-                if (l < mini) {
-                    mini = l;
-                    res = S.substr(dp[p][i], l);
-                }
+            int l = i - dp[p][i] + 1;
+            if (l < mini) {
+                mini = l;
+                res = S.substr(dp[p][i], l);
             }
         }
         return res;
