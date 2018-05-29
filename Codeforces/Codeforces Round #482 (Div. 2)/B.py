@@ -2,15 +2,14 @@ from collections import Counter
 
 def calc(k, s):
     n = len(s)
-    res = 0
-    for (_, m) in Counter(s).items():
-        if m == n and k == 1:
-            return n - 1
-        elif m + k <= n:
-            res = max(res, m + k)
-        else:
-            res = n
-    return res
+    _, m = max(Counter(s).items(), key=lambda (key, value): value)
+
+    if m == n and k == 1:
+        return n - 1
+    elif m + k <= n:
+        return m + k
+    else:
+        return n
 
 if __name__ == '__main__':
     k = int(raw_input())
@@ -23,4 +22,3 @@ if __name__ == '__main__':
         print 'Draw'
     else:
         print max(zip(a, b))[1]
-
