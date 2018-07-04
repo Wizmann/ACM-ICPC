@@ -1,6 +1,6 @@
 '''$$$
 [Descriptoin]
-Given N arrays, please find any two arrays whose sums are equal after you delete one element from each array.
+Given N arrays, please find any two of the N whose sums are equal after you delete one element from each array.
 
 [Tags]
 hash, implementation
