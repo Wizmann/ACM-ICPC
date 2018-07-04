@@ -1,3 +1,28 @@
+/*$$$
+[Description]
+A team of k (1 <= K <= 100) workers should paint a fence which contains N (1 <= N <= 16 000) planks numbered from 1 to N from left to right. 
+
+Each worker i (1 <= i <= K) should sit in front of the plank Si and he may paint only a compact consecutive interval [Li, Ri] (inclusive), and Li <= Si <= Ri.
+
+Also a worker should not paint more than Li planks and for each painted plank he will receive Pi (1 <= Pi <= 10 000).
+
+* A plank should be painted by no more than one worker.
+* A plank could be left with blank.
+* A worker can paint no planks.
+* All the numbers Si should be distinct. 
+
+Write a program that determines the total maximal income obtained by the K workers. 
+
+[Tags]
+dp
+
+[Difficulty]
+4.5
+
+[Url]
+http://poj.org/problem?id=1821
+$$$*/
+
 // Result: 18740430	wizmann	1821	Accepted	1044K	110MS	G++	2128B	2018-07-04 01:23:42
 #include <cstdio>
 #include <cstdlib>
