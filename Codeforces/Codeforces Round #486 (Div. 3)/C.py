@@ -1,5 +1,5 @@
 '''$$$
-[Descriptoin]
+[Description]
 Given N arrays, please find any two of the N whose sums are equal after you delete one element from each array.
 
 [Tags]
