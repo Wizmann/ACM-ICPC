@@ -1,3 +1,17 @@
+'''$$$
+[Descriptoin]
+Given N arrays, please find any two arrays whose sums are equal after you delete one element from each array.
+
+[Tags]
+hash, implementation
+
+[Url]
+https://codeforces.com/contest/988/problem/C
+
+[Difficulty]
+2
+$$$'''
+
 import sys
 n = int(raw_input())
 
