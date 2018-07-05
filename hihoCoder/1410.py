@@ -1,3 +1,21 @@
+'''$$$
+[Description]
+Given a positive integer N, it is possible to represent N as the sum of several positive or negative powers of 2 (± 2k for some k). 
+
+For example 7 can be represented as 2^2 + 2^1 + 2^0 and 2^3 - 2^0.
+
+Your task is to find the representation which contains the minimum powers of 2.
+
+[Tags]
+dfs, implementation, dp
+
+[Difficulty]
+2.5
+
+[Url]
+http://hihocoder.com/problemset/problem/1410
+$$$'''
+
 def bruteforce(x):
     u = len('{:b}'.format(x))
     ans = u
