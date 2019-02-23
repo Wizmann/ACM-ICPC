@@ -1,0 +1,10 @@
+class Solution {
+public:
+     int NumberOf1(int n) {
+         int res = 0;
+         for (int i = 0; i < 32; i++) {
+             res += bool(n & (1 << i));
+         }
+         return res;
+     }
+};
