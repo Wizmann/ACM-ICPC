@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <cstring>
+#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <algorithm>
@@ -9,78 +9,62 @@ using namespace std;
 
 #define print(x) cout << x << endl
 #define input(x) cin >> x
-#define loop(i, n) for (int i = 0; i < n; i++)
 
-const int SIZE = 22222;
+const int SIZE = 23456;
 const int INF = 0x3f3f3f3f;
 
 int n;
 vector<int> g[SIZE];
+int mini, minb;
 
-void init() {
-    loop(i, SIZE) {
-        g[i].clear();
+int dfs(int pre, int cur) {
+    int maxsub = 0;
+    int tot = 0;
+
+    for (int i = 0; i < g[cur].size(); i++) {
+        int next = g[cur][i];
+        if (next == pre) {
+            continue;
+        }
+        int s = dfs(cur, next);
+        maxsub = max(maxsub, s);
+        tot += s;
     }
+
+    maxsub = max(maxsub, n - tot - 1);
+    if (maxsub < minb || (maxsub == minb && mini > cur)) {
+        mini = cur;
+        minb = maxsub;
+    }
+
+    return tot + 1;
 }
 
-class Solution {
-public:
-    Solution() {
-        dp = vector<int>(n + 1, 0);
-    }
-
-    void get_result(int& core, int& min_balance) {
-        int mini = INF;
-        int res = -1;
-        loop(i, n) {
-            if (dp[i + 1] < mini) {
-                mini = dp[i + 1];
-                res = i + 1;
-            }
-        }
-        core = res;
-        min_balance = mini;
-    }
-    int dfs(int pre, int cur) {
-        int child_num = 0;
-        int max_subtree = 0;
-        loop(i, g[cur].size()) {
-            int next = g[cur][i];
-            if (next == pre) {
-                continue;
-            }
-            int t = dfs(cur, next);
-            child_num += t;
-            max_subtree = max(max_subtree, t);
-        }
-        max_subtree = max(max_subtree, n - child_num - 1);
-        dp[cur] = max_subtree;
-        return child_num + 1;
-    }
-private:
-    vector<int> dp;
-};
+void solve() {
+    dfs(-1, 1);
+}
 
 int main() {
-    freopen("input.txt", "r", stdin);
     int T;
-    int a, b;
-
     input(T);
     while (T--) {
-        init();
-
         input(n);
-        loop(i, n - 1) {
+        for (int i = 0; i < SIZE; i++) {
+            g[i].clear();
+        }
+
+        mini = -1;
+        minb = INF;
+
+        int a, b;
+        for (int i = 0; i < n - 1; i++) {
             scanf("%d%d", &a, &b);
             g[a].push_back(b);
             g[b].push_back(a);
         }
-
-        Solution S;
-        S.dfs(-1, 1);
-        S.get_result(a, b);
-        printf("%d %d\n", a, b);
+        
+        solve();
+        printf("%d %d\n", mini, minb);
     }
     return 0;
 }
