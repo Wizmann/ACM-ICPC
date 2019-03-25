@@ -100,7 +100,7 @@ int main()
         ac.insert(word, i);
     }
 
-    ac.makeAC();
+    ac.makeAC(); // <- ** DO NOT FORGET THIS **
 
     scanf("%d",&m);
     for(int i = 1;i <= m; i++) {
