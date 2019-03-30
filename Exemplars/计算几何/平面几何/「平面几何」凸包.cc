@@ -12,71 +12,80 @@ bool isConvex(point poly[])
 	return true;
 }
 
-//使用namespace防止命名冲突
 
-namespace ConvexHull//一定要多于三个点
+typedef long long llint;
+
+const double eps=1e-8;
+
+inline int zero(double x)
 {
-	int sz;
-	point array[SIZE];
-	point stack[SIZE];
-	point *p;
-	inline void push(point n){*p=n;	p++;}
-	inline void pop(){p--;}
-	inline void init(int isz)
-	{
-		sz=isz;
-		memset(stack,0,sizeof(stack));
-		p=stack;
-	}
+    if(x>eps) return 1;
+    else if(x<-eps) return -1;
+    else return 0;
+}
 
-	int cmp(point p1,point p2)
-	{
-		if(xmult(p1,p2,array[0])>0) return 1;
-		else if(xmult(p1,p2,array[0])==0 && pntDis(p1,array[0])<pntDis(p2,array[0])) return 1;
-		else return 0;
-	}
-	int findtop()
-	{
-		int res=0;
-		for(int i=1;i<sz;i++)
-		{
-			if(array[i].y<array[res].y) res=i;
-			else if(array[i].y==array[res].y && array[i].x<array[res].x) res=i;
-		}
-		return res;
-	}
-
-	int graham()
-	{
-		int top=findtop();
-		push(array[top]);
-		swap(array[0],array[top]);
-		sort(array+1,array+sz,cmp);
-		
-		push(array[1]);
-		push(array[2]);
-		for(int i=3;i<sz;i++)
-		{
-			while(xmult(array[i],*(p-1),*(p-2))>0) pop();//有等号时，不包括点都在一条直线的情况
-			push(array[i]);
-		}
-		return p-stack;
-	}
-	
-	//先求出凸包，然后传入凸包顶点数，求出最远顶点对的距离
-	double maxPntDis(int num)
-	{
-		double ans=0;
-		int q=1;
-		stack[num]=stack[0];
-		for(int p=0;p<num;p++)
-		{
-			while(xmult(stack[p+1],stack[q+1],stack[p])>xmult(stack[p+1],stack[q],stack[p]))
-			{
-				q=(q+1)%num;
-			}
-			ans=max(ans,max(pntDis(stack[p],stack[q]),pntDis(stack[p+1],stack[q+1])));
-		}
-		return ans;
-	}
+struct CPoint {
+    llint x, y;
 };
+
+class ConvexHull {
+public:
+    template <typename T>
+    T mul(const T& value) {
+        return value * value;
+    }
+
+    double xmult(const CPoint& sp, const CPoint& ep, const CPoint& op) {
+        return ((sp.x - op.x) * (ep.y - op.y) - (sp.y - op.y) * (ep.x - op.x));
+    }
+
+    double pntDis(const CPoint& p1, const CPoint& p2) {
+        return sqrt(mul(p1.x - p2.x) + mul(p1.y - p2.y));
+    }
+
+    void add_point(int x, int y) {
+        points.push_back({x, y});
+    }
+
+    int findtop() {
+        int res = 0;
+        for(int i = 1; i < points.size(); i++) {
+            if (points[i].y < points[res].y) {
+                res = i;
+            } else if(points[i].y == points[res].y && points[i].x < points[res].x) {
+                res=i;
+            }
+        }
+        return res;
+    }
+
+    const vector<CPoint> graham() {
+        int top = findtop();
+        pstack.push_back(points[top]);
+        swap(points[0], points[top]);
+
+        sort(points.begin() + 1, points.end(), [&](const CPoint& p1, const CPoint& p2) -> bool {
+            if (xmult(p1, p2, points[0]) > 0) {
+                return true;
+            } else if (xmult(p1, p2, points[0]) == 0 && pntDis(p1, points[0]) < pntDis(p2, points[0])) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        pstack.push_back(points[1]);
+        pstack.push_back(points[2]);
+        for(int i = 3; i < points.size(); i++) {
+            while (zero(xmult(points[i], pstack[pstack.size() - 1], pstack[pstack.size() - 2])) > 0) {
+                pstack.pop_back();//有等号时，不包括点都在一条直线的情况
+            }
+            pstack.push_back(points[i]);
+        }
+        return pstack;
+    }
+private:
+    vector<CPoint> points;
+    vector<CPoint> pstack;
+};
+
