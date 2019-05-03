@@ -10,7 +10,7 @@ def solve(n, k):
         res[i] += i
         n -= i
     res[-1] += n
-    if n and n == k - 1:
+    if n and n == k - 1 and res[-2] * 2 < res[-1]:
         res[-1] -= 1
         res[-2] += 1
     for i in xrange(k - 1):
