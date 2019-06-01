@@ -1,3 +1,23 @@
+/*
+URL: https://vjudge.net/problem/LightOJ-1079
+
+### Description
+
+劫匪想打劫银行，但是希望被抓的概率不大于p。
+
+有n个银行，给定打劫银行`i`的收益`m[i]`和被抓的概率`q[i]`。
+
+问最多能打劫几个银行，使得收益最大。
+
+### Solution
+
+由于银行的个数`n`和抢银行的收益`m[i]`的乘积最大才10000。所以可以用`dp[k]`表示抢银行的总收益为`k`时被抓的概率。
+
+```math
+dp[k + m_{i}] = \min(dp[k + m_{i}], 1 - (1 - dp[k])(1 - q_{i}))
+```
+*/
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
