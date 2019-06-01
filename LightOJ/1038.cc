@@ -1,3 +1,23 @@
+/*
+URL: https://vjudge.net/problem/LightOJ-1038
+
+### Description
+
+给一个数N，每一步都可以将N整除，直到除到1为止。
+
+问步数的期望。
+
+### Solution
+
+非常简单的DP，由于数据规模不大，可以直接在DFS的过程中求约数。
+
+`P`代表数字`i`约数个数的倒数。
+
+
+```math
+dp[i] = \sum{dp[i / k] * P} \quad \mid \quad  i \bmod k == 0
+```
+*/
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
