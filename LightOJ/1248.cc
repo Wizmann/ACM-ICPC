@@ -1,3 +1,25 @@
+/*
+URL: https://vjudge.net/problem/LightOJ-1248
+
+### Description
+
+给定一个N面的骰子，问N面至少都能投出一次的数学期望。
+
+### Solution
+
+我们可以列出期望的方程，设我们已经投出了`i`面，还有`n - i`面没有投出，`dp[i]`代表还需要投的次数的期望。此时有：
+
+```math
+
+dp[i] = \frac{i}{n} \times dp[i] + \frac{n - i}{n} \times dp[i + 1] + 1
+
+\Downarrow
+
+dp[i] = dp[i + 1] + \frac{n}{n - i}
+
+```
+*/
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
