@@ -1,3 +1,36 @@
+/*
+URL: https://vjudge.net/problem/LightOJ-1274
+
+### Description
+
+给定N道题，N道题的答案分别是"YES"或"NO"当中的一种。
+
+现在你没有时间做题了，你想靠RP骗分。
+
+已知这N道题有y道题的答案是"YES"，有n道题的答案是"NO"。并且你可以知道之前一道题的正确答案。
+
+你的策略是第一题答"YES"，之后的每一道题都使用前一道题的答案。
+
+问错误答案个数的期望。
+
+### Solution
+
+直接列式：
+
+$$
+DP[y][n][eYES] = P_{y}DP[y - 1][n][eYES] + P_{n}(DP[y][n - 1][eNO] + 1) 
+$$
+
+$$
+DP[y][n][eNO] = P_{y}(DP[y - 1][n][eYES] + 1) + P_{n}DP[y][n - 1][eNO]
+$$
+
+y代表当前还剩余多少个"YES"，n代表还剩余多少个"NO"。eYES和eNO代表上一个答案是"YES"还是"NO"。
+
+我们使用滚动数组进行DP。
+
+*/
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
