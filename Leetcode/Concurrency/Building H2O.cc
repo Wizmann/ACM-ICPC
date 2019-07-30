@@ -20,7 +20,7 @@ public:
         if (r == 7) {
             r = 0;
         }
-        cv.notify_all();
+        cv.notify_one();
         
         releaseHydrogen();
     }
@@ -38,7 +38,7 @@ public:
             r = 0;
         }
 
-        cv.notify_all();
+        cv.notify_one();
         
         releaseOxygen();
     }
