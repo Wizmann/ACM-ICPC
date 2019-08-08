@@ -211,3 +211,150 @@ int main()
 	return 0;
 }
 
+//----
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <deque>
+#include <map>
+#include <cassert>
+
+using namespace std;
+
+#define print(x) cout << x << endl
+#define input(x) cin >> x
+
+typedef long long llint;
+
+const vector<string> months = {
+    "[X]", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+};
+
+int to_month(const string& month) {
+    auto iter = find(months.begin(), months.end(), month);
+    return distance(months.begin(), iter);
+}
+
+int month_to_day(int yy, int mm) {
+    bool r = (yy % 100 != 0 && yy % 4 == 0) || (yy % 400 == 0);
+    int res = 0;
+    switch (mm) {
+        case 12: 
+            res += 31;
+        case 11:
+            res += 30;
+        case 10:
+            res += 31;
+        case 9:
+            res += 30;
+        case 8:
+            res += 31;
+        case 7:
+            res += 31;
+        case 6:
+            res += 30;
+        case 5:
+            res += 31;
+        case 4:
+            res += 30;
+        case 3:
+            res += 31;
+        case 2:
+            res += r ? 29: 28;
+        case 1:
+            res += 31;
+        case 0:
+            res += 0;
+    }
+    return res;
+}
+
+int to_hour(int yy, int mm, int dd, int hh) {
+    const int by = 2000;
+    const int bm = 1;
+    const int bd = 1;
+
+    int res = 0;
+
+    int dy = yy - by;
+    res += 365 * dy * 24;
+    int ry = (dy + 3) / 4 - (dy / 100) + (dy / 400);
+    res += ry * 24;
+
+    res += (month_to_day(yy, mm - 1) + dd - 1) * 24;
+    res += hh;
+
+    return res;
+}
+
+int main() {
+    int n, m;
+    assert(to_hour(2000, 1, 2, 0) == 24);
+    assert(to_hour(2000, 1, 1, 0) == 0);
+    assert(to_hour(2002, 12, 19, 9) == 26001);
+    assert(to_hour(2001, 11, 19, 9) == 16521);
+    while (input(n >> m) && n + m) {
+        map<int, llint> mp;
+        for (int i = 0; i < n; i++) {
+            char month_buf[10];
+            int month;
+            int date;
+            int year;
+            int h;
+            int r;
+
+            scanf("%s%d%d%d%d", 
+                month_buf, &date, &year, &h, &r);
+
+            month = to_month(month_buf);
+
+            int hh = to_hour(year, month, date, h);
+
+            mp[hh] += r;
+        }
+        int t, s;
+        scanf("%d%d", &t, &s);
+
+        int a;
+        vector<int> ing(m);
+        for (int i = 0; i < m; i++) {
+            scanf("%d", &ing[i]);
+        }
+
+        llint res = 0;
+        deque<int> dq;
+        for (int i = 0; i < m; i++) {
+            int cur = ing[i];
+            while (!dq.empty() && i - dq.front() > t) {
+                dq.pop_front();
+            }
+
+            while (!dq.empty()) {
+                int b = dq.back();
+                llint costb = 1LL * (i - b) * s + ing[b];
+                llint costc = ing[i];
+
+                if (costc <= costb) {
+                    dq.pop_back();
+                } else {
+                    break;
+                }
+            }
+            dq.push_back(i);
+
+            if (mp.find(i) != mp.end()) {
+                int tot = mp[i];
+                llint cost = 1LL * (1LL * (i - dq.front()) * s) + ing[dq.front()];
+                res += 1LL * tot * cost;
+                // print(i << ' ' << dq.front() << ' ' << 1LL * tot * cost);
+            }
+        }
+
+        printf("%lld\n", res);
+    }
+    return 0;
+}
