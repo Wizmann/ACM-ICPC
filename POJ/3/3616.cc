@@ -74,3 +74,83 @@ int main() {
 
     return 0;
 }
+
+////
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <map>
+#include <set>
+#include <queue>
+#include <deque>
+#include <list>
+#include <cassert>
+
+using namespace std;
+
+#define print(x) cout << x << endl
+#define input(x) cin >> x
+
+typedef long long llint;
+
+const int N = 1234567;
+const int INF = 0x3f3f3f3f;
+
+struct Interval {
+    int st, end, e;
+
+    Interval() {}
+    Interval(int st_, int end_, int e_) : \
+            st(st_), end(end_), e(e_) {
+        // pass
+    }
+
+    bool operator < (const Interval& other) const {
+        return st < other.st;
+    }
+};
+
+int main() {
+    int n, m, r;
+    input(n >> m >> r);
+
+    vector<Interval> intervals;
+
+    int a, b, c;
+    for (int i = 0; i < m; i++) {
+        scanf("%d%d%d", &a, &b, &c);
+        a++;
+        b++;
+        intervals.push_back(Interval(a, b, c));
+    }
+    n += 1;
+
+    sort(intervals.begin(), intervals.end());
+
+    vector<int> dp(n + 1, -INF);
+
+    dp[0] = 0;
+    int p = 1;
+
+    for (int i = 0; i < m; i++) {
+        const Interval& it = intervals[i];
+        while (p < it.st) {
+            dp[p] = max(dp[p], dp[p - 1]);
+            p++;
+        }
+
+        int pre = it.st - r >= 0? dp[it.st - r]: 0;
+        dp[it.end] = max(dp[it.end], pre + it.e);
+    }
+    while (p <= n) {
+        dp[p] = max(dp[p], dp[p - 1]);
+        p++;
+    }
+    print(dp[n]);
+
+    return 0;
+}
