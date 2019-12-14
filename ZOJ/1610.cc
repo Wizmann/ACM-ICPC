@@ -74,13 +74,14 @@ private:
             return (r - l + 1) * tree[cur];
         }
 
-        int m = -1;
+        assert(rangeL[cur] <= l && r <= rangeR[cur]);
+
         if (cur >= N) {
-            assert(rangeL[cur] == rangeR[cur]);
-            m = rangeL[cur];
-        } else {
-            m = rangeR[left(cur)];
+            assert (tree[cur] != UNKNOWN);
         }
+
+        assert (cur < N);
+        int m = rangeR[left(cur)];
         assert(m >= 0);
 
         int res = 0;
