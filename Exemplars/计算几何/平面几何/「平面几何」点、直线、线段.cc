@@ -44,6 +44,37 @@ struct point
     }
 };
 
+//返回vector(op->sp)与vector(op->ep)的向量积
+//abs(xmult(sp,ep,op)) = 2* 三角形面积（sp,ep,op)
+//xmult(sp,ep,op) = |op->sp| * |op->ep| * sin(sop) -> 边op->sp到边op->ep的夹角
+//正负性用右手定则判定，从手指从op->sp握到op->ep方向
+inline double xmult(point sp,point ep,point op)
+{
+    return ((sp.x-op.x)*(ep.y-op.y)-(sp.y-op.y)*(ep.x-op.x));
+}
+
+inline double pntDis(const point &a,const point &b)
+{
+    return sqrt(mul(a.x-b.x)+mul(a.y-b.y));
+}
+
+//返回vector(op->sp)与vector(op->ep)的数量积
+//dotmult(sp,ep,op) = |op->sp| * |op->ep| * cos(sop) -> 边op->sp到边op->ep的夹角
+double dotmult(point sp,point ep,point op)
+{
+	return (sp.x-op.x)*(ep.x-op.x)+(sp.y-op.y)*(ep.y-op.y);
+}
+
+//求向量的夹角，从(sp->op)到(ep->op)，较精确
+double getangle(const point &sp,const point &ep,const point &op)
+{
+	double a=atan2(sp.y-op.y,sp.x-op.x);
+	double b=atan2(ep.y-op.y,ep.x-op.x);
+	if(b-a>pi) a+=2*pi;
+	if(a-b>pi) b+=2*pi;
+	return a-b;
+}
+
 //线段
 struct segment
 {
@@ -115,7 +146,6 @@ struct line
 	}
 };
 
-
 struct circle
 {
 	point c;
@@ -169,34 +199,6 @@ struct circle
 		}
 	}
 };
-
-
-//返回vector(op->sp)与vector(op->ep)的向量积
-//abs(xmult(sp,ep,op)) = 2* 三角形面积（sp,ep,op)
-//xmult(sp,ep,op) = |op->sp| * |op->ep| * sin(sop) -> 边op->sp到边op->ep的夹角
-//正负性用右手定则判定，从手指从op->sp握到op->ep方向
-inline double xmult(point sp,point ep,point op)
-{
-    return ((sp.x-op.x)*(ep.y-op.y)-(sp.y-op.y)*(ep.x-op.x));
-}
-
-//返回vector(op->sp)与vector(op->ep)的数量积
-//dotmult(sp,ep,op) = |op->sp| * |op->ep| * cos(sop) -> 边op->sp到边op->ep的夹角
-double dotmult(point sp,point ep,point op)
-{
-	return (sp.x-op.x)*(ep.x-op.x)+(sp.y-op.y)*(ep.y-op.y);
-}
-
-//求向量的夹角，从(sp->op)到(ep->op)，较精确
-double getangle(const point &sp,const point &ep,const point &op)
-{
-	double a=atan2(sp.y-op.y,sp.x-op.x);
-	double b=atan2(ep.y-op.y,ep.x-op.x);
-	if(b-a>pi) a+=2*pi;
-	if(a-b>pi) b+=2*pi;
-	return a-b;
-}
-
 
 line makeLine(point p1,point p2)
 {
