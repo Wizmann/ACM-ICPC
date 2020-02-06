@@ -1,3 +1,5 @@
+// https://codeforces.com/contest/355/problem/C
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
