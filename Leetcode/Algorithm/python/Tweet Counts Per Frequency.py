@@ -1,3 +1,5 @@
+# https://leetcode.com/problems/tweet-counts-per-frequency/
+
 INF = 10 ** 10
 
 from collections import defaultdict
