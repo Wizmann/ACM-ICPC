@@ -1,24 +1,27 @@
-void kmp_get_next()
-{
-    next[0]=-1;
-    for(int i=0,j=-1;i<len;i++,j++,next[i]=j)
-    {
-        while(j>=0 and str[i]!=str[j]) j=next[j];
-    }
-}
-
-void kmp_do()
-{
-    int i=0,j=0;
-    while(i<len and j<len)
-    {
-        if(j==-1 or mia[i]==str[j])
-        {
-            i++;j++;
+class Solution {
+public:
+    bool repeatedSubstringPattern(string str) {
+        if (str.empty()) {
+            return false;
         }
-        else
-        {
-            j=next[j];
+        int n = str.size();
+        vector<int> next;
+        kmp_get_next(str, next);
+        int g = *next.rbegin();
+        return g && n % (n - g) == 0;
+    }
+    
+    void kmp_get_next(const string& needle, vector<int>& next) {
+        int n = needle.size();
+        next = vector<int>(n + 1, -1);
+        for (int pre = -1, suf = 0; pre < n && suf < n; /* pass */) {
+            if (pre == -1 || needle[pre] == needle[suf]) {
+                pre++;
+                suf++;
+                next[suf] = pre;
+            } else {
+                pre = next[pre];
+            }
         }
     }
-}
+};
