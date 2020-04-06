@@ -1,6 +1,18 @@
 import sys
 import random
 
+DEBUG = True
+
+def logging(*args):
+    if not DEBUG:
+        return
+    lineno = sys._getframe(1).f_lineno
+    sys.stderr.write("L%d: " % lineno)
+    for arg in args:
+        sys.stderr.write("%s " % str(arg))
+    sys.stderr.write("\n")
+    sys.stderr.flush()
+
 def pprint(line):
     pline = map(lambda x: 'x' if x == -1 else str(x), line)
     return ''.join(pline)
@@ -133,9 +145,8 @@ class Solution(object):
                 elif u != v and b1 == -1:
                     b1 = l
                 bits[l], bits[r] = u, v
-        #print a1, b1, a2, b2
-        # print pprint(bits)
-        #print pprint(self.judge.bits)
+        logging(pprint(bits))
+        # logging(pprint(self.judge.bits))
         res = self.judge.query(''.join(map(str, bits)))
         assert res in 'YN'
         if res == 'N':
@@ -154,7 +165,7 @@ for i in xrange(30):
     s = Solution(100, TestJudge('1' * 50 + '0' * 50, i))
     s.solve()
 for i in xrange(30):
-    s = Solution(100, TestJudge('1011111001111011110001000010010000001101010101101000101000011011000000001101101010101101111001000010', 123 + i))
+    s = Solution(100, TestJudge('1011111001111011110001000010010000001101010101101000101000011011000000001101101010101101111001000010', i))
     s.solve()
 for i in xrange(300):
     s = Solution(10, TestJudge('1010110101', i))
