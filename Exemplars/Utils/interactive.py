@@ -1,33 +1,26 @@
-# interactive tester for some GCJ problems
-
-import sys
 import subprocess
-from subprocess import Popen, PIPE
-import time
+import select
+import sys
 
-now = time.time()
-timestamp = time.strftime('%y%m%d%H%M%S',time.localtime(now))
+def print_and_flush(owner, line):
+    print owner, '>>', line.strip()
+    sys.stdout.flush()
 
-ping, pong = sys.argv[1], sys.argv[2]
+judge, solution = sys.argv[1], sys.argv[2]
 
-p1 = Popen('python ' + ping + ' 1', stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, shell=True)
-p2 = Popen('python ' + pong, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, shell=True)
+p1 = subprocess.Popen(judge, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
+p2 = subprocess.Popen(solution, stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True)
 
-with open('ping.%s.txt' % timestamp, 'w') as pingfile:
-    with open('pong.%s.txt' % timestamp, 'w') as pongfile:
-        while True:
-            # add any filtering code if you like
-            ping = p1.stdout.readline()
-            print 'ping:', repr(ping.strip())
-            pingfile.write(ping)
-            p2.stdin.write(ping)
-
-            # add any filtering code if you like
-            pong = p2.stdout.readline()
-            print 'pong: ', pong.strip()
-            pongfile.write(pong)
-            p1.stdin.write(pong)
-
-            # flush the output to file
-            pingfile.flush()
-            pongfile.flush()
+while p1.poll() is None and p2.poll() is None:
+    fds = select.select([p1.stdout, p2.stdout], [], [], 0)[0]
+    for fd in fds:
+        if fd is p1.stdout:
+            line = fd.readline()
+            print_and_flush('judge', line)
+            p2.stdin.write(line)
+        elif fd is p2.stdout:
+            line = fd.readline()
+            print_and_flush('solution', line)
+            p1.stdin.write(line)
+        else:
+            assert False
