@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 #include <cassert>
+#include <set>
 
 using namespace std;
 
@@ -13,110 +14,82 @@ using namespace std;
 
 typedef long long llint;
 
-bool check(const vector<int>& ns, int u) {
-    int n = ns.size();
-    llint maxi = u == 0? 0: ((1LL << u) - 1);
-    llint pre = 1LL * ns[n - 1] + maxi;
+const int SIZE = 123456;
 
-    for (int i = n - 2; i >= 0; i--) {
-        llint delta = pre - ns[i];
-        if (delta < 0) {
-            return false;
-        }
+vector<int> g[SIZE];
 
-        llint cur = 1LL * ns[i] + min(maxi, delta);
-        // print(ns[i] << ' ' << cur);
-        assert(cur <= pre);
-        pre = cur;
+void dfs1(int pre, int cur, int depth, set<int>& st) {
+    // is leaf
+    if (g[cur].size() == 1 && g[cur][0] == pre) {
+        st.insert(depth % 2);
+        return;
     }
 
-    return true;
+    llint u = 0;
+    for (auto nxt : g[cur]) {
+        if (nxt == pre) {
+            continue;
+        }
+        dfs1(cur, nxt, depth + 1, st);
+    }
 }
 
-int solve(const vector<int>& ns) {
-    int l = 0;
-    int r = 40;
-    while (l <= r) {
-        int m = (l + r) / 2;
-        if (check(ns, m)) {
-            r = m - 1;
-        } else {
-            l = m + 1;
+bool dfs2(int pre, int cur, int depth, int& tot) {
+    // is leaf
+    if (g[cur].size() == 1 && g[cur][0] == pre) {
+        return true;
+    }
+
+    int leaf = 0;
+    for (auto nxt : g[cur]) {
+        if (nxt == pre) {
+            continue;
         }
+        leaf += dfs2(cur, nxt, depth + 1, tot);
     }
-    return l;
-}
 
-void test() {
-    vector<int> v6 = {1000000000, 88888888, -1000000000};
-    print(solve(v6));
-
-    vector<int> v2 = {1, 2, 3, 4, 5};
-    assert(check(v2, 0) == true);
-    assert(solve(v2) == 0);
-
-    vector<int> v1 = {1, 7, 6, 5};
-    assert(check(v1, 0) == false);
-    assert(check(v1, 1) == false);
-    assert(check(v1, 2) == true);
-
-    assert(solve(v1) == 2);
-
-
-    vector<int> v3 = {0, -4};
-    assert(solve(v3) == 3);
-
-    vector<int> v4 = {-10, 10, 2, 100};
-    for (int i = 0; i < 4; i++) {
-        assert(check(v4, i) == false);
+    if (leaf) {
+        tot -= leaf - 1;
     }
-    assert(check(v4, 4) == true);
-    assert(solve(v4) == 4);
 
-    vector<int> v5 = {-10, 10, 2, -100};
-    for (int i = 0; i < 7; i++) {
-        assert(check(v5, i) == false);
-    }
-    assert(check(v5, 8) == true);
-
-    vector<int> v7 = {1};
-    assert(solve(v7) == 0);
-    
-    srand(0);
-    for (int case_ = 0; case_ < 100; case_++) {
-        int n = rand() % 100000 + 1;
-        vector<int> ns(n);
-        for (int i = 0; i < n; i++) {
-            ns[i] = rand() % 1000000000;
-            if (rand() % 2 != 0) {
-                ns[i] *= -1;
-            }
-        }
-
-        int u = solve(ns);
-        for (int i = 0; i < u; i++) {
-            assert(check(ns, i) == false);
-        }
-        assert(check(ns, u) == true);
-    }
-    puts("OK");
+    return false;
 }
 
 int main() {
-    // test();
+    int n;
+    input(n);
 
-    int T;
-    input(T);
-    while (T--) {
-        int n;
-        input(n);
-        vector<int> ns(n);
-        for (int i = 0; i < n; i++) {
-            scanf("%d", &ns[i]);
-        }
-
-        int res = solve(ns);
-        printf("%d\n", res);
+    int a, b;
+    for (int i = 0; i < n - 1; i++) {
+        scanf("%d%d", &a, &b);
+        a--;
+        b--;
+        g[a].push_back(b);
+        g[b].push_back(a);
     }
+
+    int root = -1;
+    for (int i = 0; i < n; i++) {
+        if (g[i].size() > 1) {
+            root = i;
+            break;
+        }
+    }
+    assert(root != -1);
+
+    set<int> st1;
+    dfs1(-1, root, 0, st1);
+    if (st1.size() == 1) {
+        a = 1;
+    } else {
+        a = 3;
+    }
+
+    b = n - 1;
+    dfs2(-1, root, 0, b);
+
+    printf("%d %d\n", a, b);
+
+
     return 0;
 }
