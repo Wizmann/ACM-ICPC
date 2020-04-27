@@ -7,8 +7,8 @@ class Solution(object):
         for i, line in enumerate(nums):
             for j, num in enumerate(line):
                 u = i + j
-                d[u].append((j, num))
+                d[u].append(num)
         res = []
         for key in sorted(d.keys()):
-            res += map(lambda (a, b): b, sorted(d[key]))
+            res += d[key][::-1]
         return res
