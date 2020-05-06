@@ -17,7 +17,7 @@ void print() { cout << "\n"; }
 template <typename...T, typename X>
 void print(X& x, T... args) { cout << x << " "; print(args...); }
 
-void input() { // pass }
+void input() { /* pass */ }
 
 template <typename...T, typename X>
 void input(X& x, T&... args) { cin >> x; input(args...); }
