@@ -1,3 +1,9 @@
+def log(*args):
+    if not locals().get("DEBUG", False):
+        return
+    for arg in args:
+        print arg,
+    print ''
 
 def solve1(n):
     # n = k ^ a
@@ -50,7 +56,7 @@ def solve(n):
     s1 = solve1(n)
     s2 = solve2(n)
     s3 = solve3(n)
-    # print sorted(s1 | s2 | s3)
+    log(sorted(s1 | s2 | s3))
     return len(s1 | s2 | s3)
 
 assert solve(6) == 3
@@ -59,7 +65,6 @@ assert solve(314159265358) == 9
 
 assert solve(10 ** 12)
 
-import random
 for i in xrange(2, 100):
     assert brute_force(i) == solve(i)
 
