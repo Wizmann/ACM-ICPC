@@ -64,10 +64,12 @@ int solve(const string& s) {
         }
     }
 
+    /*
     for (int i = 0; i <= n; i++) {
         printf("%d ", dp[i]);
     }
     puts("");
+    */
 
     return dp[n];
 }
