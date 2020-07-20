@@ -56,28 +56,25 @@ int solve(const string& s) {
         dp[i] = min(dp[i], i + 1);
         for (int j = 1; j <= m; j++) {
             assert(next[j] >= 0);
-            dp[i + j] = min(dp[i + j], dp[i] + j + 1);
             if (j % (j - next[j]) == 0) {
+                dp[i + j] = min(dp[i + j], dp[i] + j + 1);
                 int loop = j - next[j];
                 dp[i + j] = min(dp[i + j], dp[i] + intlen(j / loop) + loop);
             }
         }
     }
 
-    /*
     for (int i = 0; i <= n; i++) {
         printf("%d ", dp[i]);
     }
     puts("");
-    */
 
     return dp[n];
 }
 
 void test() {
+    assert(solve("xxxcac") == 6);
     assert(solve("ababcaababcbac") == 14);
-    assert(solve("bbcaacacacccbcbaaabcccaacccabccaaabaccacbbcccabcbbabbabbbacbbccabccbcacbbbacccbbccbcc") == 78);
-    assert(solve("aaaaaaaaabbbbbbbbbbbcccccaaabbaabababababaabbaababababaaabzzdfsdfa") == 36);
     assert(solve("aaaabbccdabababa") == 12);
     assert(solve("bbbacacb") == 7);
     assert(solve("abaabacccccccc") == 6);
