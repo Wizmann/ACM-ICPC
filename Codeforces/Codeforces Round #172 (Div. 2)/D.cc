@@ -25,8 +25,7 @@ int solve(const vector<int>& ns) {
     sort(ps.begin(), ps.end(), [](const auto& p1, const auto& p2) {
         if (p1.second != p2.second) {
             return p1.second < p2.second;
-        } 
-        else {
+        } else {
             return p1.first < p2.first;
         }
     });
