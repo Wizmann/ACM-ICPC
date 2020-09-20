@@ -1,5 +1,5 @@
 /*
- * 二分图HopcroftKarp算法，时间复杂度O(n * sqrt(m))
+ * 二分图HopcroftKarp算法，时间复杂度O(E * sqrt(V))
  * 输入：n1 - 左侧节点的数目
  *      n2 - 右侧节点的数目
  *       k - 边的数目
