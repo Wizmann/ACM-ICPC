@@ -16,7 +16,7 @@ public:
         return _endpoint;
     }
     
-    bool set_end() {
+    void set_end() {
         _endpoint = true;
     }
     

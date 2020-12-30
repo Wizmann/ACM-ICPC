@@ -18,8 +18,3 @@ class Solution(object):
             res = max(res, pre + num)
             # print q
         return res
-            
-                
-            
-            
-        
