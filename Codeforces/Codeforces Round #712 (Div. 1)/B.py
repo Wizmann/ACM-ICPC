@@ -7,7 +7,7 @@ mx = [0, 1, 0, -1]
 
 class InteractiveJudge(object):
     def query(self, c, y, x):
-        print c, y, x
+        print c, y + 1, x + 1
         sys.stdout.flush()
 
     def read(self):
@@ -49,24 +49,33 @@ class Solution(object):
 
         for i in xrange(self.n * self.n):
             c = self.judge.read()
-            if c != 1:
-                if odds:
-                    (y, x) = odds.pop(0)
-                    matrix[y][x] = 1
-                    self.judge.query(1, y + 1, x + 1)
-                else:
-                    (y, x) = evens.pop(0)
-                    matrix[y][x] = 5 - c
-                    self.judge.query(5 - c, y + 1, x + 1)
-            else:
-                if evens:
-                    (y, x) = evens.pop(0)
+            if odds and evens:
+                if c == 1:
+                    y, x = evens.pop()
+                    self.judge.query(2, y, x)
                     matrix[y][x] = 2
-                    self.judge.query(2, y + 1, x + 1)
                 else:
-                    (y, x) = odds.pop(0)
+                    y, x = odds.pop()
+                    self.judge.query(1, y, x)
+                    matrix[y][x] = 1
+            elif odds:
+                if c == 1:
+                    y, x = odds.pop()
+                    self.judge.query(3, y, x)
                     matrix[y][x] = 3
-                    self.judge.query(3, y + 1, x + 1)
+                else:
+                    y, x = odds.pop()
+                    self.judge.query(1, y, x)
+                    matrix[y][x] = 1
+            else:
+                if c == 2:
+                    y, x = evens.pop()
+                    self.judge.query(3, y, x)
+                    matrix[y][x] = 3
+                else:
+                    y, x = evens.pop()
+                    self.judge.query(2, y, x)
+                    matrix[y][x] = 2
 
         # print matrix
         for i in xrange(self.n):
@@ -80,6 +89,30 @@ class Solution(object):
                     if matrix[i][j] == matrix[ny][nx]:
                         return False
         return True
+
+j1 = TestJudge(2, ns=[1, 2, 1, 3])
+s1 = Solution(j1)
+assert s1.solve()
+
+for i in xrange(10000):
+    j3 = TestJudge(3, seed=i * i)
+    s3 = Solution(j3)
+    assert s3.solve()
+
+j3 = TestJudge(10, seed=2469)
+s3 = Solution(j3)
+assert s3.solve()
+
+j2 = TestJudge(20, seed=0)
+s2 = Solution(j2)
+assert s2.solve()
+
+for i in xrange(2, 101):
+    j3 = TestJudge(i, seed=199)
+    s3 = Solution(j3)
+    assert s3.solve()
+
+# print 'ok'
 
 j = InteractiveJudge()
 s = Solution(j)
