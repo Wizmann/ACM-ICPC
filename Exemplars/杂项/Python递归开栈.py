@@ -1,5 +1,7 @@
 #codeforces 369C
 
+# 只适用于Python2/3，不适用于pypy2/3
+
 import sys
 import threading
 
