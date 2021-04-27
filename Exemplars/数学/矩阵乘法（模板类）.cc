@@ -46,7 +46,7 @@ Matrix<T> matmul(
             if (ma[i][k] == 0) {
                 continue;
             }
-            for (int j = 0; j < m1; j++) {
+            for (int j = 0; j < m2; j++) {
                 res[i][j] = (res[i][j] + 1LL * ma[i][k] * mb[k][j] % MOD) % MOD;
             }
         }
