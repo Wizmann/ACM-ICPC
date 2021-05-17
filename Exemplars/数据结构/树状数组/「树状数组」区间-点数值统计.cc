@@ -1,103 +1,99 @@
-#define SIZE 100100
+const int N = 55555;
 
 inline int lowbit(int x)
 {
-	return x&(-x);
+    return x&(-x);
 }
 
-struct BIT//点更新，区间查询
-{
-	int baum[SIZE];
-	inline void init()
-	{
-		memset(baum,0,sizeof(baum));
-	}
-	void add(int x,int val)
-	{
-		while(x<SIZE)
-		{
-			baum[x]+=val;
-			x+=lowbit(x);
-		}
-	}
-	int sum(int x)
-	{
-		int res=0;
-		while(x>0)
-		{
-			res+=baum[x];
-			x-=lowbit(x);
-		}
-		return res;
-	}
-	int sum(int a,int b)//查询区间和
-	{
-		return sum(b)-sum(a-1);
-	}
+class BITree { // 点更新，点查询
+public:
+    BITree() {}
+    BITree(int n_): n(n_), tree(n + 1, 0) {}
+
+    void add(int pos, int val) {
+        while (pos < n) {
+            tree[pos] += val;
+            pos += lowbit(pos);
+        }
+    }
+
+    int sum(int pos) {
+        int res = 0;
+        while (pos > 0) {
+            res += tree[pos];
+            pos -= lowbit(pos);
+        }
+        return res;
+    }
+
+    int sum(int a ,int b) {
+        return sum(b) - sum(a - 1);
+    }
+private:
+    int n;
+    vector<int> tree;
 };
 
-struct SegBIT//区间更新，点查询
-{
-	int baum[SIZE];
-	inline void init()
-	{
-		memset(baum,0,sizeof(baum));
-	}
-	void add(int x,int val)
-	{
-		while(x>0)
-		{
-			baum[x]+=val;
-			x-=lowbit(x);
-		}
-	}
-	void addseg(int a,int b,int val)//区间更新
-	{
-		add(a-1,-val);
-		add(b,val);
-	}
-	int sum(int x)//点查询
-	{
-		int res=0;
-		while(x<SIZE)
-		{
-			res+=baum[x];
-			x+=lowbit(x);
-		}
-		return res;
-	}
+class SegBIT { // 区间更新，点查询
+public:
+    SegBIT() {}
+    SegBIT(int n_): n(n_), tree(n + 1, 0) {}
+
+    void add(int pos, int val) {
+        while (pos > 0) {
+            tree[pos] += val;
+            pos -= lowbit(pos);
+        }
+    }
+
+    void addseg(int a, int b, int val) {
+        add(a - 1, -val);
+        add(b, val);
+    }
+
+    //点查询
+    int sum(int pos) {
+        int res = 0;
+        while (pos < n) {
+            res += tree[pos];
+            pos += lowbit(pos);
+        }
+        return res;
+    }
+private:
+    int n;
+    vector<int> tree;
 };
 
-struct SegSegBIT//区间更新，区间查询
-{
-	SegBIT A;
-	BIT B;
-	inline void init()
-	{
-		A.init();
-		B.init();
-	}
-	
-	void update(int pos,int val)
-	{
-		A.add(pos,val);
-		B.add(pos,pos*val);
-	}
-	
-	void addseg(int a,int b,int val)//区间更新
-	{
-		update(b,val);
-		if(a>1) update(a-1,-val);
-	}
+class SegSegBIT { // 区间更新，区间查询
+public:
+    SegSegBIT(int n_) : n(n_), A(n), B(n) {}
+    
+    void addseg(int a, int b, int val) { // 区间更新
+        update(b, val);
+        if (a > 1) {
+            update(a - 1, -val);
+        }
+    }
 
-	int sum(int x)
-	{
-		if(x) return A.sum(x)*x+B.sum(x-1);
-		else return 0;
-	}
+    int sum(int x) {
+        if (x) {
+            return A.sum(x) * x + B.sum(x - 1);
+        } else {
+            return 0;
+        }
+    }
 
-	int sum(int a,int b)//区间查询
-	{
-		return sum(b)-sum(a-1);
-	}
+    int sum(int a, int b) { //区间查询
+        return sum(b) - sum(a - 1);
+    }
+private:
+    void update(int pos, int val) {
+        A.add(pos,val);
+        B.add(pos,pos*val);
+    }
+
+    int n;
+    SegBIT A;
+    BITree B;
 };
