@@ -1,3 +1,4 @@
+// https://nanti.jisuanke.com/t/T3410
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
