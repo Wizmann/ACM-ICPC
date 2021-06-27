@@ -10,7 +10,7 @@ def kmp(s):
         if pre == -1 or s[pre] == s[suf]:
             pre += 1
             suf += 1
-            kmp_next[i] = pre
+            kmp_next[suf] = pre
         else:
             pre = kmp_next[pre]
     return kmp_next
