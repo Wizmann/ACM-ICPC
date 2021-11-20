@@ -4,5 +4,5 @@ class Solution(object):
         a = map(int, ''.join(map(convert, firstWord)))
         b = map(int, ''.join(map(convert, secondWord)))
         c = map(int, ''.join(map(convert, targetWord)))
-        # print a, b, c
+        a, b, c = map(lambda x: int(''.join(map(str, x))), [a, b, c])
         return a + b == c
