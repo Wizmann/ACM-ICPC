@@ -152,5 +152,127 @@ $$$TEST$$$
 -1
 $$$TEST$$$
 
+*/
+
+// -----------------------------------------
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <map>
+#include <set>
+#include <deque>
+#include <string>
+#include <cassert>
+
+using namespace std;
+
+typedef long long llint;
+
+const int INF = 0x3f3f3f3f;
+const llint INFLL = 0x3f3f3f3f3f3f3f3fLL;
+
+void print() { cout << "\n"; }
+
+template <typename...T, typename X>
+void print(X&& x, T... args) { cout << x << " "; print(args...); }
+
+int input() { return 0; }
+
+template <typename...T, typename X>
+int input(X& x, T&... args) {
+    if (!(cin >> x)) return 0;
+    return input(args...) + 1;
+}
+
+const int SIZE = 123456;
+
+llint dp[SIZE];
+
+llint dfs(int cur, int n, llint k, vector<int>& res) {
+    if (cur == n) {
+        return 1;
+    }
+
+    if (dp[n - cur] != -1) {
+        if (dp[n - cur] < k) {
+            return dp[n - cur];
+        }
+    }
+
+    llint tot = 0;
+    bool flag = false;
+    for (int i = 1; cur + i <= n; i++) {
+        tot += dfs(cur + i, n, k - tot, res);
+        if (tot >= k && flag == false) {
+            flag = true;
+            for (int j = 0; j < i; j++) {
+                res[cur + j] = cur + i - j;
+            }
+            break;
+        }
+    }
+
+    if (flag) {
+        return tot;
+    } else {
+        return dp[n - cur] = tot;
+    }
+}
+
+void solve(int n, llint k, vector<int>& res) {
+    dfs(0, n, k, res);
+}
+
+int main() {
+    int T;
+    input(T);
+
+    memset(dp, -1, sizeof(dp));
+
+    int n;
+    llint k;
+    while (T--) {
+        input(n, k);
+
+        vector<int> ns(n, -1);
+        solve(n, k, ns);
+
+        if (ns[0] == -1) {
+            puts("-1");
+        } else {
+            for (auto num : ns) {
+                printf("%d ", num);
+            }
+            puts("");
+        }
+    }
+
+    return 0;
+}
+
+/*
+
+^^^TEST^^^
+5
+1 1
+1 2
+3 3
+6 5
+3 4
+-----
+1 
+-1
+2 1 3 
+1 2 4 3 5 6 
+3 2 1 
+$$$TEST$$$
 
 */
+
