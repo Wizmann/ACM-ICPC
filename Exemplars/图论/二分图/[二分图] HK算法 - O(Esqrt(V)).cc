@@ -33,7 +33,7 @@ public:
         visited.resize(n1 + n2);
     }
 
-    void AddEdge(int from, int to) {
+    void addEdge(int from, int to) {
         g[from].push_back(to);
     }
 
@@ -55,6 +55,14 @@ public:
             }
         }
         return ans;
+    }
+
+    int get_match_x(int x) const {
+        return mx[x];
+    }
+
+    int get_match_y(int y) const {
+        return my[y];
     }
 private:
     bool bfs(){
@@ -119,6 +127,7 @@ private:
     vector<vector<int> > g;
 };
 
+
 int main() {
     freopen("input.txt", "r", stdin);
     
@@ -129,7 +138,7 @@ int main() {
     int a, b;
     for (int i = 0; i < k; i++) {
         scanf("%d%d", &a, &b);
-        S.AddEdge(a - 1, b - 1);
+        S.addEdge(a - 1, b - 1);
     }
     print(S.match());
     return 0;
