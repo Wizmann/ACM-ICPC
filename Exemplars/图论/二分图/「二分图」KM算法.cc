@@ -1,213 +1,185 @@
 //g[i][j]表示左边的编号为i的到右边编号为j的权值
 //KM算法默认求最大匹配权值
 //若要求最小匹配权，则需要把权值设为负
-int g[SIZE][SIZE];
-bitset<SIZE> visx,visy;
-int linky[SIZE];
-int lx[SIZE],ly[SIZE];
-int slack;
 
-bool dfs(int x)
-{
-	visx[x]=1;
-	for(int y=0;y<m;y++)
-	{
-		if(visy[y]) continue;
-		int t=lx[x]+ly[y]-g[x][y];
-		if(!t)
-		{
-			visy[y] = 1;
-			if(linky[y]==-1 || dfs(linky[y]))
-			{
-				linky[y] = x;
-				return 1;
-			}
-		}
-		else if(t<slack)  slack=t;
-	}
-	return 0;
-}
+// n为二分图左边节点数，m为二分图右边节点数。要求n >= m，否则程序会因无法产生匹配而一直循环下去
 
-int km()
-{
-	memset(linky,-1,sizeof(linky));
-	memset(lx,0,sizeof(lx));
-	memset(ly,0,sizeof(ly));
-	for(int i=0;i<n;i++)
-	{
-		for(int j=0;j<m;j++)
-		{
-			lx[i]=max(lx[i],g[i][j]);
-		}
-	}
-	for(int i=0;i<n;i++)
-	{
-		while(1)
-		{
-			visx.reset();
-			visy.reset();
-			slack=INF;
-			if(dfs(i)) break;
-			for(int j=0;j<n;j++)
-			{
-				if(visx[j]) lx[j]-=slack;
-			}
-			for(int j=0;j<m;j++)
-			{
-				if(visy[j]) ly[j]+=slack;
-			}
-		}
-	}
-	int res=0;
-	for(int i=0;i<m;i++)
-	{
-		if(linky[i]!=-1)
-		{
-			res+=lx[linky[i]]+ly[i];
-		}
-	}
-	return res;
-}
+// https://uoj.ac/problem/80
 
-////////////////////////
-// Leetcode 2172. Maximum AND Sum of Array
-// 除此之外没有验过
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <map>
+#include <set>
+#include <deque>
+#include <string>
+#include <cassert>
+
+using namespace std;
+
+typedef long long llint;
 
 const int INF = 0x3f3f3f3f;
+const llint INFLL = 0x3f3f3f3f3f3f3f3fLL;
 
-class KM {
+void print() { cout << "\n"; }
+
+template <typename...T, typename X>
+void print(X&& x, T... args) { cout << x << " "; print(args...); }
+
+int input() { return 0; }
+
+template <typename...T, typename X>
+int input(X& x, T&... args) {
+    if (!(cin >> x)) return 0;
+    return input(args...) + 1;
+}
+
+class KuhnMunkres {
 public:
-    KM(int n_, int m_) {
-        n = n_;
-        m = max(n_, m_);
-        g = vector<vector<int>>(n, vector<int>(m, 0));
-        visx = vector<bool>(n, false);
-        visy = vector<bool>(m, false);
-        lx = vector<int>(n, 0);
-        ly = vector<int>(m, 0);
-        linky = vector<int>(m, -1);
-        slack = vector<int>(m, INF);
-    }
+    KuhnMunkres(int size_) : \
+            size(size_), g(size, vector<llint>(size)),
+            matx(size, -1), maty(size, -1),
+            lx(size), ly(size, -INF), pre(size) { /* pass */ }
+    
+    void addEdge(int u, int v, llint w) {
+        assert(u < size && v < size);
+        g[u][v] = max(g[u][v], w);
+    };
 
-    void SetWeight(int l, int r, int v) {
-        assert(l < g.size());
-        assert(r < g[l].size());
-        g[l][r] = v;
-    }
-
-    int solve() {
-        return km();
-    }
-private:
-    bool dfs(int x) {
-        assert(x < visx.size());
-        visx[x] = true;
-        for (int y = 0; y < m; y++) {
-            assert(y < visy.size());
-            if (visy[y]) {
-                continue;
-            }
-            assert(x < lx.size());
-            assert(y < ly.size());
-            assert(x < g.size());
-            assert(y < g[x].size());
-            int t = lx[x] + ly[y] - g[x][y];
-            assert(y < slack.size());
-            if (!t) {
-                assert(y < linky.size());
-                visy[y] = true;
-                if (linky[y] == -1 || dfs(linky[y])) {
-                    linky[y] = x;
-                    return true;
-                }
-            } else if (t < slack[y]) {
-                slack[y] = t;
-            }
-        }
-        return false;
-    }
-
-    int km() {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                assert(i < lx.size());
-                assert(i < g.size());
-                assert(j < g[i].size());
-                lx[i] = max(lx[i], g[i][j]);
+    llint solve() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                ly[i] = max(ly[i], g[j][i]);
             }
         }
 
-        fill(ly.begin(), ly.end(), 0);
-
-        for (int i = 0; i < n; i++) {
-            fill(slack.begin(), slack.end(), INF);
-            assert(slack.size() == m);
-            assert(visx.size() == n);
-            assert(visy.size() == m);
-            while (true) {
-                fill(visx.begin(), visx.end(), false);
-                fill(visy.begin(), visy.end(), false);
-                if (dfs(i)) {
-                    break;
-                }
-                int d = INF;
-                for (int j = 0; j < m; j++) {
-                    if (!visy[j]) {
-                        assert(j < slack.size());
-                        d = min(d, slack[j]);
-                    }
-                }
-                for (int j = 0; j < n; j++) {
-                    assert(j < visx.size());
-                    assert(j < lx.size());
-                    if (visx[j]) {
-                        lx[j] -= d;
-                    }
-                }
-                for (int j = 0; j < m; j++) {
-                    assert(j < visy.size());
-                    assert(j < ly.size());
-                    if (visy[j]) {
-                        ly[j] += d;
-                    }
-                }
-            }
+        for (int i = 0; i < size; ++i) {
+            bfs(i);
         }
-
-        int res = 0;
-        for (int i = 0; i < m; i++) {
-            if (linky[i] != -1) {
-                res += lx[linky[i]] + ly[i];
-            }
+        llint res = 0;
+        for (int i = 0; i < size; ++i) {
+            res += g[i][matx[i]]; 
         }
         return res;
     }
 
-    int n, m;
-    vector<vector<int> > g;
-    vector<bool> visx;
-    vector<bool> visy;
-    vector<int> linky;
-    vector<int> lx;
-    vector<int> ly;
-    vector<int> slack;
-};
+    int matchx(int x) {
+        return g[x][matx[x]] > 0 ? matx[x] : -1;
+    }
+private:
+    void bfs(int u) {
+        vector<bool> visx(size);
+        vector<bool> visy(size);
+        vector<llint> slack(size, INFLL);
 
-class Solution {
-public:
-    int maximumANDSum(vector<int>& nums, int numSlots) {
-        int n = numSlots * 2 + 1;
-        int m = nums.size();
-        KM km(n, n);
+        q = queue<int>();
+        q.push(u);
+        visx[u] = true;
+        while (true) {
+            while(!q.empty()) {
+                int u = q.front();
+                q.pop();
+                for (int v = 0; v < size; ++v) {
+                    if (!visy[v]) {
+                        llint del = lx[u] + ly[v] - g[u][v];
+                        if (del < slack[v]) {
+                            pre[v] = u;
+                            slack[v] = del;
+                            if (!slack[v] && check(visx, visy, v)) {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
 
-        for (int i = 1; i <= numSlots; i++) {
-            for (int j = 0; j < m; j++) {
-                int v = nums[j];
-                km.SetWeight(i * 2 - 1, j, i & v);
-                km.SetWeight(i * 2, j, i & v);
+            llint a = INFLL;
+            for (int i = 0; i < size; i++) {
+                if (!visy[i]) {
+                    a = min(a, slack[i]);
+                }
+            }
+            for (int i = 0; i < size; i++) {
+                if (visx[i]) {
+                    lx[i] -= a;
+                }
+                if (visy[i]) {
+                    ly[i] += a;
+                } else {
+                    slack[i] -= a;
+                }
+            }
+            for (int i = 0; i < size; i++) {
+                if (!visy[i] && !slack[i] && check(visx, visy, i)) {
+                    return;
+                }
             }
         }
-
-        return km.solve();
     }
+
+    bool check(vector<bool>& visx, vector<bool>& visy, int u) {
+        visy[u] = 1;
+        if (maty[u] != -1) {
+            q.push(maty[u]);
+            visx[maty[u]] = true;
+            return false;
+        }
+        while (u != -1) {
+            maty[u] = pre[u];
+            swap(u, matx[pre[u]]);
+        }
+        return true;
+    };
+
+private:
+    int size;
+    vector<vector<llint>> g;
+    vector<int> matx, maty;
+    vector<llint> lx, ly; 
+    vector<int> pre;
+    queue<int> q;
 };
+
+
+int main() {
+    int n, m, k;
+    input(n, m, k);
+
+    KuhnMunkres km(max(n, m));
+
+    int a, b, c;
+    for (int i = 0; i < k; i++) {
+        scanf("%d%d%d", &a, &b, &c);
+        km.addEdge(a - 1, b - 1, c);
+    }
+
+    print(km.solve());
+
+    for (int i = 0; i < n; i++) {
+        printf("%d ", km.matchx(i) + 1);
+    }
+    puts("");
+
+    return 0;
+}
+
+/*
+
+^^^TEST^^^
+2 2 3
+1 1 100
+1 2 1
+2 1 1
+-----
+100
+1 0
+$$$TEST$$$
+
+*/
