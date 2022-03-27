@@ -87,7 +87,7 @@ public:
         for(int i = pos; i < n; i += lowbit(i)) {
             tree[i] = nums[i];
             for(int j = 1; j < lowbit(i); j <<= 1) {
-                tree[i] = min(tree[i], tree[i - j]);
+                tree[i] = cmp(tree[i], tree[i - j]);
             }
         }
     }
