@@ -7,16 +7,20 @@ class Solution(object):
         res = 0
 
         while l < n and r < n:
-            res = max(res, min(carpetLen, tiles[r][1] - tiles[l][0] + 1) - space)
-            while l < r and tiles[r][1] - tiles[l][0] >= carpetLen:
+            while r < n and tiles[r][1] - tiles[l][0] <= carpetLen:
                 res = max(res, min(carpetLen, tiles[r][1] - tiles[l][0] + 1) - space)
-                space -= tiles[l + 1][0] - tiles[l][1] - 1
-                l += 1
+                if r + 1 < n:
+                    r += 1
+                    space += tiles[r][0] - tiles[r - 1][1] - 1
+                else:
+                    break
+
             res = max(res, min(carpetLen, tiles[r][1] - tiles[l][0] + 1) - space)
 
-            r += 1
-            if r < n:
-                space += tiles[r][0] - tiles[r - 1][1] - 1
+            l += 1
+            if l < n:
+                space -= tiles[l][0] - tiles[l - 1][1] - 1
+            
         return res
 
 '''
@@ -44,3 +48,4 @@ $$$TEST$$$
 '''
 
         
+
