@@ -16,6 +16,7 @@ def z_function(s):
             r = i + z[i] - 1
     return z
 
+
 T = int(input())
 
 for case_ in range(T):
@@ -29,23 +30,17 @@ for case_ in range(T):
 
     res = n
     for i, num in enumerate(z):
-        u = n - num
-        if n % u == 0:
-            res = min(res, u)
+        if i + num == n and n % i == 0:
+            res = min(res, i)
     if case_:
         print('')
     print(res)
 
 '''
 ^^^TEST^^^
-2
-
-abcabcabc
-
+1
 HoHoHo
 ------
-3
-
 2
 $$$TEST$$$
 
