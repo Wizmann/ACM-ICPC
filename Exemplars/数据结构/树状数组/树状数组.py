@@ -19,4 +19,5 @@ class BITree(object):
         return res
     
     def query_range(self, a, b):
-        return self.query(b) - self.query(a - 1)
+        a = max(0, a - 1)
+        return self.query(b) - self.query(a)
