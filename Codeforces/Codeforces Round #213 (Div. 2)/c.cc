@@ -3,69 +3,114 @@
 #include <cstring>
 #include <iostream>
 #include <algorithm>
+#include <functional>
+#include <vector>
+#include <queue>
+#include <stack>
 #include <map>
+#include <set>
+#include <deque>
+#include <string>
+#include <cassert>
 
 using namespace std;
 
-#define print(x) cout << x << endl
-#define input(x) cin >> x
-
 typedef long long llint;
 
-const int SIZE = 4444;
+const int INF = 0x3f3f3f3f;
+const llint INFLL = 0x3f3f3f3f3f3f3f3fLL;
 
+void print() { cout << "\n"; }
+
+template <typename...T, typename X>
+void print(X&& x, T... args) { cout << x << " "; print(args...); }
+
+int input() { return 0; }
+
+template <typename...T, typename X>
+int input(X& x, T&... args) {
+    if (!(cin >> x)) return 0;
+    return input(args...) + 1;
+}
+
+int n;
 llint a;
-int len;
-char val[SIZE];
-map<llint, int> mp;
+vector<llint> ns;
 
-int main()
-{
-    freopen("input.txt", "r", stdin);
-    while (input(a)) {
-        llint ans = 0;
-        input(val);
-        len = strlen(val);
-        mp.clear();
-        int sumall = 0;
-        for (int i = 0; i < len; i++) {
-            val[i] -= '0';
-        }
+int main() {
+    string s;
 
-        for (int i = 1; i <= len; i++) {
-            llint t = 0;
-            for (int j = 0; j < i; j++) {
-                t += val[j];
-            }
-            mp[t]++;
-            sumall++;
-            for (int j = i; j < len; j++) {
-                t -= val[j - i];
-                t += val[j];
-                mp[t]++;
-                sumall++;
-            }
-        }
-        for (map<llint, int>::iterator iter = mp.begin();
-                iter != mp.end();
-                ++iter) {
-            llint x = iter -> first;
-            int y = iter -> second;
-            //print(x << ' ' << y);
-            if (!x) {
-                if (!a) {
-                    ans += (llint)sumall * y;
-                }
-                continue;
-            }
-            if (a % x == 0) {
-                int z = mp[a / x];
-                ans += (llint)y * z;
-            }
-        }
-        print(ans);
+    input(a);
+    input(s);
+
+    n = s.size();
+    ns = vector<llint>(n + 1, 0);
+    for (int i = 1; i <= n; i++) {
+        ns[i] = s[i - 1] - '0';
+        ns[i] += ns[i - 1];
     }
-    
+
+    map<llint, int> mp;
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = i; j <= n; j++) {
+            llint r = ns[j] - ns[i - 1];
+            mp[r] += 1;
+        }
+    }
+
+    llint res = 0;
+
+    for (const auto& p : mp) {
+        llint cur = p.first;
+        int cnt1 = p.second;
+
+        if (cur == 0 && a == 0) {
+            res += 1LL * cnt1 * n * (n + 1) / 2;
+            continue;
+        }
+
+        if (cur == 0 && a != 0) {
+            continue;
+        }
+
+        if (a % cur != 0) {
+            continue;
+        }
+
+        llint nxt = a / cur;
+        int cnt2 = mp[nxt];
+        // print(cur, nxt, cnt1, cnt2);
+
+        res += 1LL * cnt1 * cnt2;
+    }
+    print(res);
     return 0;
 }
 
+
+
+/*
+
+^^^TEST^^^
+10
+12345
+-----
+6
+$$$TEST$$$
+
+^^^TEST^^^
+16
+439873893693495623498263984765
+-----
+40
+$$$TEST$$$
+
+^^^TEST^^^
+0
+1230
+-----
+19
+$$$TEST$$$
+
+*/
