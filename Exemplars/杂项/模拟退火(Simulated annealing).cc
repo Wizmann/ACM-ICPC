@@ -111,7 +111,7 @@ void simulateAnneal(int round) {
                 }
                 puts("");
             }
-
+            // 这里是求极大值的方法；若要求极小值，接受新解的条件是`delta <= 0 || exp(-delta /t) > Rand()`
             double delta = nxt_value - now_value;
             if (delta >= 0 || exp(delta / t) > Rand()) {
                 now = nxt;
