@@ -1,0 +1,6 @@
+{
+    "foam.files.ignore": [
+        "README.md",
+        "README"
+    ]
+}
