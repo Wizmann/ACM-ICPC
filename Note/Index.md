@@ -4,11 +4,7 @@
 
 * Sorting
 
-## Data Structures
-
-* Array
-* List
-* Tree
+![[Data_Structures]]
 
 ## Problem Solving
 
@@ -23,16 +19,10 @@
 * String Matching
 * [[Palindrome]]
 
-## Graph Theory
-
-* DFS and BFS
-* Disjont Set
-* Shortest Path
+![[Graph]]
 
 ## Math and Number Theory
 
 * Matrix
 
-## Misc
-
-* [[Implementation]]
+![[Misc]]
