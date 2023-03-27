@@ -3,7 +3,7 @@
 Tags: #Disjoint-Set #Satisfiability #Boolean-Function
 
 * Related Topics:
-    * [[Disjont_Set]]
+    * [[Disjont Set]]
 * Program: [Link][1]
 * Code: [Luogu P5937][2]
 

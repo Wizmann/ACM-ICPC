@@ -1,10 +1,9 @@
 # Algorithms
 
-## Basic Algorithms
+![[Basic Algorithms]]
 
-* Sorting
 
-![[Data_Structures]]
+![[Data Structures]]
 
 ## Problem Solving
 
