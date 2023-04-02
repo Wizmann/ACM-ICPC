@@ -5,9 +5,8 @@
 
 ![[Data Structures]]
 
-## Problem Solving
+![[Problem Solving]]
 
-* Greedy
 
 ## Dynamic Programming
 
