@@ -119,29 +119,23 @@ llint solve(vector<pair<int, int> >& ps) {
     int m = ps.size();
 
     int v1 = ps[0].first;
-    int v2 = ps[1].first;
 
     llint res = 0;
-    if (v1 == v2) {
-        vector<int> ns;
-        for (int i = 0; i < m; i++) {
-            if (ps[i].first != v1) {
-                break;
-            }
-            ns.push_back(ps[i].second);
+    vector<int> ns;
+    for (int i = 0; i < m; i++) {
+        if (ps[i].first != v1) {
+            break;
         }
-        res = 1;
-        for (auto num : ns) {
-            res = (res * (num + 1)) % MOD;
-        }
-        for (auto num : ns) {
-            res = (res - num + MOD) % MOD;
-        }
-        res = (res - 1 + MOD) % MOD;
-    } else {
-        res += 1LL * ps[0].second * ps[1].second % MOD;
-        res %= MOD;
+        ns.push_back(ps[i].second);
     }
+    res = 1;
+    for (auto num : ns) {
+        res = (res * (num + 1)) % MOD;
+    }
+    for (auto num : ns) {
+        res = (res - num + MOD) % MOD;
+    }
+    res = (res - 1 + MOD) % MOD;
 
     return res;
 }
