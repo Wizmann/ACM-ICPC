@@ -26,3 +26,8 @@
 ![[Misc]]
 
 ## TODO
+
+* [虚树][10000]
+
+
+[1]: https://oi-wiki.org/graph/virtual-tree/
