@@ -1,3 +1,4 @@
 # Problem Solving
 
 * [[Greedy]]
+* [[Parity]]
