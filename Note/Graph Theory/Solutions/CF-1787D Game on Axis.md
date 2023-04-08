@@ -1,6 +1,6 @@
 # CF-1787D Game on Axis
 
-Tags: #Graph-Traversal #DFS #Counting
+Tags: #Graph-Traversal #DFS #Counting #Case-Discussion
 * Related Topics:
     * [[Graph Traversal]]
     * [[DFS]]
@@ -21,6 +21,10 @@ Before the game begins, you can choose two integers `x` and `y` satisfying `1≤
 Notice that you do not have to satisfy `a[x]≠y`.
 
 ## Solution
+
+Let's say the path starting from `1` is the "main path". And it's easy to know there're 2 cases for the main path.
+
+The first sceanrio is 
 
 
 [1]: https://codeforces.com/contest/1787/problem/D
