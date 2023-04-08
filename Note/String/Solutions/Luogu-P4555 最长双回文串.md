@@ -1,7 +1,7 @@
 # Luogu P4555 最长双回文串
 
 
-Tags: #String #Palindrome #DP #Dynamic-Programming
+Tags: #String #Palindrome #DP
 
 * Related Topics:
   * [[Palindrome]]

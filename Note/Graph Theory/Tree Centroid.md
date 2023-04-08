@@ -5,7 +5,7 @@
 Tags: #BFS #DFS #DP #Tree
 * Related Topics:
     * [[DFS]]
-    * [[DP]]
+    * [[Dynamic Programming]]
 
 ## Problems
 
