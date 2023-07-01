@@ -2,3 +2,4 @@
 
 * [[Greedy]]
 * [[Parity]]
+* [[Sliding Window]]
