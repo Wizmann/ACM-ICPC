@@ -14,5 +14,9 @@
 
 * [KickStart2022 Round E: Coloring Game][2]
 
+### Other Optimization
+
+* [Leetcode 2742. Painting the Walls]
+
 [1]: https://codingcompetitions.withgoogle.com/kickstart/round/00000000008cb0f5/0000000000ba86e6
 [2]: https://codingcompetitions.withgoogle.com/kickstart/round/00000000008cb0f5/0000000000ba856a
