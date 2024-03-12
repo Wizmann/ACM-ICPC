@@ -60,7 +60,7 @@ int main() {
             scanf("%d", &b);
             auto iter = mp[b];
             lst.erase(iter);
-
+            mp.erase(mp.find(b));
         }
     }
 
