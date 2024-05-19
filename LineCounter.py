@@ -32,6 +32,7 @@ if(__name__ == '__main__'):
             for item in files 
                 if('Exemplars' not in root 
                     and 'utils' not in root
+                    and 'Note' not in root
                     and item.split('.')[-1] in EXTS)
             ]
         )
