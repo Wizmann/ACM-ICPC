@@ -52,11 +52,9 @@ class Solution(object):
     def dfs3(self, pre, cur, odd, even):
         odd += self.cnt1_odd[cur]
         even += self.cnt1_even[cur]
-        self.ans[cur] = even + self.maxi2_even
+        self.ans[cur] = even + max(self.maxi2_odd, self.maxi2_even)
 
         for nxt in self.g1[cur]:
             if nxt == pre:
                 continue
             self.dfs3(cur, nxt, even - self.cnt1_odd[nxt], odd - self.cnt1_even[nxt])
-
-
