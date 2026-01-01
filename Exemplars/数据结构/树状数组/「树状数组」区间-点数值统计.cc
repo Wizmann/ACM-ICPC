@@ -5,7 +5,7 @@ inline int lowbit(int x)
     return x&(-x);
 }
 
-class BITree { // 点更新，点查询
+class BITree { // 点更新，区间查询
 public:
     BITree() {}
     BITree(int n_): n(n_), tree(n + 1, 0) {}
