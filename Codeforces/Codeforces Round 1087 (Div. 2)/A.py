@@ -1,0 +1,61 @@
+def solve(c, k, ns):
+    n = len(ns)
+    ns.sort()
+
+    for monster in ns:
+        if monster > c:
+            break
+        monster2 = min(c, monster + k)
+        delta = monster2 - monster
+        k -= delta
+        c += monster2
+    return c
+
+
+T = int(raw_input())
+
+for case_ in xrange(T):
+    n, c, k = map(int, raw_input().split())
+    ns = map(int, raw_input().split())
+
+    print(solve(c, k, ns))
+
+'''
+^^^^TEST^^^^
+10
+1 12 23
+21
+1 8 4
+5
+1 3 4
+16
+3 6 3
+14 9 11
+5 9 2
+20 16 18 16 11
+5 18 30
+1 2 93 84 2
+7 29 13
+2 9 38 4 7 1 6
+10 9 2
+8 1 8 11 17 3 14 16 20 10
+10 192 109
+1 9 20 9 829 3 87 1 283 7
+10 1000000000 1000000000
+19 1000000000 1 9 2 3 8 1 2 3
+---------
+12
+16
+3
+6
+9
+53
+109
+119
+721
+3000000048
+$$$$$TEST$$$$$
+'''
+
+
+
