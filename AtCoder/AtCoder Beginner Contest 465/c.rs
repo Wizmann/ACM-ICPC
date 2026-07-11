@@ -23,29 +23,47 @@ impl Scanner {
     }
 }
 
-fn solve(n: i32, s: &[u8]) -> VecDeque<usize> {
-    if (n == -1) {
-        return VecDeque::new();
+// Appending then reversing on every `o` can be represented by a deque plus a
+// logical orientation flag, so no element is ever moved.
+fn solve(s: &[u8]) -> (VecDeque<usize>, bool) {
+    let mut result = VecDeque::with_capacity(s.len());
+    let mut reversed = false;
+
+    for (i, &ch) in s.iter().enumerate() {
+        // Append `i + 1` to the logical back.
+        if reversed {
+            result.push_front(i + 1);
+        } else {
+            result.push_back(i + 1);
+        }
+
+        if ch == b'o' {
+            reversed = !reversed;
+        }
     }
-    if (s[n as usize] == b'o') {
-        let mut result = solve(n - 1, s);
-        result.make_contiguous().reverse();
-        result.push_front((n + 1) as usize);
-        return result;
-    } else {
-        let mut result = solve(n - 1, s);
-        result.push_back((n + 1) as usize);
-        return result;
-    }
+
+    (result, reversed)
 }
 
 fn main() {
     let mut sc = Scanner::new();
-    let n: i32 = sc.next();
+    let n: usize = sc.next();
     let s: String = sc.next();
+    assert_eq!(n, s.len());
 
-    let res = solve(n - 1, s.as_bytes());
-    println!("{}", res.iter().map(|x| x.to_string()).collect::<Vec<_>>().join(" "));
+    let (res, reversed) = solve(s.as_bytes());
+    let output = if reversed {
+        res.iter().rev()
+            .map(|x| x.to_string())
+            .collect::<Vec<_>>()
+            .join(" ")
+    } else {
+        res.iter()
+            .map(|x| x.to_string())
+            .collect::<Vec<_>>()
+            .join(" ")
+    };
+    println!("{output}");
 
 }
 
